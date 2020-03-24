@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 120);
 
-class GrassSideMenu extends StatefulWidget {
-  GrassSideMenu({
+class GsSideMenu extends StatefulWidget {
+  GsSideMenu({
     Key key,
     @required this.menu,
     @required this.content,
     this.menuWidth = 200,
     this.duration = _kBaseSettleDuration,
+    this.maskColor = Colors.black,
+    this.maskOpacity = 0.2,
   }) : super(key: key);
 
   final Widget menu;
@@ -17,11 +19,14 @@ class GrassSideMenu extends StatefulWidget {
   final double menuWidth;
   final Duration duration;
 
+  final Color maskColor;
+  final double maskOpacity;
+
   @override
-  GrassSideMenuState createState() => GrassSideMenuState();
+  GsSideMenuState createState() => GsSideMenuState();
 }
 
-class GrassSideMenuState extends State<GrassSideMenu> with SingleTickerProviderStateMixin {
+class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   bool _previouslyOpened = false;
 
@@ -74,7 +79,7 @@ class GrassSideMenuState extends State<GrassSideMenu> with SingleTickerProviderS
                 ignoring: !_previouslyOpened,
                 child: GestureDetector(
                   child: Container(
-                    color: Colors.black.withOpacity(0.15 * _controller.value),
+                    color: widget.maskColor.withOpacity(widget.maskOpacity * _controller.value),
                   ),
                   onTap: () => close()
                 ),

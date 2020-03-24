@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GrassAppBar extends StatelessWidget implements PreferredSizeWidget {
-  GrassAppBar({
+class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  GsAppBar({
     Key key,
     this.middle,
     this.leading,
@@ -37,7 +37,10 @@ class GrassAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: CupertinoNavigationBar(
         backgroundColor: backgroundColor,
-        middle: middle,
+        middle: DefaultTextStyle(
+          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle.copyWith(fontWeight: FontWeight.w400),
+          child: middle,
+        ),
         leading: leading,
         trailing: trailing,
         border: Border.all(width: 0, color: backgroundColor),

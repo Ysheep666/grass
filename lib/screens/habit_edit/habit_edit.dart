@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 
-class SchemeAddScreen extends StatefulWidget {
-  SchemeAddScreen({Key key}) : super(key: key);
+class HabitEditScreen extends StatefulWidget {
+  HabitEditScreen({Key key}) : super(key: key);
 
   @override
-  _SchemeAddScreenState createState() => _SchemeAddScreenState();
+  HabitEditScreenState createState() => HabitEditScreenState();
 }
 
-class _SchemeAddScreenState extends State<SchemeAddScreen> {
+class HabitEditScreenState extends State<HabitEditScreen> {
   FocusNode _nameFocusNode;
   TextEditingController _nameController;
   TextEditingController _remarksController;
@@ -27,12 +28,13 @@ class _SchemeAddScreenState extends State<SchemeAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF1F2F6),
-      appBar: GrassAppBar(
+      backgroundColor: GsColors.of(context).background,
+      appBar: GsAppBar(
+        backgroundColor: GsColors.of(context).background,
         middle: Text('新建习惯'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: Text('取消', style: TextStyle(fontSize: 15)),
+          child: Text('取消', style: TextStyle(fontSize: 15, color: GsColors.of(context).primary)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -43,6 +45,7 @@ class _SchemeAddScreenState extends State<SchemeAddScreen> {
           onPressed: _isSubmit ? () {
           } : null,
         ),
+        shadow: false,
       ),
       body: SafeArea(
         child: Center(
