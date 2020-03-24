@@ -16,6 +16,9 @@ class _ContainerLayoutState extends State<ContainerLayout> {
   final routes = {
     '/': (context) => HabitScreen(),
     '/calendar': (context) => HabitScreen(),
+    '/count': (context) => HabitScreen(),
+    '/trash': (context) => HabitScreen(),
+    '/guide': (context) => HabitScreen(),
     '/setting': (context) => HabitScreen(),
   };
 

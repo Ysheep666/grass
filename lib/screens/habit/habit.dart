@@ -24,7 +24,6 @@ class _HabitScreenState extends State<HabitScreen> {
     return Scaffold(
       backgroundColor: GsColors.of(context).background,
       appBar: GsAppBar(
-        backgroundColor: GsColors.of(context).background,
         middle: Text('健身小助手'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -45,7 +44,7 @@ class _HabitScreenState extends State<HabitScreen> {
             );
           },
         ),
-        // shadow: false,
+        shadow: false,
       ),
       body: Center(
         child: Column(

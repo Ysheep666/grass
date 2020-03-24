@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
+import 'package:grass/widgets/cell/cell.dart';
+import 'package:grass/widgets/cell/text_field_cell.dart';
 
 class HabitEditScreen extends StatefulWidget {
   HabitEditScreen({Key key}) : super(key: key);
@@ -30,7 +32,6 @@ class HabitEditScreenState extends State<HabitEditScreen> {
     return Scaffold(
       backgroundColor: GsColors.of(context).background,
       appBar: GsAppBar(
-        backgroundColor: GsColors.of(context).background,
         middle: Text('新建习惯'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -45,73 +46,78 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           onPressed: _isSubmit ? () {
           } : null,
         ),
-        shadow: false,
       ),
       body: SafeArea(
         child: Center(
           child: ListView(
             padding: EdgeInsets.symmetric(vertical: 6),
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: _nameController, 
-                  focusNode: _nameFocusNode,
-                  decoration: InputDecoration(
-                    hintText: '名称',
-                    hintStyle: TextStyle(fontWeight: FontWeight.w400, color: Color(0xFFD2D2D2)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                  ),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Color(0xFF0290FF),
-                  autofocus: true,
-                  onChanged: (String value) {
-                    setState(() {
-                      _isSubmit = value.trim().isNotEmpty;
-                    });
-                  },
-                  onSubmitted: (String value) {
-                    _nameFocusNode.nextFocus();
-                  },
-                ),
+              TextFieldCell(
+                title: '名称',
+                hintText: '请输入习惯名称',
+                controller: _nameController,
+                autofocus: true,
+                onChanged: (String value) {
+                  setState(() {
+                    _isSubmit = value.trim().isNotEmpty;
+                  });
+                },
+                onSubmitted: (String value) {
+                  _nameFocusNode.nextFocus();
+                },
               ),
-              Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              TextFieldCell(
+                title: '备注',
+                hintText: '请输入备注',
+                controller: _remarksController,
+                textInputAction: TextInputAction.newline,
                 height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: _remarksController, 
-                  decoration: InputDecoration(
-                    hintText: '备注',
-                    hintStyle: TextStyle(color: Color(0xFFD2D2D2)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                maxLines: 99,
+              ),
+              SizedBox(height: 24),
+              Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Text(
+                  '基本信息',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: GsColors.of(context).text,
                   ),
-                  style: TextStyle(fontSize: 14, height: 1.5),
-                  maxLines: 99,
-                  cursorColor: Color(0xFF0290FF),
                 ),
               ),
-              MaterialButton(
-                child: Text('点击我'),
-                onPressed: () {
-                }
+              SizedBox(height: 15),
+              Cell(
+                title: '重复',
+                content: '每天',
+                onTap: () => _openRepeatStatus(),
+              ),
+              Cell(
+                title: '开始日期',
+                content: '今天',
+                onTap: () {},
+              ),
+              Cell(
+                title: '提醒时间',
+                content: '关',
+                onTap: () {},
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _openRepeatStatus() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: 600,
+        );
+      },
     );
   }
 }
