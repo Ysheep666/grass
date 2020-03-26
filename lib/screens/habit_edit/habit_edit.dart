@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/utils/colors.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
@@ -25,16 +26,32 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   TextEditingController _nameController;
   TextEditingController _remarksController;
 
-  Habit _habit;
+  Habit _value;
   bool _isSubmit = false;
+
+  String get _repeatLabel {
+    if (_value.repeatStatusType == 0) {
+      if (_value.repeatStatusValues.length == 7) {
+        return '每天';
+      }
+      final daysMap = Constant.weekDaysShort.asMap();
+      final values = _value.repeatStatusValues..sort((a, b) => a - b);
+      return values.map((i) => daysMap[i]).toList().join('、');
+    }
+
+    if (_value.repeatStatusType == 1) {
+      return '每周第 ${_value.repeatStatusValues[0] + 1} 天';
+    }
+    return '';
+  }
 
   @override
   void initState() {
-    _habit = widget.habit;
-    _nameFocusNode = FocusNode();
-    _nameController = TextEditingController(text: _habit.name);
-    _remarksController = TextEditingController(text: _habit.remarks);
     super.initState();
+    _value = widget.habit;
+    _nameFocusNode = FocusNode();
+    _nameController = TextEditingController(text: _value.name);
+    _remarksController = TextEditingController(text: _value.remarks);
   }
 
   @override
@@ -67,7 +84,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 hintText: '请输入习惯名称',
                 controller: _nameController,
                 focusNode: _nameFocusNode,
-                autofocus: true,
+                autofocus: _value.name == '',
                 onChanged: (String value) {
                   setState(() {
                     _isSubmit = value.trim().isNotEmpty;
@@ -100,7 +117,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
               SizedBox(height: 15),
               Cell(
                 title: '重复',
-                content: '每天',
+                content: _repeatLabel,
                 onTap: () => _openRepeatStatus(),
               ),
               Cell(
@@ -127,14 +144,12 @@ class HabitEditScreenState extends State<HabitEditScreen> {
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return RepeatStatusPicker(
-          value: RepeatStatusPickerValue(
-            _habit.repeatStatusType,
-            _habit.repeatStatusValues,
-          ),
+          statusType: _value.repeatStatusType,
+          statusValues: _value.repeatStatusValues,
           onChanged: (value) {
             setState(() {
-              _habit.repeatStatusType = value.statusType;
-              _habit.repeatStatusValues = value.statusValues;
+              _value.repeatStatusType = value['type'] as int;
+              _value.repeatStatusValues = value['values'] as List<int>;
             });
           },
         );

@@ -42,7 +42,7 @@ class _HabitScreenState extends State<HabitScreen> {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (context) => HabitEditScreen(habit: Habit(name: '1111'))
+                builder: (context) => HabitEditScreen(habit: Habit())
               ),
             );
           },

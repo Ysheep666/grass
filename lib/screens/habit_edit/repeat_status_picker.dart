@@ -1,33 +1,22 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/check_cell.dart';
-
-class RepeatStatusPickerValue {
-  final int statusType;
-  final List<int> statusValues;
-  RepeatStatusPickerValue(this.statusType, this.statusValues);
-
-  RepeatStatusPickerValue merge({int statusType, List<int> statusValues}) {
-    return RepeatStatusPickerValue(
-      statusType ?? this.statusType,
-      statusValues ?? this.statusValues,
-    );
-  }
-}
+import 'package:grass/widgets/cell/text_field_cell.dart';
 
 class RepeatStatusPicker extends StatefulWidget {
   RepeatStatusPicker({
     Key key,
-    this.value,
+    this.statusType,
+    this.statusValues,
     this.onChanged,
   }) : super(key: key);
 
-  final RepeatStatusPickerValue value;
-  final ValueChanged<RepeatStatusPickerValue> onChanged;
+  final int statusType;
+  final List<int> statusValues;
+  final ValueChanged<Map> onChanged;
 
   @override
   _RepeatStatusPickerState createState() => _RepeatStatusPickerState();
@@ -40,17 +29,30 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
     2: Text('自定义'),
   };
 
-  RepeatStatusPickerValue _value;
+  TextEditingController _valueController;
+
+  int _type;
   Map<int, List<int>> _values = {
     0: Constant.weekDays.asMap().keys.toList(),
     1: [0],
-    2: [0],
+    2: [2],
   };
 
   @override
   void initState() {
-    _value = widget.value;
+    _type = widget.statusType;
+    _values[widget.statusType] = widget.statusValues;
+    _valueController = TextEditingController(text: '${_values[2][0]}');
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    widget.onChanged({
+      'type': _type,
+      'values': _values[_type],
+    });
   }
 
   @override
@@ -89,14 +91,16 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
         child: CupertinoSlidingSegmentedControl(
           children: segmentedChildren,
           onValueChanged: (int newValue) {
-            widget.onChanged(widget.value.merge(statusType: newValue));
+            setState(() {
+              _type = newValue;
+            });
           },
-          groupValue: widget.value.statusType,
+          groupValue: _type,
         ),
       )
     ];
 
-    switch (widget.value.statusType) {
+    switch (_type) {
       case 0:
         items.addAll(
           Constant.weekDays.asMap().map((i, title) => MapEntry(
@@ -114,7 +118,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
                 });
               },
             ),
-          )).values.toList()
+          )).values.toList(),
         );
         break;
       case 1:
@@ -130,7 +134,17 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
                 });
               },
             ),
-          )).values.toList()
+          )).values.toList(),
+        );
+        break;
+      case 2:
+        items.add(
+          TextFieldCell(
+            title: '间隔天数',
+            hintText: '请输入间隔天数',
+            controller: _valueController,
+            textInputAction: TextInputAction.done,
+          ),
         );
         break;
       default:

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/layouts/container.dart';
 import 'package:grass/stores/base.dart';
@@ -44,5 +47,9 @@ class _MyAppState extends State<MyApp> {
 }
 
 void main() async {
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
   runApp(MyApp());
 }
