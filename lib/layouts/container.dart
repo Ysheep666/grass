@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grass/screens/habit/habit.dart';
 import 'package:grass/screens/menu/menu.dart';
 import 'package:grass/utils/constant.dart';
@@ -29,6 +30,7 @@ class _ContainerLayoutState extends State<ContainerLayout> {
     super.initState();
     Constant.emitter.on('drawer@toggle', (data) => _sideMenuKey.currentState.toggle());
     Constant.emitter.on('drawer@selected', (data) {
+      HapticFeedback.lightImpact();
       _sideMenuKey.currentState.close();
       setState(() {
         _routeName = data['routeName'] ?? '/';

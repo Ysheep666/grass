@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
         builder: (_) => MaterialApp(
           title: 'Grass',
           theme: ThemeData(
-            splashColor: Colors.transparent,
+            // splashColor: Colors.transparent,
           ),
           themeMode: store.useDarkMode,
           routes: {

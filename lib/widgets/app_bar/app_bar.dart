@@ -8,6 +8,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.middle,
     this.leading,
     this.trailing,
+    this.padding,
     this.backgroundColor,
     this.shadow = true,
   })  : preferredSize = Size.fromHeight(44),
@@ -16,6 +17,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget middle;
   final Widget leading;
   final Widget trailing;
+  final EdgeInsetsDirectional padding;
   final Color backgroundColor;
   final bool shadow;
 
@@ -38,9 +40,10 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
           ] : [],
       ),
       child: CupertinoNavigationBar(
+        padding: padding,
         backgroundColor: _backgroundColor,
         middle: DefaultTextStyle(
-          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle.copyWith(fontWeight: FontWeight.w400),
+          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle.copyWith(fontWeight: FontWeight.w500),
           child: middle,
         ),
         leading: leading,

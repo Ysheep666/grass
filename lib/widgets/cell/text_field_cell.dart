@@ -8,11 +8,11 @@ class TextFieldCell extends StatelessWidget {
   const TextFieldCell({
     Key key,
     @required this.title,
-    this.hintText: '',
+    this.hintText = '',
     this.controller,
     this.height = 50,
-    this.keyboardType: TextInputType.text,
-    this.textInputAction: TextInputAction.next,
+    this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
     this.focusNode,
     this.autofocus = false,
     this.maxLines = 1,
@@ -44,13 +44,14 @@ class TextFieldCell extends StatelessWidget {
           )
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            height: 50,
+            height: 46,
             alignment: Alignment.centerLeft,
             child: Text(title, style: TextStyle(
               fontSize: 15,
+              fontWeight: FontWeight.w400,
               color: GsColors.of(context).text,
             ))
           ),
@@ -64,6 +65,7 @@ class TextFieldCell extends StatelessWidget {
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: hintText,
+                  hintStyle: TextStyle(color: GsColors.of(context).gray),
                   border: InputBorder.none,
                 ),
                 textInputAction: textInputAction,

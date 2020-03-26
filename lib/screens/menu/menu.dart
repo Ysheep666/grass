@@ -61,6 +61,7 @@ class _MenuScreenState extends State<MenuScreen> {
             Text(title, style: TextStyle(
               color: color,
               fontSize: 14,
+              fontWeight: FontWeight.w500,
             )),
           ],
         ),  

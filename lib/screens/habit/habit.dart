@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:grass/models/habit.dart';
 import 'package:grass/screens/habit_edit/habit_edit.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
@@ -36,10 +38,11 @@ class _HabitScreenState extends State<HabitScreen> {
           padding: EdgeInsets.zero,
           child: Icon(FeatherIcons.plus, color: GsColors.of(context).gray),
           onPressed: () {
+            HapticFeedback.lightImpact();
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (context) => HabitEditScreen()
+                builder: (context) => HabitEditScreen(habit: Habit(name: '1111'))
               ),
             );
           },

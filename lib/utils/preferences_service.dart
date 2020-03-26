@@ -18,7 +18,7 @@ class PreferencesService {
   ThemeMode get useDarkMode {
     final darkMode = _sharedPreferences.getString(_useDarkModeKey);
     if (darkMode == null) {
-      return ThemeMode.system;
+      return ThemeMode.light;
     }
     return ThemeMode.values.firstWhere((e) => e.toString() == darkMode);
   }

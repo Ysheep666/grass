@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grass/models/habit.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
 
+import 'repeat_status_picker.dart';
+
 class HabitEditScreen extends StatefulWidget {
-  HabitEditScreen({Key key}) : super(key: key);
+  HabitEditScreen({
+    Key key,
+    @required this.habit,
+  }) : super(key: key);
+
+  final Habit habit;
 
   @override
   HabitEditScreenState createState() => HabitEditScreenState();
@@ -17,14 +25,16 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   TextEditingController _nameController;
   TextEditingController _remarksController;
 
+  Habit _habit;
   bool _isSubmit = false;
 
   @override
   void initState() {
-    super.initState();
+    _habit = widget.habit;
     _nameFocusNode = FocusNode();
-    _nameController = TextEditingController(text: '');
-    _remarksController = TextEditingController(text: '');
+    _nameController = TextEditingController(text: _habit.name);
+    _remarksController = TextEditingController(text: _habit.remarks);
+    super.initState();
   }
 
   @override
@@ -56,6 +66,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 title: '名称',
                 hintText: '请输入习惯名称',
                 controller: _nameController,
+                focusNode: _nameFocusNode,
                 autofocus: true,
                 onChanged: (String value) {
                   setState(() {
@@ -113,9 +124,19 @@ class HabitEditScreenState extends State<HabitEditScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return Container(
-          height: 600,
+        return RepeatStatusPicker(
+          value: RepeatStatusPickerValue(
+            _habit.repeatStatusType,
+            _habit.repeatStatusValues,
+          ),
+          onChanged: (value) {
+            setState(() {
+              _habit.repeatStatusType = value.statusType;
+              _habit.repeatStatusValues = value.statusValues;
+            });
+          },
         );
       },
     );

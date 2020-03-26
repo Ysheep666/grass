@@ -8,6 +8,7 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    MethodFlutterPlugin.register(with: self.registrar(forPlugin: "MethodFlutterPlugin"))
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

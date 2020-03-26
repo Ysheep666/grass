@@ -1,22 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
+import 'package:grass/widgets/icons/icons.dart';
 
-class Cell extends StatelessWidget {
-  const Cell({
+class CheckCell extends StatelessWidget {
+  const CheckCell({
     Key key,
     this.onTap,
     @required this.title,
-    this.content: '',
-    this.textAlign: TextAlign.start,
-    this.maxLines: 1
+    this.checked = false,
   }): super(key: key);
 
   final GestureTapCallback onTap;
   final String title;
-  final String content;
-  final TextAlign textAlign;
-  final int maxLines;
+  final bool checked;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class Cell extends StatelessWidget {
             )
         ),
         child: Row(
-          crossAxisAlignment: maxLines == 1 ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(title, style: TextStyle(
               fontSize: 15,
@@ -45,27 +42,9 @@ class Cell extends StatelessWidget {
             )),
             Spacer(),
             SizedBox(width: 15),
-            Expanded(
-              flex: 4,
-              child: Text(
-                content,
-                maxLines: maxLines,
-                textAlign: maxLines == 1 ? TextAlign.right : textAlign,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: GsColors.of(context).gray,
-                ),
-              ),
-            ),
-            SizedBox(width: 3),
             Opacity(
-              opacity: onTap == null ? 0 : 1,
-              child: Padding(
-                padding: EdgeInsets.only(top: maxLines == 1 ? 0 : 2),
-                child: Icon(CupertinoIcons.right_chevron, color: GsColors.of(context).gray),
-              ),
+              opacity: checked ? 1 : 0,
+              child: Icon(FeatherIcons.check, color: GsColors.of(context).primary),
             )
           ],
         ),
