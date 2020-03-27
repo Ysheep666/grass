@@ -13,11 +13,13 @@ class TextFieldCell extends StatelessWidget {
     this.height = 50,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
+    this.inputFormatters,
     this.focusNode,
     this.autofocus = false,
     this.maxLines = 1,
     this.onChanged,
     this.onSubmitted,
+    this.border,
   }): super(key: key);
 
   final String title;
@@ -26,11 +28,13 @@ class TextFieldCell extends StatelessWidget {
   final double height;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
+  final List<TextInputFormatter> inputFormatters;
   final FocusNode focusNode;
   final int maxLines;
   final bool autofocus;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
+  final Border border;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class TextFieldCell extends StatelessWidget {
       margin: const EdgeInsets.only(left: 16.0),
       width: double.infinity,
       decoration: BoxDecoration(
-          border: Border(
+          border: border ?? Border(
             bottom: Divider.createBorderSide(context, width: 0.6),
           )
       ),
@@ -69,6 +73,7 @@ class TextFieldCell extends StatelessWidget {
                   border: InputBorder.none,
                 ),
                 textInputAction: textInputAction,
+                inputFormatters: inputFormatters,
                 cursorColor: Color(0xFF027AFF),
                 maxLines: maxLines,
                 autofocus: autofocus,

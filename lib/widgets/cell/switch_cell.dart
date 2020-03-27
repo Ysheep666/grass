@@ -1,27 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
-import 'package:grass/widgets/icons/icons.dart';
 
-class CheckCell extends StatelessWidget {
-  const CheckCell({
+class SwitchCell extends StatelessWidget {
+  const SwitchCell({
     Key key,
-    this.onTap,
+    this.onChanged,
     @required this.title,
     this.checked = false,
     this.border,
   }): super(key: key);
 
-  final GestureTapCallback onTap;
+  final ValueChanged<bool> onChanged;
   final String title;
   final bool checked;
   final Border border;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
+    return Container(
         margin: const EdgeInsets.only(left: 15),
         padding: const EdgeInsets.fromLTRB(0, 15, 15, 15),
         height: 50,
@@ -41,13 +38,12 @@ class CheckCell extends StatelessWidget {
             )),
             Spacer(),
             SizedBox(width: 15),
-            Opacity(
-              opacity: checked ? 1 : 0,
-              child: Icon(FeatherIcons.check, color: GsColors.of(context).primary),
-            )
+            CupertinoSwitch(
+              value: checked,
+              onChanged: onChanged,
+            ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

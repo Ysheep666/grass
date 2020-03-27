@@ -9,7 +9,8 @@ class Cell extends StatelessWidget {
     @required this.title,
     this.content: '',
     this.textAlign: TextAlign.start,
-    this.maxLines: 1
+    this.maxLines: 1,
+    this.border,
   }): super(key: key);
 
   final GestureTapCallback onTap;
@@ -17,6 +18,7 @@ class Cell extends StatelessWidget {
   final String content;
   final TextAlign textAlign;
   final int maxLines;
+  final Border border;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class Cell extends StatelessWidget {
         ),
         width: double.infinity,
         decoration: BoxDecoration(
-            border: Border(
+            border: border ?? Border(
               bottom: Divider.createBorderSide(context, width: 0.6),
             )
         ),

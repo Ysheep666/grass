@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
+import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
+import 'package:intl/intl.dart';
 
+import 'alert_time_picker.dart';
 import 'repeat_status_picker.dart';
 
 class HabitEditScreen extends StatefulWidget {
@@ -30,7 +33,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   bool _isSubmit = false;
 
   String get _repeatLabel {
-    if (_value.repeatStatusType == 0) {
+    if (_value.repeatStatusType == HabitRepeatStatusType.day) {
       if (_value.repeatStatusValues.length == 7) {
         return '每天';
       }
@@ -38,11 +41,31 @@ class HabitEditScreenState extends State<HabitEditScreen> {
       final values = _value.repeatStatusValues..sort((a, b) => a - b);
       return values.map((i) => daysMap[i]).toList().join('、');
     }
-
-    if (_value.repeatStatusType == 1) {
+    if (_value.repeatStatusType == HabitRepeatStatusType.week) {
       return '每周第 ${_value.repeatStatusValues[0] + 1} 天';
     }
-    return '';
+    return '每间隔 ${_value.repeatStatusValues[0]} 天';
+  }
+
+  String get _startDateLabel {
+    final diffDay = calculateDifference(_value.startDate);
+    if (diffDay == 0) {
+      return '今天';
+    }
+    if (diffDay == -1) {
+      return '昨天';
+    }
+    if (diffDay == 1) {
+      return '明天';
+    }
+    return DateFormat('yyyy年MMMMdd日', 'zh_CH').format(_value.startDate);
+  }
+
+  String get _alertTimeLabel {
+    if (_value.alertTime == null) {
+      return '关';
+    }
+    return DateFormat('a h:mm', 'zh_CH').format(_value.alertTime);
   }
 
   @override
@@ -122,13 +145,13 @@ class HabitEditScreenState extends State<HabitEditScreen> {
               ),
               Cell(
                 title: '开始日期',
-                content: '今天',
-                onTap: () {},
+                content: _startDateLabel,
+                onTap: () => _openStartDate(),
               ),
               Cell(
                 title: '提醒时间',
-                content: '关',
-                onTap: () {},
+                content: _alertTimeLabel,
+                onTap: () => _openAlertTime(),
               ),
             ],
           ),
@@ -138,6 +161,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   }
 
   void _openRepeatStatus() {
+    FocusScope.of(context).unfocus();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -148,10 +172,48 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           statusValues: _value.repeatStatusValues,
           onChanged: (value) {
             setState(() {
-              _value.repeatStatusType = value['type'] as int;
+              _value.repeatStatusType = value['type'] as HabitRepeatStatusType;
               _value.repeatStatusValues = value['values'] as List<int>;
             });
           },
+        );
+      },
+    );
+  }
+
+  void _openStartDate() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: CupertinoDatePicker(
+            mode: CupertinoDatePickerMode.date,
+            initialDateTime: _value.startDate,
+            onDateTimeChanged: (value) {
+              setState(() {
+                _value.startDate = value;
+              });
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _openAlertTime() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertTimePicker(
+          alertTime: _value.alertTime,
+          onChanged: (value) {
+            setState(() {
+              _value.alertTime = value;
+            });
+          }
         );
       },
     );
