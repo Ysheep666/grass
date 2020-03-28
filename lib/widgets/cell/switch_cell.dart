@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
@@ -38,7 +40,10 @@ class SwitchCell extends StatelessWidget {
             )),
             Spacer(),
             SizedBox(width: 15),
-            CupertinoSwitch(
+            Platform.isIOS ? CupertinoSwitch(
+              value: checked,
+              onChanged: onChanged,
+            ) : Switch(
               value: checked,
               onChanged: onChanged,
             ),

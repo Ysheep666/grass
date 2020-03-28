@@ -14,13 +14,12 @@ Habit _$HabitFromJson(Map<String, dynamic> json) {
     repeatStatusType: _$enumDecodeNullable(
         _$HabitRepeatStatusTypeEnumMap, json['repeatStatusType']),
     repeatStatusValues:
-        (json['repeatStatusValues'] as List)?.map((e) => e as int)?.toList(),
-    startDate: json['startDate'] == null
-        ? null
-        : DateTime.parse(json['startDate'] as String),
-    alertTime: json['alertTime'] == null
-        ? null
-        : DateTime.parse(json['alertTime'] as String),
+        Habit._valuesFromString(json['repeatStatusValues'] as String),
+    startDate: dateTimeFromEpochUs(json['startDate'] as int),
+    alertTime: dateTimeFromEpochUs(json['alertTime'] as int),
+    isArchived: json['isArchived'] as bool,
+    createdDate: dateTimeFromEpochUs(json['createdDate'] as int),
+    updatedDate: dateTimeFromEpochUs(json['updatedDate'] as int),
   );
 }
 
@@ -30,9 +29,12 @@ Map<String, dynamic> _$HabitToJson(Habit instance) => <String, dynamic>{
       'remarks': instance.remarks,
       'repeatStatusType':
           _$HabitRepeatStatusTypeEnumMap[instance.repeatStatusType],
-      'repeatStatusValues': instance.repeatStatusValues,
-      'startDate': instance.startDate?.toIso8601String(),
-      'alertTime': instance.alertTime?.toIso8601String(),
+      'repeatStatusValues': Habit._valuesToString(instance.repeatStatusValues),
+      'startDate': dateTimeToEpochUs(instance.startDate),
+      'alertTime': dateTimeToEpochUs(instance.alertTime),
+      'isArchived': instance.isArchived,
+      'createdDate': dateTimeToEpochUs(instance.createdDate),
+      'updatedDate': dateTimeToEpochUs(instance.updatedDate),
     };
 
 T _$enumDecode<T>(

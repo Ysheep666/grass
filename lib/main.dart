@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/layouts/container.dart';
 import 'package:grass/stores/base.dart';
 import 'package:grass/utils/preferences_service.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -32,28 +33,32 @@ class _MyAppState extends State<MyApp> {
     ],
     child: Consumer<BaseStore>(
       builder: (_, store, __) => Observer(
-        builder: (_) => MaterialApp(
-          title: 'Grass',
-          // showPerformanceOverlay: true, //显示性能标签
-          // debugShowCheckedModeBanner: false,
-          // checkerboardRasterCacheImages: true,
-          // showSemanticsDebugger: true, // 显示语义视图
-          theme: ThemeData(
-            // splashColor: Colors.transparent,
+        builder: (_) => OKToast(
+          backgroundColor: Colors.black.withOpacity(0.72),
+          textPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          position: ToastPosition.center,
+          child: MaterialApp(
+            title: 'Grass',
+            // showPerformanceOverlay: true, //显示性能标签
+            // debugShowCheckedModeBanner: false,
+            // checkerboardRasterCacheImages: true,
+            // showSemanticsDebugger: true, // 显示语义视图
+            // theme: ThemeData(
+            //   splashColor: Colors.transparent,
+            // ),
+            themeMode: store.useDarkMode,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('zh', 'CH'),
+            ],
+            routes: {
+              '/': (context) => ContainerLayout(),
+            },
           ),
-          themeMode: store.useDarkMode,
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            Locale('zh', 'CH'),
-            Locale('en', 'US'),
-          ],
-          routes: {
-            '/': (context) => ContainerLayout(),
-          },
         ),
       ),
     ),

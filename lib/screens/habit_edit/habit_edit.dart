@@ -8,6 +8,7 @@ import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'alert_time_picker.dart';
 import 'repeat_status_picker.dart';
@@ -93,7 +94,12 @@ class HabitEditScreenState extends State<HabitEditScreen> {
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           child: Text('保存', style: TextStyle(fontSize: 15)),
-          onPressed: _isSubmit ? () {
+          onPressed: _isSubmit ? () async {
+            _value.name = _nameController.text;
+            _value.remarks = _remarksController.text;
+            await Habit.save(_value);
+            Navigator.pop(context);
+            showToast('✌️保存成功✌️');
           } : null,
         ),
       ),
@@ -121,6 +127,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 title: '备注',
                 hintText: '请输入备注',
                 controller: _remarksController,
+                keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
                 height: 80,
                 maxLines: 99,
