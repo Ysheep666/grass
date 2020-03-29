@@ -8,6 +8,8 @@ import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/icons/icons.dart';
 
+import 'calendar_tile.dart';
+
 class HabitScreen extends StatefulWidget {
   HabitScreen({Key key}) : super(key: key);
 
@@ -16,6 +18,8 @@ class HabitScreen extends StatefulWidget {
 }
 
 class _HabitScreenState extends State<HabitScreen> {
+  DateTime _selectedDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +30,7 @@ class _HabitScreenState extends State<HabitScreen> {
     return Scaffold(
       backgroundColor: GsColors.of(context).background,
       appBar: GsAppBar(
-        middle: Text('健身小助手'),
+        middle: Text('今天'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           child: Icon(FeatherIcons.menu, color: GsColors.of(context).gray),
@@ -51,8 +55,16 @@ class _HabitScreenState extends State<HabitScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            CalendarTile(
+              selectedDate: _selectedDate,
+              onChanged: (value) {
+                setState(() {
+                  _selectedDate = value;
+                });
+              },
+            ),
             Text(
               'You have pushed the button this many times:',
             ),

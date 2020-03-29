@@ -28,14 +28,15 @@ class _ContainerLayoutState extends State<ContainerLayout> {
   @override
   void initState() {
     super.initState();
-    Constant.emitter.on('drawer@toggle', (data) => _sideMenuKey.currentState.toggle());
-    Constant.emitter.on('drawer@selected', (data) {
-      HapticFeedback.lightImpact();
-      _sideMenuKey.currentState.close();
-      setState(() {
-        _routeName = data['routeName'] ?? '/';
-      });
-    });
+    Constant.emitter.on('drawer@toggle', _toggleSideMenu);
+    Constant.emitter.on('drawer@selected', _selected);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Constant.emitter.off('drawer@toggle', _toggleSideMenu);
+    Constant.emitter.off('drawer@selected', _selected);
   }
 
   @override
@@ -45,5 +46,17 @@ class _ContainerLayoutState extends State<ContainerLayout> {
       menu: MenuScreen(routeName: _routeName),
       content: routes[_routeName](context),
     );
+  }
+
+  void _toggleSideMenu(data) {
+     _sideMenuKey.currentState.toggle();
+  }
+
+  void _selected(data) {
+      HapticFeedback.lightImpact();
+      _sideMenuKey.currentState.close();
+      setState(() {
+        _routeName = data['routeName'] ?? '/';
+      });
   }
 }

@@ -42,7 +42,7 @@ class _AlertTimePickerState extends State<AlertTimePicker> {
             checked: _value != null,
             border: Border(bottom: BorderSide.none),
             onChanged: (value) {
-              HapticFeedback.lightImpact();
+              HapticFeedback.selectionClick();
               setState(() {
                 if (_value == null) {
                   _alertTime = DateTime.now();

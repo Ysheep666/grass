@@ -102,7 +102,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
         child: CupertinoSlidingSegmentedControl(
           children: segmentedChildren,
           onValueChanged: (HabitRepeatStatusType newValue) {
-            HapticFeedback.lightImpact();
+            HapticFeedback.selectionClick();
             setState(() {
               _type = newValue;
             });
