@@ -5,19 +5,21 @@ import 'package:grass/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-_getStartDate() {
-  return DateTime.now().add(Duration(days: -30));
-}
+const calendarTileOffsetIndex = 3;
+
+_getStartDate() => DateTime.now().add(Duration(days: -30));
 
 class CalendarTile extends StatefulWidget {
   CalendarTile({
     Key key,
     this.selectedDate,
     this.onChanged,
+    this.itemScrollController,
   }) : super(key: key);
 
   final DateTime selectedDate;
   final ValueChanged<DateTime> onChanged;
+  final ItemScrollController itemScrollController;
 
   @override
   _CalendarTileState createState() => _CalendarTileState();
@@ -37,8 +39,9 @@ class _CalendarTileState extends State<CalendarTile> {
     return Container(
       height: 62,
       child: ScrollablePositionedList.separated(
-        initialScrollIndex: 30 - 5,
+        initialScrollIndex: 30 - calendarTileOffsetIndex,
         scrollDirection: Axis.horizontal,
+        itemScrollController: widget.itemScrollController,
         padding: EdgeInsets.all(10),
         itemBuilder: (context, index) {
           final date = _startDate.add(Duration(days: index));

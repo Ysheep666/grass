@@ -32,7 +32,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: _backgroundColor,
           boxShadow: shadow ? [
             BoxShadow(
-              color: Color(0xFF222122).withOpacity(0.1),
+              color: GsColors.of(context).black.withOpacity(0.1),
               offset: Offset(0, 1),
               blurRadius: 1,
               spreadRadius: 0,

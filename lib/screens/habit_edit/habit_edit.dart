@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
+import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
@@ -9,6 +10,7 @@ import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
 
 import 'alert_time_picker.dart';
 import 'repeat_status_picker.dart';
@@ -49,17 +51,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   }
 
   String get _startDateLabel {
-    final diffDay = calculateDifference(_value.startDate);
-    if (diffDay == 0) {
-      return '今天';
-    }
-    if (diffDay == -1) {
-      return '昨天';
-    }
-    if (diffDay == 1) {
-      return '明天';
-    }
-    return DateFormat('yyyy年MMMMdd日', 'zh_CH').format(_value.startDate);
+    return dateTimeFromNow(_value.startDate);
   }
 
   String get _alertTimeLabel {
@@ -79,7 +71,16 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   }
 
   @override
+  void dispose() {
+    _nameFocusNode.dispose();
+    _nameController.dispose();
+    _remarksController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final habitStore = Provider.of<HabitStore>(context);
     return Scaffold(
       backgroundColor: GsColors.of(context).background,
       appBar: GsAppBar(
@@ -97,9 +98,9 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           onPressed: _isSubmit ? () async {
             _value.name = _nameController.text;
             _value.remarks = _remarksController.text;
-            await Habit.save(_value);
-            Navigator.pop(context);
+            await habitStore.save(_value);
             showToast('✌️保存成功✌️');
+            Navigator.pop(context);
           } : null,
         ),
       ),

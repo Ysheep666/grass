@@ -35,6 +35,7 @@ class Habit {
   DateTime startDate;
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
   DateTime alertTime;
+  @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
   bool isArchived;
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
   DateTime createdDate;

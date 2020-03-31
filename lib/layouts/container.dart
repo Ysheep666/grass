@@ -34,9 +34,9 @@ class _ContainerLayoutState extends State<ContainerLayout> {
 
   @override
   void dispose() {
-    super.dispose();
     Constant.emitter.off('drawer@toggle', _toggleSideMenu);
     Constant.emitter.off('drawer@selected', _selected);
+    super.dispose();
   }
 
   @override

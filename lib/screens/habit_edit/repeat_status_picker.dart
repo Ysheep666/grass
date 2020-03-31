@@ -67,6 +67,12 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   }
 
   @override
+  void dispose() {
+    _valueFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: GsColors.of(context).background,

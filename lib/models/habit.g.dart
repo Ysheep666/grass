@@ -17,7 +17,7 @@ Habit _$HabitFromJson(Map<String, dynamic> json) {
         Habit._valuesFromString(json['repeatStatusValues'] as String),
     startDate: dateTimeFromEpochUs(json['startDate'] as int),
     alertTime: dateTimeFromEpochUs(json['alertTime'] as int),
-    isArchived: json['isArchived'] as bool,
+    isArchived: boolFromInt(json['isArchived'] as int),
     createdDate: dateTimeFromEpochUs(json['createdDate'] as int),
     updatedDate: dateTimeFromEpochUs(json['updatedDate'] as int),
   );
@@ -32,7 +32,7 @@ Map<String, dynamic> _$HabitToJson(Habit instance) => <String, dynamic>{
       'repeatStatusValues': Habit._valuesToString(instance.repeatStatusValues),
       'startDate': dateTimeToEpochUs(instance.startDate),
       'alertTime': dateTimeToEpochUs(instance.alertTime),
-      'isArchived': instance.isArchived,
+      'isArchived': boolToInt(instance.isArchived),
       'createdDate': dateTimeToEpochUs(instance.createdDate),
       'updatedDate': dateTimeToEpochUs(instance.updatedDate),
     };

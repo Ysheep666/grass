@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/layouts/container.dart';
-import 'package:grass/stores/base.dart';
+import 'package:grass/stores/base_store.dart';
+import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/preferences_service.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,9 @@ class _MyAppState extends State<MyApp> {
       ),
       ProxyProvider<PreferencesService, BaseStore>(
         update: (_, preferencesService, __) => BaseStore(preferencesService),
+      ),
+      Provider<HabitStore>(
+        create: (_) => HabitStore(),
       ),
     ],
     child: Consumer<BaseStore>(

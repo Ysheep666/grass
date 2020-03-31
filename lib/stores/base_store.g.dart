@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'base.dart';
+part of 'base_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -29,8 +29,8 @@ mixin _$BaseStore on _BaseStore, Store {
   final _$setDarkModeAsyncAction = AsyncAction('setDarkMode');
 
   @override
-  Future<void> setDarkMode({@required ThemeMode value}) {
-    return _$setDarkModeAsyncAction.run(() => super.setDarkMode(value: value));
+  Future<void> setDarkMode(ThemeMode value) {
+    return _$setDarkModeAsyncAction.run(() => super.setDarkMode(value));
   }
 
   @override

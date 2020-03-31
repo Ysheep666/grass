@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grass/utils/preferences_service.dart';
 import 'package:mobx/mobx.dart';
 
-part 'base.g.dart';
+part 'base_store.g.dart';
 
 class BaseStore = _BaseStore with _$BaseStore;
 
@@ -19,7 +19,7 @@ abstract class _BaseStore with Store {
   ThemeMode useDarkMode = ThemeMode.light;
 
   @action
-  Future<void> setDarkMode({@required ThemeMode value}) async {
+  Future<void> setDarkMode(ThemeMode value) async {
     await _preferencesService.loaded;
     _preferencesService.useDarkMode = value;
     useDarkMode = value;
