@@ -1,25 +1,45 @@
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 const calendarTileOffsetIndex = 3;
 
 _getStartDate() => DateTime.now().add(Duration(days: -30));
 
+class CalendarTileController {
+  _CalendarTileState _calendarTileStateState;
+
+  void _attach(_CalendarTileState calendarTileStateState) {
+    assert(_calendarTileStateState == null);
+    _calendarTileStateState = calendarTileStateState;
+  }
+
+  void _detach() {
+    assert(_calendarTileStateState != null);
+    _calendarTileStateState = null;
+  }
+
+  goToday() {
+    _calendarTileStateState
+      ._scrollController
+      .scrollTo(index: 30 - calendarTileOffsetIndex, duration: Duration(milliseconds: 200));
+  }
+}
+
 class CalendarTile extends StatefulWidget {
   CalendarTile({
     Key key,
     this.selectedDate,
-    this.onChanged,
-    this.itemScrollController,
+    this.controller,
   }) : super(key: key);
 
   final DateTime selectedDate;
-  final ValueChanged<DateTime> onChanged;
-  final ItemScrollController itemScrollController;
+  final CalendarTileController controller;
 
   @override
   _CalendarTileState createState() => _CalendarTileState();
@@ -27,11 +47,19 @@ class CalendarTile extends StatefulWidget {
 
 class _CalendarTileState extends State<CalendarTile> {
   DateTime _startDate = _getStartDate();
+  final ItemScrollController _scrollController = ItemScrollController();
 
   @override
   void initState() {
     super.initState();
     _startDate = _getStartDate();
+    widget.controller?._attach(this);
+  }
+
+  @override
+  void dispose() {
+    widget.controller?._detach();
+    super.dispose();
   }
 
   @override
@@ -41,7 +69,7 @@ class _CalendarTileState extends State<CalendarTile> {
       child: ScrollablePositionedList.separated(
         initialScrollIndex: 30 - calendarTileOffsetIndex,
         scrollDirection: Axis.horizontal,
-        itemScrollController: widget.itemScrollController,
+        itemScrollController: _scrollController,
         padding: EdgeInsets.all(10),
         itemBuilder: (context, index) {
           final date = _startDate.add(Duration(days: index));
@@ -70,7 +98,8 @@ class _CalendarTileState extends State<CalendarTile> {
             ),
             onTap: () {
               HapticFeedback.selectionClick();
-              widget.onChanged(date);
+              final habitStore = Provider.of<HabitStore>(context, listen: false);
+              habitStore.setSelectedDate(date);
             },
           );
         }, 

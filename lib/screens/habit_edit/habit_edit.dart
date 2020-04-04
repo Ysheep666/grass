@@ -78,6 +78,65 @@ class HabitEditScreenState extends State<HabitEditScreen> {
     super.dispose();
   }
 
+  void _openRepeatStatus() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return RepeatStatusPicker(
+          statusType: _value.repeatStatusType,
+          statusValues: _value.repeatStatusValues,
+          onChanged: (value) {
+            setState(() {
+              _value.repeatStatusType = value['type'] as HabitRepeatStatusType;
+              _value.repeatStatusValues = value['values'] as List<int>;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  void _openStartDate() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: CupertinoDatePicker(
+            mode: CupertinoDatePickerMode.date,
+            initialDateTime: _value.startDate,
+            onDateTimeChanged: (value) {
+              setState(() {
+                _value.startDate = value;
+              });
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _openAlertTime() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertTimePicker(
+          alertTime: _value.alertTime,
+          onChanged: (value) {
+            setState(() {
+              _value.alertTime = value;
+            });
+          }
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final habitStore = Provider.of<HabitStore>(context);
@@ -165,65 +224,6 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  void _openRepeatStatus() {
-    FocusScope.of(context).unfocus();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return RepeatStatusPicker(
-          statusType: _value.repeatStatusType,
-          statusValues: _value.repeatStatusValues,
-          onChanged: (value) {
-            setState(() {
-              _value.repeatStatusType = value['type'] as HabitRepeatStatusType;
-              _value.repeatStatusValues = value['values'] as List<int>;
-            });
-          },
-        );
-      },
-    );
-  }
-
-  void _openStartDate() {
-    FocusScope.of(context).unfocus();
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 300,
-          child: CupertinoDatePicker(
-            mode: CupertinoDatePickerMode.date,
-            initialDateTime: _value.startDate,
-            onDateTimeChanged: (value) {
-              setState(() {
-                _value.startDate = value;
-              });
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  void _openAlertTime() {
-    FocusScope.of(context).unfocus();
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertTimePicker(
-          alertTime: _value.alertTime,
-          onChanged: (value) {
-            setState(() {
-              _value.alertTime = value;
-            });
-          }
-        );
-      },
     );
   }
 }

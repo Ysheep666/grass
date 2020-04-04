@@ -65,6 +65,30 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
     }
   }
 
+  void _animationChanged() {
+    setState(() {});
+  }
+
+  void _animationStatusChanged(AnimationStatus status) {
+    final bool opened = _controller.value > 0 ? true : false;
+    switch (status) {
+      case AnimationStatus.reverse:
+        break;
+      case AnimationStatus.forward:
+        break;
+      case AnimationStatus.dismissed:
+        if (_previouslyOpened != opened) {
+          _previouslyOpened = opened;
+        }
+        break;
+      case AnimationStatus.completed:
+        if (_previouslyOpened != opened) {
+          _previouslyOpened = opened;
+        }
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -96,30 +120,5 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
         ),
       ],
     );
-  }
-
-
-  void _animationChanged() {
-    setState(() {});
-  }
-
-  void _animationStatusChanged(AnimationStatus status) {
-    final bool opened = _controller.value > 0 ? true : false;
-    switch (status) {
-      case AnimationStatus.reverse:
-        break;
-      case AnimationStatus.forward:
-        break;
-      case AnimationStatus.dismissed:
-        if (_previouslyOpened != opened) {
-          _previouslyOpened = opened;
-        }
-        break;
-      case AnimationStatus.completed:
-        if (_previouslyOpened != opened) {
-          _previouslyOpened = opened;
-        }
-        break;
-    }
   }
 }

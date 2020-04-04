@@ -72,35 +72,6 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: GsColors.of(context).background,
-      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 11 / 16,
-        child: Scaffold(
-          backgroundColor: GsColors.of(context).background,
-          appBar: GsAppBar(
-            padding: EdgeInsetsDirectional.only(start: 5, end: 5),
-            middle: Text('重复'),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.clear, size: 28, color: GsColors.of(context).text),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          body: ListView(
-            children: _items(),
-          ),
-        ),
-      ),
-    );
-  }
-
   List<Widget> _items() {
     final items = <Widget>[
       Container(
@@ -171,5 +142,34 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
       default:
     }
     return items;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: GsColors.of(context).background,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 11 / 16,
+        child: Scaffold(
+          backgroundColor: GsColors.of(context).background,
+          appBar: GsAppBar(
+            padding: EdgeInsetsDirectional.only(start: 5, end: 5),
+            middle: Text('重复'),
+            leading: CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: Icon(CupertinoIcons.clear, size: 28, color: GsColors.of(context).text),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          body: ListView(
+            children: _items(),
+          ),
+        ),
+      ),
+    );
   }
 }

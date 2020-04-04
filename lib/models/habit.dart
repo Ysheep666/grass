@@ -1,5 +1,5 @@
 import 'package:grass/utils/constant.dart';
-import 'package:grass/utils/db_helper.dart';
+import 'package:grass/utils/db.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -60,6 +60,16 @@ class Habit {
     this.updatedDate ??= DateTime.now();
   }
 
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+    other is Habit &&
+    runtimeType == other.runtimeType &&
+    id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
   factory Habit.fromJson(Map<String, dynamic> json) => _$HabitFromJson(json);
   Map<String, dynamic> toJson() => _$HabitToJson(this);
 
@@ -68,17 +78,23 @@ class Habit {
 
   static Future<Habit> save(Habit habit) async {
     final db = await DbHelper.instance.getDb();
+    Habit value = Habit.fromJson(habit.toJson());
     if (habit.id == null) {
-      habit.id = await db.insert(tableName, habit.toJson());
+      value.id = await db.insert(tableName, habit.toJson());
     } else {
       await db.update(
         tableName,
         habit.toJson(),
         where: '$fieldId = ?',
-        whereArgs: [habit.id]
+        whereArgs: [habit.id],
       );
     }
-    return habit;
+    return value;
+  }
+
+  static Future<int> delete(int id) async {
+    final db = await DbHelper.instance.getDb();
+    return await db.delete(tableName, where: '$fieldId = ?', whereArgs: [id]);
   }
 
   static Future<List<Habit>> getHabits() async {

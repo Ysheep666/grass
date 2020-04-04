@@ -21,27 +21,6 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _item(FeatherIcons.layout, '/', '习惯'),
-            _item(FeatherIcons.calendar, '/calendar', '日历'),
-            _item(FeatherIcons.activity, '/count', '统计'),
-            _item(FeatherIcons.trash_2, '/trash', '已归档'),
-            Divider(height: 30, indent: 10, endIndent: 10, color: Color(0xFFD2D2D4)),
-            _item(FeatherIcons.book, '/guide', '指南', more: true),
-            _item(FeatherIcons.settings, '/setting', '设置', more: true),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _item(IconData iconData, String name, String title, {
     bool more = false,
   }) {
@@ -71,6 +50,27 @@ class _MenuScreenState extends State<MenuScreen> {
           'routeName': name
         });
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _item(FeatherIcons.layout, '/', '习惯'),
+            _item(FeatherIcons.calendar, '/calendar', '日历'),
+            _item(FeatherIcons.activity, '/count', '统计'),
+            _item(FeatherIcons.archive, '/trash', '已归档'),
+            Divider(height: 30, indent: 10, endIndent: 10, color: Color(0xFFD2D2D4)),
+            _item(FeatherIcons.book, '/guide', '指南', more: true),
+            _item(FeatherIcons.settings, '/setting', '设置', more: true),
+          ],
+        ),
+      ),
     );
   }
 }
