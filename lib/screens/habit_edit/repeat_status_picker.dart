@@ -98,6 +98,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
               title: title, 
               checked: _values[HabitRepeatStatusType.day].contains(i),
               onTap: () {
+                HapticFeedback.selectionClick();
                 setState(() {
                   if (_values[HabitRepeatStatusType.day].contains(i)) {
                     _values[HabitRepeatStatusType.day].remove(i);
@@ -118,6 +119,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
               title: '每周第 ${i + 1} 天',
               checked: _values[HabitRepeatStatusType.week].contains(i),
               onTap: () {
+                HapticFeedback.selectionClick();
                 setState(() {
                   _values[HabitRepeatStatusType.week] = [i];
                 });

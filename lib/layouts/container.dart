@@ -39,6 +39,18 @@ class _ContainerLayoutState extends State<ContainerLayout> {
     super.dispose();
   }
 
+  void _toggleSideMenu(data) {
+    _sideMenuKey.currentState.toggle();
+  }
+
+  void _selected(data) {
+    HapticFeedback.lightImpact();
+    _sideMenuKey.currentState.close();
+    setState(() {
+      _routeName = data['routeName'] ?? '/';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GsSideMenu(
@@ -46,17 +58,5 @@ class _ContainerLayoutState extends State<ContainerLayout> {
       menu: MenuScreen(routeName: _routeName),
       content: routes[_routeName](context),
     );
-  }
-
-  void _toggleSideMenu(data) {
-     _sideMenuKey.currentState.toggle();
-  }
-
-  void _selected(data) {
-      HapticFeedback.lightImpact();
-      _sideMenuKey.currentState.close();
-      setState(() {
-        _routeName = data['routeName'] ?? '/';
-      });
   }
 }

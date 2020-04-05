@@ -32,6 +32,8 @@ dev_dependencies:
 flutter:
   assets:
    - assets/images/
+   - assets/resources/
+   - assets/motions.json
   fonts:
     - family: Feather
       fonts:

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/colors.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -12,20 +13,20 @@ const calendarTileOffsetIndex = 3;
 _getStartDate() => DateTime.now().add(Duration(days: -30));
 
 class CalendarTileController {
-  _CalendarTileState _calendarTileStateState;
+  _CalendarTileState _calendarTileState;
 
-  void _attach(_CalendarTileState calendarTileStateState) {
-    assert(_calendarTileStateState == null);
-    _calendarTileStateState = calendarTileStateState;
+  void _attach(_CalendarTileState calendarTileState) {
+    assert(_calendarTileState == null);
+    _calendarTileState = calendarTileState;
   }
 
   void _detach() {
-    assert(_calendarTileStateState != null);
-    _calendarTileStateState = null;
+    assert(_calendarTileState != null);
+    _calendarTileState = null;
   }
 
   goToday() {
-    _calendarTileStateState
+    _calendarTileState
       ._scrollController
       .scrollTo(index: 30 - calendarTileOffsetIndex, duration: Duration(milliseconds: 200));
   }
@@ -97,6 +98,7 @@ class _CalendarTileState extends State<CalendarTile> {
               ),
             ),
             onTap: () {
+              Constant.emitter.emit('habit@close_slidable');
               HapticFeedback.selectionClick();
               final habitStore = Provider.of<HabitStore>(context, listen: false);
               habitStore.setSelectedDate(date);

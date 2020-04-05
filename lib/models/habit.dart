@@ -12,7 +12,7 @@ enum HabitRepeatStatusType {
 }
 
 @JsonSerializable()
-class Habit {
+class Habit extends BaseModel {
   static final tableName = "habits";
   static final fieldId = "id";
   static final fieldName = "name";
@@ -25,7 +25,6 @@ class Habit {
   static final fieldCreatedDate = "createdDate";
   static final fieldUpdatedDate = "updatedDate";
 
-  int id;
   String name;
   String remarks;
   HabitRepeatStatusType repeatStatusType;
@@ -43,7 +42,7 @@ class Habit {
   DateTime updatedDate;
 
   Habit({
-    this.id,
+    int id,
     this.name = '',
     this.remarks = '',
     this.repeatStatusType = HabitRepeatStatusType.day,
@@ -53,22 +52,12 @@ class Habit {
     this.isArchived = false,
     this.createdDate,
     this.updatedDate,
-  }) {
+  }) : super(id) {
     this.repeatStatusValues ??= Constant.weekDays.asMap().keys.toList();
     this.startDate ??= DateTime.now();
     this.createdDate ??= DateTime.now();
     this.updatedDate ??= DateTime.now();
   }
-
-  @override
-  bool operator ==(Object other) =>
-    identical(this, other) ||
-    other is Habit &&
-    runtimeType == other.runtimeType &&
-    id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
 
   factory Habit.fromJson(Map<String, dynamic> json) => _$HabitFromJson(json);
   Map<String, dynamic> toJson() => _$HabitToJson(this);
@@ -76,28 +65,16 @@ class Habit {
   static List<int> _valuesFromString(String text) => text == null ? [] : text.split('|').map((a) => int.parse(a)).toList();
   static String _valuesToString(List<int> values) => values?.join('|');
 
-  static Future<Habit> save(Habit habit) async {
-    final db = await DbHelper.instance.getDb();
-    Habit value = Habit.fromJson(habit.toJson());
-    if (habit.id == null) {
-      value.id = await db.insert(tableName, habit.toJson());
-    } else {
-      await db.update(
-        tableName,
-        habit.toJson(),
-        where: '$fieldId = ?',
-        whereArgs: [habit.id],
-      );
-    }
-    return value;
+  static Future<Habit> save(Habit value) async {
+    final reset = await DbHelper.instance.save(value.toJson(), tableName: tableName);
+    return Habit.fromJson(reset);
   }
 
   static Future<int> delete(int id) async {
-    final db = await DbHelper.instance.getDb();
-    return await db.delete(tableName, where: '$fieldId = ?', whereArgs: [id]);
+    return await DbHelper.instance.delete(id, tableName: tableName);
   }
 
-  static Future<List<Habit>> getHabits() async {
+  static Future<List<Habit>> getItems() async {
     final db = await DbHelper.instance.getDb();
     List<Map> resets = await db.query(tableName);
     return resets.map((reset) => Habit.fromJson(reset)).toList();

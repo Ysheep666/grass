@@ -13,7 +13,7 @@ import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar_tile.dart';
-import 'habit_list.dart';
+import 'list.dart';
 
 class HabitScreen extends StatefulWidget {
   HabitScreen({Key key}) : super(key: key);
@@ -62,6 +62,7 @@ class _HabitScreenState extends State<HabitScreen> {
           ),
           onTap: () {
             HapticFeedback.selectionClick();
+            Constant.emitter.emit('habit@close_slidable');
             final habitStore = Provider.of<HabitStore>(context, listen: false);
             habitStore.setSelectedDate(DateTime.now());
             _controller.goToday();
@@ -109,12 +110,14 @@ class _HabitScreenState extends State<HabitScreen> {
               child: Icon(FeatherIcons.menu, color: GsColors.of(context).gray),
               onPressed: () {
                 Constant.emitter.emit('drawer@toggle');
+                Constant.emitter.emit('habit@close_slidable');
               },
             ),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
               child: Icon(FeatherIcons.plus, color: GsColors.of(context).gray),
               onPressed: () {
+                Constant.emitter.emit('habit@close_slidable');
                 HapticFeedback.lightImpact();
                 Navigator.push(
                   context,
@@ -139,7 +142,7 @@ class _HabitScreenState extends State<HabitScreen> {
                     color: GsColors.of(context).background,
                     child: SafeArea(
                       child: habitStore.isLoaded ? 
-                        habitStore.items.isEmpty ? _placeholder() : HabitList(items: habitStore.items) : 
+                        habitStore.items.isEmpty ? _placeholder() : List(items: habitStore.items) : 
                         Center(),
                     ),
                   ),

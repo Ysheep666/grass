@@ -59,9 +59,7 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: [
               Locale('zh', 'CH'),
             ],
-            routes: {
-              '/': (context) => ContainerLayout(),
-            },
+            home: ContainerLayout(),
           ),
         ),
       ),

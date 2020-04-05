@@ -28,41 +28,30 @@ abstract class _HabitStore with Store {
 
   @action
   Future<void> didLoad() async {
-    _allItems = await Habit.getHabits();
+    _allItems = await Habit.getItems();
     _updateAllItems();
     isLoaded = true;
   }
 
   @action
   Future<void> save(Habit value) async {
-    await Habit.save(value);
+    final newValue = await Habit.save(value);
     if (value.id == null) {
-      _allItems.add(value);
-      if (_isSelectedAtHabit(value)) {
-        items.add(value);
-      }
+      _allItems.add(newValue);
     } else {
-      final index = _allItems.indexWhere((h) => h.id == value.id);
+      final index = _allItems.indexWhere((h) => h.id == newValue.id);
       if (index != -1) {
-        _allItems[index] = value;
-      }
-
-      if (_isSelectedAtHabit(value)) {
-        final observableListIndex = items.indexWhere((h) => h.id == value.id);
-        if (observableListIndex != -1) {
-          items[observableListIndex] = value;
-        }
-      } else {
-        items.remove(value);
+        _allItems[index] = newValue;
       }
     }
+    _updateAllItems();
   }
 
   @action
   Future<void> remove(Habit value) async {
     await Habit.delete(value.id);
     _allItems.remove(value);
-    items.remove(value);
+    _updateAllItems();
   }
 
   bool _isSelectedAtHabit(Habit value) {
