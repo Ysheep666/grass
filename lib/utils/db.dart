@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:grass/models/habit.dart';
 import 'package:grass/models/habit_record.dart';
+import 'package:grass/models/motion_group_record.dart';
+import 'package:grass/models/motion_record.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -81,13 +83,19 @@ class DbHelper {
       onCreate: (Database db, int version) async {
         await _createHabitTable(db);
         await _createHabitRecordTable(db);
+        await _createMotionRecordTable(db);
+        await _createMotionGroupRecordTable(db);
       }, 
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        await db.execute("DROP TABLE ${Habit.tableName}");
-        await db.execute("DROP TABLE ${HabitRecord.tableName}");
+        await db.execute('DROP TABLE ${Habit.tableName}');
+        await db.execute('DROP TABLE ${HabitRecord.tableName}');
+        await db.execute('DROP TABLE ${MotionRecord.tableName}');
+        await db.execute('DROP TABLE ${MotionGroupRecord.tableName}');
 
         await _createHabitTable(db);
         await _createHabitRecordTable(db);
+        await _createMotionRecordTable(db);
+        await _createMotionGroupRecordTable(db);
       },
     );
     _didInit = true;
@@ -95,29 +103,53 @@ class DbHelper {
 
   Future _createHabitTable(Database db) {
     return db.transaction((Transaction txn) async {
-      txn.execute("CREATE TABLE ${Habit.tableName} ("
-          "${Habit.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "${Habit.fieldName} TEXT,"
-          "${Habit.fieldRemarks} TEXT,"
-          "${Habit.fieldRepeatStatusType} TEXT,"
-          "${Habit.fieldRepeatSxtatusValues} TEXT,"
-          "${Habit.fieldStartDate} INTEGER,"
-          "${Habit.fieldAlertTime} INTEGER,"
-          "${Habit.fieldIsArchived} INTEGER,"
-          "${Habit.fieldCreatedDate} INTEGER,"
-          "${Habit.fieldUpdatedDate} INTEGER);"
+      txn.execute('CREATE TABLE ${Habit.tableName} ('
+          '${Habit.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
+          '${Habit.fieldName} TEXT,'
+          '${Habit.fieldRemarks} TEXT,'
+          '${Habit.fieldRepeatStatusType} TEXT,'
+          '${Habit.fieldRepeatSxtatusValues} TEXT,'
+          '${Habit.fieldStartDate} INTEGER,'
+          '${Habit.fieldAlertTime} INTEGER,'
+          '${Habit.fieldIsArchived} INTEGER,'
+          '${Habit.fieldCreatedDate} INTEGER,'
+          '${Habit.fieldUpdatedDate} INTEGER);'
       );
     });
   }
 
   Future _createHabitRecordTable(Database db) {
     return db.transaction((Transaction txn) async {
-      txn.execute("CREATE TABLE ${HabitRecord.tableName} ("
-          "${HabitRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "${HabitRecord.fieldHabitId} INTEGER,"
-          "${HabitRecord.fieldIsDone} INTEGER,"
-          "${HabitRecord.fieldCreatedDate} INTEGER,"
-          "${HabitRecord.fieldUpdatedDate} INTEGER);"
+      txn.execute('CREATE TABLE ${HabitRecord.tableName} ('
+          '${HabitRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
+          '${HabitRecord.fieldHabitId} INTEGER,'
+          '${HabitRecord.fieldIsDone} INTEGER,'
+          '${HabitRecord.fieldCreatedDate} INTEGER,'
+          '${HabitRecord.fieldUpdatedDate} INTEGER,'
+          'FOREIGN KEY(${HabitRecord.fieldHabitId}) REFERENCES ${Habit.tableName}(${Habit.fieldId}) ON DELETE CASCADE);'
+      );
+    });
+  }
+
+  Future _createMotionRecordTable(Database db) {
+    return db.transaction((Transaction txn) async {
+      txn.execute('CREATE TABLE ${MotionRecord.tableName} ('
+          '${MotionRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
+          '${MotionRecord.fieldMotionId} INTEGER,'
+          '${MotionRecord.fieldHabitRecordId} INTEGER,'
+          'FOREIGN KEY(${MotionRecord.fieldHabitRecordId}) REFERENCES ${HabitRecord.tableName}(${HabitRecord.fieldId}) ON DELETE CASCADE);'
+      );
+    });
+  }
+
+  Future _createMotionGroupRecordTable(Database db) {
+    return db.transaction((Transaction txn) async {
+      txn.execute('CREATE TABLE ${MotionGroupRecord.tableName} ('
+          '${MotionGroupRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
+          '${MotionGroupRecord.fieldMotionRecordId} INTEGER,'
+          '${MotionGroupRecord.fieldContent} TEXT,'
+          '${MotionGroupRecord.fieldIsDone} INTEGER,'
+          'FOREIGN KEY(${MotionGroupRecord.fieldMotionRecordId}) REFERENCES ${MotionRecord.tableName}(${MotionRecord.fieldId}) ON DELETE CASCADE);'
       );
     });
   }

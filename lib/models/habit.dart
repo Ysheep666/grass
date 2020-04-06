@@ -13,17 +13,17 @@ enum HabitRepeatStatusType {
 
 @JsonSerializable()
 class Habit extends BaseModel {
-  static final tableName = "habits";
-  static final fieldId = "id";
-  static final fieldName = "name";
-  static final fieldRemarks = "remarks";
-  static final fieldRepeatStatusType = "repeatStatusType";
-  static final fieldRepeatSxtatusValues = "repeatStatusValues";
-  static final fieldStartDate = "startDate";
-  static final fieldAlertTime = "alertTime";
-  static final fieldIsArchived = "isArchived";
-  static final fieldCreatedDate = "createdDate";
-  static final fieldUpdatedDate = "updatedDate";
+  static final tableName = 'habits';
+  static final fieldId = 'id';
+  static final fieldName = 'name';
+  static final fieldRemarks = 'remarks';
+  static final fieldRepeatStatusType = 'repeatStatusType';
+  static final fieldRepeatSxtatusValues = 'repeatStatusValues';
+  static final fieldStartDate = 'startDate';
+  static final fieldAlertTime = 'alertTime';
+  static final fieldIsArchived = 'isArchived';
+  static final fieldCreatedDate = 'createdDate';
+  static final fieldUpdatedDate = 'updatedDate';
 
   String name;
   String remarks;

@@ -2,16 +2,18 @@ import 'package:grass/utils/db.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'motion_record.dart';
+
 part 'habit_record.g.dart';
 
 @JsonSerializable()
 class HabitRecord extends BaseModel {
-  static final tableName = "habit_records";
-  static final fieldId = "id";
-  static final fieldHabitId = "habitId";
-  static final fieldIsDone = "isDone";
-  static final fieldCreatedDate = "createdDate";
-  static final fieldUpdatedDate = "updatedDate";
+  static final tableName = 'habit_records';
+  static final fieldId = 'id';
+  static final fieldHabitId = 'habitId';
+  static final fieldIsDone = 'isDone';
+  static final fieldCreatedDate = 'createdDate';
+  static final fieldUpdatedDate = 'updatedDate';
 
   int habitId;
   @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
@@ -20,6 +22,9 @@ class HabitRecord extends BaseModel {
   DateTime createdDate;
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
   DateTime updatedDate;
+
+  @JsonKey(ignore: true)
+  List<MotionRecord> motions;
 
   HabitRecord({
     int id,

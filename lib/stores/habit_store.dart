@@ -7,7 +7,7 @@ part 'habit_store.g.dart';
 
 class HabitStore = _HabitStore with _$HabitStore;
 
-/// habit 数据，主要用于 habit 列表
+/// habit 数据，主要用于 habit 页面
 abstract class _HabitStore with Store {
   List<Habit> _allItems = [];
 
