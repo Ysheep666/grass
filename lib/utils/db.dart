@@ -8,8 +8,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class BaseModel {
+abstract class BaseModel<T> {
   int id;
+  BaseModel(this.id);
 
   @override
   bool operator ==(Object other) =>
@@ -21,7 +22,44 @@ abstract class BaseModel {
   @override
   int get hashCode => id.hashCode;
 
-  BaseModel(this.id);
+  String getTableName() {
+    return '';
+  }
+
+  toJson();
+  Future<void> preSave() async {}
+
+  Future<int> save() async {
+    final tableName = getTableName();
+    if (tableName == '') {
+      return -1;
+    }
+    
+    final db = await DbHelper.instance.getDb();
+    await preSave();
+    final json = toJson();
+    if (json['id'] == null) {
+      return await db.insert(tableName, json);
+    } else {
+      await db.update(
+        tableName,
+        json,
+        where: 'id = ?',
+        whereArgs: [json['id']],
+      );
+      return json['id'];
+    }
+  }
+
+  Future<int> delete() async {
+    final tableName = getTableName();
+    if (tableName == '') {
+      return -1;
+    }
+
+    final db = await DbHelper.instance.getDb();
+    return await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
 }
 
 class DbHelper {
@@ -51,26 +89,6 @@ class DbHelper {
       _database.close();
       _didInit = false;
     }
-  }
-
-  Future<Map<String, dynamic>> save(Map<String, dynamic> json, {String tableName}) async {
-    final db = await DbHelper.instance.getDb();
-    if (json['id'] == null) {
-      json['id'] = await db.insert(tableName, json);
-    } else {
-      await db.update(
-        tableName,
-        json,
-        where: 'id = ?',
-        whereArgs: [json['id']],
-      );
-    }
-    return json;
-  }
-
-  Future<int> delete(int id, {String tableName}) async {
-    final db = await DbHelper.instance.getDb();
-    return await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
   }
 
   Future _init() async {
@@ -149,6 +167,8 @@ class DbHelper {
           '${MotionGroupRecord.fieldMotionRecordId} INTEGER,'
           '${MotionGroupRecord.fieldContent} TEXT,'
           '${MotionGroupRecord.fieldIsDone} INTEGER,'
+          '${MotionGroupRecord.fieldCreatedDate} INTEGER,'
+          '${MotionGroupRecord.fieldUpdatedDate} INTEGER,'
           'FOREIGN KEY(${MotionGroupRecord.fieldMotionRecordId}) REFERENCES ${MotionRecord.tableName}(${MotionRecord.fieldId}) ON DELETE CASCADE);'
       );
     });

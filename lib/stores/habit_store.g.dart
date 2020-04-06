@@ -43,21 +43,21 @@ mixin _$HabitStore on _HabitStore, Store {
     }, _$selectedDateAtom, name: '${_$selectedDateAtom.name}_set');
   }
 
-  final _$itemsAtom = Atom(name: '_HabitStore.items');
+  final _$habitsAtom = Atom(name: '_HabitStore.habits');
 
   @override
-  ObservableList<Habit> get items {
-    _$itemsAtom.context.enforceReadPolicy(_$itemsAtom);
-    _$itemsAtom.reportObserved();
-    return super.items;
+  ObservableList<Habit> get habits {
+    _$habitsAtom.context.enforceReadPolicy(_$habitsAtom);
+    _$habitsAtom.reportObserved();
+    return super.habits;
   }
 
   @override
-  set items(ObservableList<Habit> value) {
-    _$itemsAtom.context.conditionallyRunInAction(() {
-      super.items = value;
-      _$itemsAtom.reportChanged();
-    }, _$itemsAtom, name: '${_$itemsAtom.name}_set');
+  set habits(ObservableList<Habit> value) {
+    _$habitsAtom.context.conditionallyRunInAction(() {
+      super.habits = value;
+      _$habitsAtom.reportChanged();
+    }, _$habitsAtom, name: '${_$habitsAtom.name}_set');
   }
 
   final _$didLoadAsyncAction = AsyncAction('didLoad');
@@ -70,15 +70,15 @@ mixin _$HabitStore on _HabitStore, Store {
   final _$saveAsyncAction = AsyncAction('save');
 
   @override
-  Future<void> save(Habit value) {
-    return _$saveAsyncAction.run(() => super.save(value));
+  Future<void> save(Habit habit) {
+    return _$saveAsyncAction.run(() => super.save(habit));
   }
 
   final _$removeAsyncAction = AsyncAction('remove');
 
   @override
-  Future<void> remove(Habit value) {
-    return _$removeAsyncAction.run(() => super.remove(value));
+  Future<void> remove(Habit habit) {
+    return _$removeAsyncAction.run(() => super.remove(habit));
   }
 
   final _$_HabitStoreActionController = ActionController(name: '_HabitStore');
@@ -96,7 +96,7 @@ mixin _$HabitStore on _HabitStore, Store {
   @override
   String toString() {
     final string =
-        'isLoaded: ${isLoaded.toString()},selectedDate: ${selectedDate.toString()},items: ${items.toString()}';
+        'isLoaded: ${isLoaded.toString()},selectedDate: ${selectedDate.toString()},habits: ${habits.toString()}';
     return '{$string}';
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/layouts/container.dart';
 import 'package:grass/stores/base_store.dart';
+import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/preferences_service.dart';
 import 'package:oktoast/oktoast.dart';
@@ -34,6 +35,9 @@ class _MyAppState extends State<MyApp> {
       Provider<HabitStore>(
         create: (_) => HabitStore(),
       ),
+      Provider<HabitDetailStore>(
+        create: (_) => HabitDetailStore(),
+      ),
     ],
     child: Consumer<BaseStore>(
       builder: (_, store, __) => Observer(
@@ -43,13 +47,6 @@ class _MyAppState extends State<MyApp> {
           position: ToastPosition.center,
           child: MaterialApp(
             title: 'Grass',
-            // showPerformanceOverlay: true, //显示性能标签
-            // debugShowCheckedModeBanner: false,
-            // checkerboardRasterCacheImages: true,
-            // showSemanticsDebugger: true, // 显示语义视图
-            // theme: ThemeData(
-            //   splashColor: Colors.transparent,
-            // ),
             themeMode: store.useDarkMode,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,

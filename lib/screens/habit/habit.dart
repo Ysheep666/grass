@@ -141,9 +141,9 @@ class _HabitScreenState extends State<HabitScreen> {
                   child: Material(
                     color: GsColors.of(context).background,
                     child: SafeArea(
-                      child: habitStore.isLoaded ? 
-                        habitStore.items.isEmpty ? _placeholder() : List(items: habitStore.items) : 
-                        Center(),
+                      child: habitStore.isLoaded
+                          ? habitStore.habits.isEmpty ? _placeholder() : List(items: habitStore.habits) 
+                          : Center(),
                     ),
                   ),
                 ),

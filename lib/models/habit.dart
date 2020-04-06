@@ -59,20 +59,21 @@ class Habit extends BaseModel {
     this.updatedDate ??= DateTime.now();
   }
 
+  @override
+  getTableName() {
+    return tableName;
+  }
+
+  @override
+  Future<void> preSave() async {
+    this.updatedDate = DateTime.now();
+  }
+
   factory Habit.fromJson(Map<String, dynamic> json) => _$HabitFromJson(json);
   Map<String, dynamic> toJson() => _$HabitToJson(this);
 
   static List<int> _valuesFromString(String text) => text == null ? [] : text.split('|').map((a) => int.parse(a)).toList();
   static String _valuesToString(List<int> values) => values?.join('|');
-
-  static Future<Habit> save(Habit value) async {
-    final reset = await DbHelper.instance.save(value.toJson(), tableName: tableName);
-    return Habit.fromJson(reset);
-  }
-
-  static Future<int> delete(int id) async {
-    return await DbHelper.instance.delete(id, tableName: tableName);
-  }
 
   static Future<List<Habit>> getItems() async {
     final db = await DbHelper.instance.getDb();

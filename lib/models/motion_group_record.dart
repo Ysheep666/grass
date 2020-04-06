@@ -13,12 +13,17 @@ class MotionGroupRecord extends BaseModel {
   static final fieldMotionRecordId = 'motionRecordId';
   static final fieldContent = 'content';
   static final fieldIsDone = 'isDone';
+  static final fieldCreatedDate = 'createdDate';
+  static final fieldUpdatedDate = 'updatedDate';
 
   int motionRecordId;
   @JsonKey(fromJson: _valuesFromJson, toJson: _valuesToJson)
   List<MotionContent> content;
   @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
   bool isDone;
+  DateTime createdDate;
+  @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
+  DateTime updatedDate;
 
   MotionGroupRecord({
     int id,
@@ -27,6 +32,18 @@ class MotionGroupRecord extends BaseModel {
     this.isDone = false,
   }) : super(id) {
     this.content ??= [];
+    this.createdDate ??= DateTime.now();
+    this.updatedDate ??= DateTime.now();
+  }
+
+  @override
+  getTableName() {
+    return tableName;
+  }
+
+  @override
+  Future<void> preSave() async {
+    this.updatedDate = DateTime.now();
   }
 
   factory MotionGroupRecord.fromJson(Map<String, dynamic> json) => _$MotionGroupRecordFromJson(json);
@@ -43,12 +60,16 @@ class MotionGroupRecord extends BaseModel {
           : e.toJson())
       ?.toList();
 
-  static Future<MotionGroupRecord> save(MotionGroupRecord value) async {
-    final reset = await DbHelper.instance.save(value.toJson(), tableName: tableName);
-    return MotionGroupRecord.fromJson(reset);
-  }
-
-  static Future<int> delete(int id) async {
-    return await DbHelper.instance.delete(id, tableName: tableName);
+  static Future<List<MotionGroupRecord>> getItemsByMotionRecordIds(List<int> motionRecordIds) async {
+    if (motionRecordIds.isEmpty) {
+      return [];
+    }
+    final db = await DbHelper.instance.getDb();
+    List<Map> resets = await db.query(
+      tableName,
+      where: '$fieldMotionRecordId IN (?)',
+      whereArgs: [motionRecordIds.join(',')],
+    );
+    return resets.map((reset) => MotionGroupRecord.fromJson(reset)).toList();
   }
 }

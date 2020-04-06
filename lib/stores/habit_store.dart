@@ -9,7 +9,7 @@ class HabitStore = _HabitStore with _$HabitStore;
 
 /// habit 数据，主要用于 habit 页面
 abstract class _HabitStore with Store {
-  List<Habit> _allItems = [];
+  List<Habit> _allHabits = [];
 
   @observable
   bool isLoaded = false;
@@ -18,40 +18,41 @@ abstract class _HabitStore with Store {
   DateTime selectedDate = DateTime.now();
 
   @observable
-  ObservableList<Habit> items = ObservableList<Habit>();
+  ObservableList<Habit> habits = ObservableList<Habit>();
 
   @action
   setSelectedDate(DateTime value) {
     selectedDate = value;
-    _updateAllItems();
+    _updateHabits();
   }
 
   @action
   Future<void> didLoad() async {
-    _allItems = await Habit.getItems();
-    _updateAllItems();
+    _allHabits = await Habit.getItems();
     isLoaded = true;
+    _updateHabits();
   }
 
   @action
-  Future<void> save(Habit value) async {
-    final newValue = await Habit.save(value);
-    if (value.id == null) {
-      _allItems.add(newValue);
+  Future<void> save(Habit habit) async {
+    final isAdd = habit.id == null;
+    habit.id = await habit.save();
+    if (isAdd) {
+      _allHabits.add(habit);
     } else {
-      final index = _allItems.indexWhere((h) => h.id == newValue.id);
+      final index = _allHabits.indexWhere((h) => h.id == habit.id);
       if (index != -1) {
-        _allItems[index] = newValue;
+        _allHabits[index] = habit;
       }
     }
-    _updateAllItems();
+    _updateHabits();
   }
 
   @action
-  Future<void> remove(Habit value) async {
-    await Habit.delete(value.id);
-    _allItems.remove(value);
-    _updateAllItems();
+  Future<void> remove(Habit habit) async {
+    await habit.delete();
+    _allHabits.remove(habit);
+    _updateHabits();
   }
 
   bool _isSelectedAtHabit(Habit value) {
@@ -65,24 +66,24 @@ abstract class _HabitStore with Store {
     return value.repeatStatusValues[0] == diffDay;
   }
 
-  _updateAllItems() {
-    final newItems = _allItems
+  _updateHabits() {
+    final newItems = _allHabits
       .where((i) => _isSelectedAtHabit(i))
       .toList()
       ..sort((a, b) => a.updatedDate.difference(b.updatedDate).inMicroseconds > 0 ? -1 : 1);
 
-    final diff = ListDiff<Habit>(items, newItems);
+    final diff = ListDiff<Habit>(habits, newItems);
     final ots = diff.getOt();
     int index = 0;
     for (var i = 0; i < ots.length; i++) {
       final ot = ots[i];
       if (ot.type == OperationType.add) {
-        items.insert(i, ot.newValue);
+        habits.insert(i, ot.newValue);
       } else if (ot.type == OperationType.remove) {
-        items.removeAt(i + index);
+        habits.removeAt(i + index);
         index -= 1;
       } else {
-        items[i + index] = ot.newValue;
+        habits[i + index] = ot.newValue;
       }
     }
   }

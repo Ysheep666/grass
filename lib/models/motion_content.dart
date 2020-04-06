@@ -21,7 +21,6 @@ class MotionContent {
     this.defaultValue,
   });
 
-
   factory MotionContent.fromJson(Map<String, dynamic> json) => _$MotionContentFromJson(json);
   Map<String, dynamic> toJson() => _$MotionContentToJson(this);
 }

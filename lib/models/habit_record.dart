@@ -37,25 +37,35 @@ class HabitRecord extends BaseModel {
     this.updatedDate ??= DateTime.now();
   }
 
+  @override
+  getTableName() {
+    return tableName;
+  }
+
+  @override
+  Future<void> preSave() async {
+    this.updatedDate = DateTime.now();
+  }
+
+  Future<HabitRecord> createByCopy() async {
+    // this.updatedDate = DateTime.now();
+  }
+
   factory HabitRecord.fromJson(Map<String, dynamic> json) => _$HabitRecordFromJson(json);
   Map<String, dynamic> toJson() => _$HabitRecordToJson(this);
 
-  static Future<HabitRecord> save(HabitRecord value) async {
-    final reset = await DbHelper.instance.save(value.toJson(), tableName: tableName);
-    return HabitRecord.fromJson(reset);
-  }
-
-  static Future<int> delete(int id) async {
-    return await DbHelper.instance.delete(id, tableName: tableName);
-  }
-
-  static Future<List<HabitRecord>> getItemsByHabitId(int habitId) async {
+  static Future<HabitRecord> getLastByHabitId(int habitId) async {
     final db = await DbHelper.instance.getDb();
     List<Map> resets = await db.query(
       tableName,
       where: '$fieldHabitId = ?',
       whereArgs: [habitId],
+      orderBy: '$fieldId DESC',
+      limit: 1,
     );
-    return resets.map((reset) => HabitRecord.fromJson(reset)).toList();
+    if (resets.length > 0) {
+      return HabitRecord.fromJson(resets.first);
+    }
+    return null;
   }
 }

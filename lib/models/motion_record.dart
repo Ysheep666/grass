@@ -19,15 +19,21 @@ class MotionRecord extends BaseModel {
     this.habitRecordId,
   }) : super(id);
 
+  @override
+  getTableName() {
+    return tableName;
+  }
+
   factory MotionRecord.fromJson(Map<String, dynamic> json) => _$MotionRecordFromJson(json);
   Map<String, dynamic> toJson() => _$MotionRecordToJson(this);
 
-  static Future<MotionRecord> save(MotionRecord value) async {
-    final reset = await DbHelper.instance.save(value.toJson(), tableName: tableName);
-    return MotionRecord.fromJson(reset);
-  }
-
-  static Future<int> delete(int id) async {
-    return await DbHelper.instance.delete(id, tableName: tableName);
+  static Future<List<MotionRecord>> getItemsByHabitRecordId(int habitRecordId) async {
+    final db = await DbHelper.instance.getDb();
+    List<Map> resets = await db.query(
+      tableName,
+      where: '$fieldHabitRecordId = ?',
+      whereArgs: [habitRecordId],
+    );
+    return resets.map((reset) => MotionRecord.fromJson(reset)).toList();
   }
 }
