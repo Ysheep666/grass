@@ -7,6 +7,7 @@ import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:provider/provider.dart';
 
+import 'motion_picker.dart';
 import 'top.dart';
 
 class HabitDetailScreen extends StatefulWidget {
@@ -34,6 +35,20 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
     });
   }
 
+  void _openMotion() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return MotionPicker(
+          onChanged: (value) {
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -42,6 +57,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
         return Scaffold(
           backgroundColor: GsColors.of(context).background,
           appBar: GsAppBar(
+            shadow: _appBarShadow,
             middle: Center(),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
@@ -65,31 +81,47 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
               onPressed: _isSubmit ? () async {
               } : null,
             ),
-            shadow: _appBarShadow,
           ),
-          body: SafeArea(
-            child: habitDetailStore.isLoaded 
-                ? NotificationListener<ScrollNotification>(
-                  onNotification: (ScrollNotification notification) {
-                    final shadow = notification.metrics.pixels > 0;
-                    if (_appBarShadow != shadow) {
-                      setState(() {
-                        _appBarShadow = shadow;
-                      });
-                    }
-                    return true;
-                  },
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverToBoxAdapter(
-                        child: Top(habit: habitDetailStore.habit),
+          body: habitDetailStore.isLoaded 
+              ? NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification notification) {
+                  final shadow = notification.metrics.pixels > 0;
+                  if (_appBarShadow != shadow) {
+                    setState(() {
+                      _appBarShadow = shadow;
+                    });
+                  }
+                  return true;
+                },
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: Top(habit: habitDetailStore.habit),
+                    ),
+                    // SliverAnimatedList
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        child: CupertinoButton(
+                          padding: EdgeInsets.symmetric(vertical: 6),
+                          color: GsColors.of(context).primary,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          minSize: 0,
+                          child: Text(
+                            '添加动作',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: GsColors.of(context).white,
+                            ),
+                          ),
+                          onPressed: () => _openMotion(),
+                        ),
                       ),
-                      // SliverAnimatedList
-                    ],
-                  ),
-                )
-                : Center(),
-          ),
+                    ),
+                  ],
+                ),
+              )
+              : Center(),
         );
       },
     );

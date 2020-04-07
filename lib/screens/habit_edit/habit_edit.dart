@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/stores/habit_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
+import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
@@ -9,7 +11,6 @@ import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'alert_time_picker.dart';
@@ -155,11 +156,12 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           padding: EdgeInsets.zero,
           child: Text('保存', style: TextStyle(fontSize: 15)),
           onPressed: _isSubmit ? () async {
+            Navigator.pop(context);
             _value.name = _nameController.text;
             _value.remarks = _remarksController.text;
             await habitStore.save(_value);
-            showToast('✌️保存成功✌️');
-            Navigator.pop(context);
+            NativeMethod.notificationFeedback(NotificationFeedbackType.success);
+            NativeWidget.toast('✌️保存成功✌️');
           } : null,
         ),
       ),

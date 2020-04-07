@@ -27,6 +27,11 @@ abstract class _HabitDetailStore with Store {
   ObservableList<MotionGroupRecord> motionGroupRecords = ObservableList<MotionGroupRecord>();
 
   @action
+  setIsload(bool value) {
+    isLoaded = value;
+  }
+
+  @action
   Future<void> didLoad(Habit value) async {
     habit = value;
     HabitRecord _record = await HabitRecord.getLastByHabitId(habit.id);

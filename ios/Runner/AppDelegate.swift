@@ -9,6 +9,7 @@ import Flutter
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     MethodFlutterPlugin.register(with: self.registrar(forPlugin: "MethodFlutterPlugin"))
+    WidgetFlutterPlugin.register(with: self.registrar(forPlugin: "WidgetFlutterPlugin"))
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

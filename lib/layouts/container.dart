@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:grass/screens/habit/habit.dart';
 import 'package:grass/screens/menu/menu.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/side_menu/side_menu.dart';
 
@@ -44,7 +44,7 @@ class _ContainerLayoutState extends State<ContainerLayout> {
   }
 
   void _selected(data) {
-    HapticFeedback.lightImpact();
+    NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
     _sideMenuKey.currentState.close();
     setState(() {
       _routeName = data['routeName'] ?? '/';

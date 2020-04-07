@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grass/models/habit.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
+import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/check_cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
@@ -79,7 +81,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
         child: CupertinoSlidingSegmentedControl(
           children: segmentedChildren,
           onValueChanged: (HabitRepeatStatusType newValue) {
-            HapticFeedback.selectionClick();
+            NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
             setState(() {
               _type = newValue;
             });
@@ -98,7 +100,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
               title: title, 
               checked: _values[HabitRepeatStatusType.day].contains(i),
               onTap: () {
-                HapticFeedback.selectionClick();
+                NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
                 setState(() {
                   if (_values[HabitRepeatStatusType.day].contains(i)) {
                     _values[HabitRepeatStatusType.day].remove(i);
@@ -119,7 +121,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
               title: '每周第 ${i + 1} 天',
               checked: _values[HabitRepeatStatusType.week].contains(i),
               onTap: () {
-                HapticFeedback.selectionClick();
+                NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
                 setState(() {
                   _values[HabitRepeatStatusType.week] = [i];
                 });
@@ -153,7 +155,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
       borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        height: MediaQuery.of(context).size.height * 11 / 16,
+        height: getModalBottomSheetHeight(12),
         child: Scaffold(
           backgroundColor: GsColors.of(context).background,
           appBar: GsAppBar(
@@ -161,7 +163,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
             middle: Text('重复'),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.clear, size: 28, color: GsColors.of(context).text),
+              child: Icon(CupertinoIcons.clear, size: 36, color: GsColors.of(context).text),
               onPressed: () {
                 Navigator.pop(context);
               },

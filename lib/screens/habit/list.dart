@@ -63,7 +63,7 @@ class _ListState extends State<List> {
   Widget build(BuildContext context) {
     return AnimatedList(
       key: _listKey,
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.only(top: 10, bottom: 10 + MediaQuery.of(context).padding.bottom),
       initialItemCount: _initialItemCount,
       itemBuilder: (BuildContext context, int index, Animation<double> animation) {
         if (widget.items.length <= index) {

@@ -1,7 +1,7 @@
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:grass/stores/habit_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:intl/intl.dart';
@@ -99,7 +99,7 @@ class _CalendarTileState extends State<CalendarTile> {
             ),
             onTap: () {
               Constant.emitter.emit('habit@close_slidable');
-              HapticFeedback.selectionClick();
+              NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
               final habitStore = Provider.of<HabitStore>(context, listen: false);
               habitStore.setSelectedDate(date);
             },

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/widgets/cell/switch_cell.dart';
 
 class AlertTimePicker extends StatefulWidget {
@@ -42,7 +42,7 @@ class _AlertTimePickerState extends State<AlertTimePicker> {
             checked: _value != null,
             border: Border(bottom: BorderSide.none),
             onChanged: (value) {
-              HapticFeedback.selectionClick();
+              NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
               setState(() {
                 if (_value == null) {
                   _alertTime = DateTime.now();

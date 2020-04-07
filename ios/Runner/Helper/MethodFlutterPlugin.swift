@@ -19,6 +19,11 @@ import Foundation
         method.setMethodCallHandler({ (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let method = call.method as String
             switch method {
+            case "notificationFeedback":
+                let type = call.arguments as? Int
+                notificationFeedback(UINotificationFeedbackGenerator.FeedbackType(rawValue: type ?? 0)!)
+                result(nil)
+                break
             default:
                 result(FlutterMethodNotImplemented)
                 break

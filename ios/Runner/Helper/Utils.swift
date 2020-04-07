@@ -2,11 +2,11 @@
 //  Utils.swift
 //  Runner
 //
-//  Created by Yang on 2020/3/25.
+//  Created by Yang on 2020/4/7.
 //  Copyright © 2020 The Chromium Authors. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 func impactFeedback(_ feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
     let haptics = UIImpactFeedbackGenerator(style: feedbackStyle)

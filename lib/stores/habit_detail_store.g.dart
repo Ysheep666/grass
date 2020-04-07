@@ -103,6 +103,19 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     return _$didLoadAsyncAction.run(() => super.didLoad(value));
   }
 
+  final _$_HabitDetailStoreActionController =
+      ActionController(name: '_HabitDetailStore');
+
+  @override
+  dynamic setIsload(bool value) {
+    final _$actionInfo = _$_HabitDetailStoreActionController.startAction();
+    try {
+      return super.setIsload(value);
+    } finally {
+      _$_HabitDetailStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     final string =

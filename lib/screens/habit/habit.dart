@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/screens/habit_edit/habit_edit.dart';
 import 'package:grass/stores/habit_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
@@ -34,11 +34,6 @@ class _HabitScreenState extends State<HabitScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Widget _appBarMiddle(DateTime selectedDate) {
     final items = <Widget>[Text(dateTimeFromNow(selectedDate, 'yyyy年MM月dd日'))];
     if (calculateDifference(selectedDate, DateTime.now()).abs() > 1) {
@@ -61,7 +56,7 @@ class _HabitScreenState extends State<HabitScreen> {
             ),
           ),
           onTap: () {
-            HapticFeedback.selectionClick();
+            NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
             Constant.emitter.emit('habit@close_slidable');
             final habitStore = Provider.of<HabitStore>(context, listen: false);
             habitStore.setSelectedDate(DateTime.now());
@@ -104,6 +99,7 @@ class _HabitScreenState extends State<HabitScreen> {
         return Scaffold(
           backgroundColor: GsColors.of(context).background,
           appBar: GsAppBar(
+            shadow: false,
             middle: _appBarMiddle(habitStore.selectedDate),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
@@ -118,7 +114,7 @@ class _HabitScreenState extends State<HabitScreen> {
               child: Icon(FeatherIcons.plus, color: GsColors.of(context).gray),
               onPressed: () {
                 Constant.emitter.emit('habit@close_slidable');
-                HapticFeedback.lightImpact();
+                NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -127,28 +123,23 @@ class _HabitScreenState extends State<HabitScreen> {
                 );
               },
             ),
-            shadow: false,
           ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CalendarTile(
-                  selectedDate: habitStore.selectedDate,
-                  controller: _controller,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CalendarTile(
+                selectedDate: habitStore.selectedDate,
+                controller: _controller,
+              ),
+              Expanded(
+                child: Material(
+                  color: GsColors.of(context).background,
+                  child: habitStore.isLoaded
+                      ? habitStore.habits.isEmpty ? _placeholder() : List(items: habitStore.habits) 
+                      : Center(),
                 ),
-                Expanded(
-                  child: Material(
-                    color: GsColors.of(context).background,
-                    child: SafeArea(
-                      child: habitStore.isLoaded
-                          ? habitStore.habits.isEmpty ? _placeholder() : List(items: habitStore.habits) 
-                          : Center(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       }

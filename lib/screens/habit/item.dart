@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/screens/habit_detail/habit_detail.dart';
+import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/stores/habit_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
+import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
-import 'package:grass/utils/helper.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
@@ -63,28 +65,19 @@ class Item extends StatelessWidget {
           caption: '删除',
           color: GsColors.of(context).background,
           foregroundColor: GsColors.of(context).red,
-          onTap: () => GsHelper.of(context).alertDialog(
-            title: Text('您确定要删除吗？'),
-            content: Text('将删除此习惯的所有数据，不可恢复。'),
-            actions: [
-              AlertDialogActionModel(
-                content: Text('确定', style: TextStyle(color: GsColors.of(context).red)),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Future.delayed(Duration.zero, () async {
-                    final habitStore = Provider.of<HabitStore>(context, listen: false);
-                    habitStore.remove(habit);
-                  });
-                },
-              ),
-              AlertDialogActionModel(
-                content: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
+          onTap: () async {
+            final result = await NativeWidget.showConfirmDialog(
+              title: '您确定要删除吗？',
+              message: '将删除此习惯的所有数据，不可恢复。',
+            );
+            if (result) {
+              Future.delayed(Duration.zero, () async {
+                final habitStore = Provider.of<HabitStore>(context, listen: false);
+                habitStore.remove(habit);
+                NativeWidget.toast('✌️删除成功✌️');
+              });
+            }
+          },
         ),
       ],
       child: Padding(
@@ -145,13 +138,16 @@ class Item extends StatelessWidget {
             ),
           ),
           onTap: () {
-            HapticFeedback.lightImpact();
+            NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
+            final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+            habitDetailStore.setIsload(false);
             Navigator.push(
               context,
               CupertinoPageRoute(
                 builder: (context) => HabitDetailScreen(habit: habit)
               ),
             );
+            Constant.emitter.emit('habit@close_slidable');
           },
         ),
       ),

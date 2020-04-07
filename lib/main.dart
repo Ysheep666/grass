@@ -9,7 +9,6 @@ import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/preferences_service.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -41,23 +40,18 @@ class _MyAppState extends State<MyApp> {
     ],
     child: Consumer<BaseStore>(
       builder: (_, store, __) => Observer(
-        builder: (_) => OKToast(
-          backgroundColor: Colors.black.withOpacity(0.72),
-          textPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          position: ToastPosition.center,
-          child: MaterialApp(
-            title: 'Grass',
-            themeMode: store.useDarkMode,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              Locale('zh', 'CH'),
-            ],
-            home: ContainerLayout(),
-          ),
+        builder: (_) => MaterialApp(
+          title: 'Grass',
+          themeMode: store.useDarkMode,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            Locale('zh', 'CH'),
+          ],
+          home: ContainerLayout(),
         ),
       ),
     ),
