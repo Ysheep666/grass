@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grass/screens/motion/motion.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/helper.dart';
-import 'package:grass/widgets/motion/motion.dart';
 
 class MotionPicker extends StatefulWidget {
   MotionPicker({
@@ -31,11 +31,11 @@ class MotionPickerState extends State<MotionPicker> {
   Widget build(BuildContext context) {
     return Material(
       color: GsColors.of(context).background,
-      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
       clipBehavior: Clip.antiAlias,
       child: Container(
         height: getModalBottomSheetHeight(16),
-        child: MotionList(),
+        child: MotionScreen(),
       ),
     );
   }

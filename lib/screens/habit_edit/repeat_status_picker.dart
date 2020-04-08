@@ -33,7 +33,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
     HabitRepeatStatusType.custom: Text('自定义'),
   };
 
-  FocusNode _valueFocusNode;
+  FocusNode _valueFocusNode = FocusNode();
   TextEditingController _valueController;
 
   HabitRepeatStatusType _type;
@@ -48,7 +48,6 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
     super.initState();
     _type = widget.statusType;
     _values[widget.statusType] = widget.statusValues;
-    _valueFocusNode = FocusNode();
     _valueController = TextEditingController(text: '${_values[HabitRepeatStatusType.custom][0]}');
 
     _valueFocusNode.addListener(() {
@@ -152,14 +151,14 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   Widget build(BuildContext context) {
     return Material(
       color: GsColors.of(context).background,
-      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
       clipBehavior: Clip.antiAlias,
       child: Container(
         height: getModalBottomSheetHeight(12),
         child: Scaffold(
           backgroundColor: GsColors.of(context).background,
           appBar: GsAppBar(
-            padding: EdgeInsetsDirectional.only(start: 5, end: 5),
+            padding: const EdgeInsetsDirectional.only(start: 5, end: 5),
             middle: Text('重复'),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,

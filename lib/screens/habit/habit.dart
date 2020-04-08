@@ -43,7 +43,7 @@ class _HabitScreenState extends State<HabitScreen> {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: GsColors.of(context).backgroundGray,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             child: Container(
               height: 20,

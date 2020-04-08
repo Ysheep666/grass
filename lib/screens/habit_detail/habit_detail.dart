@@ -67,10 +67,10 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
               },
             ),
             trailing: CupertinoButton(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               color: GsColors.of(context).green,
               minSize: 0,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
               child: Text(
                 '完成训练',
                 style: TextStyle(
@@ -103,9 +103,9 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                         child: CupertinoButton(
-                          padding: EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
                           color: GsColors.of(context).primary,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: const BorderRadius.all(Radius.circular(5)),
                           minSize: 0,
                           child: Text(
                             '添加动作',

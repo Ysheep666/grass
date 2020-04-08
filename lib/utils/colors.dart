@@ -19,4 +19,5 @@ class GsColors {
   Color get text => isLight ? Color(0xFF222222) : Color(0xFFB8B8B8);
   Color get background => isLight ? Color(0xFFFFFFFF) : Color(0xFF1F1F1F);
   Color get backgroundGray => isLight ? Color(0xFFF6F6F6) : Color(0xFF1F1F1F);
+  Color get backgroundGrayB => isLight ? Color(0xFFE6E7E9) : Color(0xFF1F1F1F);
 }

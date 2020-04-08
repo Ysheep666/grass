@@ -71,7 +71,7 @@ class _CalendarTileState extends State<CalendarTile> {
         initialScrollIndex: 30 - calendarTileOffsetIndex,
         scrollDirection: Axis.horizontal,
         itemScrollController: _scrollController,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         itemBuilder: (context, index) {
           final date = _startDate.add(Duration(days: index));
           final isSelected = Utils.isSameDay(date, widget.selectedDate);
@@ -79,12 +79,12 @@ class _CalendarTileState extends State<CalendarTile> {
           final backgroundColor = GsColors.of(context).backgroundGray;
           final borderColor = isSelected ? GsColors.of(context).primary : GsColors.of(context).backgroundGray;
           return InkWell(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
             child: Ink(
               decoration: BoxDecoration(
                 color: backgroundColor,
                 border: Border.all(color: borderColor, width: 1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
               ),
               child: SizedBox(
                 width: 42,

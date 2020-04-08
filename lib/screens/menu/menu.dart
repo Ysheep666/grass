@@ -30,7 +30,7 @@ class _MenuScreenState extends State<MenuScreen> {
     return InkWell(
       child: Ink(
         height: 44,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         color: backgroundColor,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

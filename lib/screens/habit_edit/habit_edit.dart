@@ -29,7 +29,7 @@ class HabitEditScreen extends StatefulWidget {
 }
 
 class HabitEditScreenState extends State<HabitEditScreen> {
-  FocusNode _nameFocusNode;
+  FocusNode _nameFocusNode = FocusNode();
   TextEditingController _nameController;
   TextEditingController _remarksController;
 
@@ -66,7 +66,6 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   void initState() {
     super.initState();
     _value = widget.habit;
-    _nameFocusNode = FocusNode();
     _nameController = TextEditingController(text: _value.name);
     _remarksController = TextEditingController(text: _value.remarks);
   }
@@ -196,7 +195,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
               ),
               SizedBox(height: 24),
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15),
                 child: Text(
                   '基本信息',
                   style: TextStyle(
