@@ -14,6 +14,10 @@
 		54153F74242AF80D00A5A20F /* MethodFlutterPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */; };
 		545642C1243C7EB300EC5F1B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C0243C7EB200EC5F1B /* Utils.swift */; };
 		545642C3243CD27C00EC5F1B /* WidgetFlutterPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */; };
+		545642C7243EF0C000EC5F1B /* MotionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C6243EF0C000EC5F1B /* MotionListViewController.swift */; };
+		545642C9243EF26300EC5F1B /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C8243EF26300EC5F1B /* NavigationController.swift */; };
+		545642CB243F028000EC5F1B /* MotionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642CA243F027F00EC5F1B /* MotionCell.swift */; };
+		545642CD243F028800EC5F1B /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642CC243F028800EC5F1B /* Motion.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9740EEBA1CF902C7004384FC /* Flutter.framework */; };
 		9705A1C71CF904A300538489 /* Flutter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9740EEBA1CF902C7004384FC /* Flutter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -46,6 +50,10 @@
 		54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodFlutterPlugin.swift; sourceTree = "<group>"; };
 		545642C0243C7EB200EC5F1B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetFlutterPlugin.swift; sourceTree = "<group>"; };
+		545642C6243EF0C000EC5F1B /* MotionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionListViewController.swift; sourceTree = "<group>"; };
+		545642C8243EF26300EC5F1B /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		545642CA243F027F00EC5F1B /* MotionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionCell.swift; sourceTree = "<group>"; };
+		545642CC243F028800EC5F1B /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		5C5995C3F3FA3BE411C26620 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,8 +109,27 @@
 				545642C0243C7EB200EC5F1B /* Utils.swift */,
 				54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */,
 				545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */,
+				545642C8243EF26300EC5F1B /* NavigationController.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		545642C4243EF06B00EC5F1B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				545642C5243EF0B000EC5F1B /* MotionList */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		545642C5243EF0B000EC5F1B /* MotionList */ = {
+			isa = PBXGroup;
+			children = (
+				545642CC243F028800EC5F1B /* Motion.swift */,
+				545642CA243F027F00EC5F1B /* MotionCell.swift */,
+				545642C6243EF0C000EC5F1B /* MotionListViewController.swift */,
+			);
+			path = MotionList;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -140,6 +167,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				545642C4243EF06B00EC5F1B /* ViewControllers */,
 				54153F70242AF7B900A5A20F /* Helper */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -308,9 +336,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				545642C3243CD27C00EC5F1B /* WidgetFlutterPlugin.swift in Sources */,
+				545642CB243F028000EC5F1B /* MotionCell.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				545642C7243EF0C000EC5F1B /* MotionListViewController.swift in Sources */,
+				545642CD243F028800EC5F1B /* Motion.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				54153F74242AF80D00A5A20F /* MethodFlutterPlugin.swift in Sources */,
+				545642C9243EF26300EC5F1B /* NavigationController.swift in Sources */,
 				545642C1243C7EB300EC5F1B /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

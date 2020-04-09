@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:provider/provider.dart';
 
-import 'motion_picker.dart';
 import 'top.dart';
 
 class HabitDetailScreen extends StatefulWidget {
@@ -33,20 +33,6 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
       final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
       await habitDetailStore.didLoad(widget.habit);
     });
-  }
-
-  void _openMotion() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return MotionPicker(
-          onChanged: (value) {
-          },
-        );
-      },
-    );
   }
 
   @override
@@ -114,7 +100,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                               color: GsColors.of(context).white,
                             ),
                           ),
-                          onPressed: () => _openMotion(),
+                          onPressed: () => NativeWidget.motionPicker(),
                         ),
                       ),
                     ),

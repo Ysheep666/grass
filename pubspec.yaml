@@ -33,6 +33,7 @@ flutter:
   assets:
    - assets/images/
    - assets/resources/
+   - assets/resources/hRvZE8Z3Ew/thumb.png
    - assets/motions.json
   fonts:
     - family: Feather

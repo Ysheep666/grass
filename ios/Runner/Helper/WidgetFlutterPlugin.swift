@@ -11,12 +11,6 @@ import Toast_Swift
 
 // 原生 UI 调用
 @objc class WidgetFlutterPlugin: NSObject, FlutterPlugin {
-    let toastPositionEnumList = [
-        ToastPosition.top,
-        ToastPosition.center,
-        ToastPosition.bottom
-    ]
-
     static func register(with registrar: FlutterPluginRegistrar) {
         let pluginRegistrar: FlutterPluginRegistrar? = registrar
         if (pluginRegistrar != nil) {
@@ -26,11 +20,21 @@ import Toast_Swift
         }
     }
 
+    let toastPositionEnumList = [
+        ToastPosition.top,
+        ToastPosition.center,
+        ToastPosition.bottom
+    ]
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let method = call.method as String
         switch method {
         case "toast":
             makeToast(call.arguments as! [String : Any])
+            result(nil)
+            break
+        case "motionPicker":
+            motionPicker(call.arguments as! [String : Any])
             result(nil)
             break
         default:
@@ -46,6 +50,14 @@ import Toast_Swift
                 duration: arguments["duration"] as? Double ?? 0,
                 position: toastPositionEnumList[arguments["position"] as? Int ?? 0]
             );
+        }
+    }
+
+    private func motionPicker(_ arguments: [String: Any]) {
+        if let topController = getTopViewController() {
+            let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MotionList") as! MotionListViewController
+            let navigationController = NavigationController(rootViewController: controller)
+            topController.present(navigationController, animated: true)
         }
     }
 

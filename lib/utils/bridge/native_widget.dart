@@ -58,4 +58,8 @@ class NativeWidget {
       'position': _toastPositionEnumMap[position],
     });
   }
+
+  static Future<void> motionPicker() async {
+    await _channel.invokeMethod('motionPicker', {});
+  }
 }

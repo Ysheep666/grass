@@ -76,6 +76,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   List<Widget> _items() {
     final items = <Widget>[
       Container(
+        width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: CupertinoSlidingSegmentedControl(
           children: segmentedChildren,
@@ -151,7 +152,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   Widget build(BuildContext context) {
     return Material(
       color: GsColors.of(context).background,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
       clipBehavior: Clip.antiAlias,
       child: Container(
         height: getModalBottomSheetHeight(12),
@@ -168,7 +169,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
               },
             ),
           ),
-          body: ListView(
+          body: Column(
             children: _items(),
           ),
         ),
