@@ -41,13 +41,13 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
       builder: (BuildContext context) {
         final habitDetailStore = Provider.of<HabitDetailStore>(context);
         return Scaffold(
-          backgroundColor: GsColors.of(context).background,
+          backgroundColor: CupertinoColors.systemBackground,
           appBar: GsAppBar(
             shadow: _appBarShadow,
             middle: Center(),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Text('关闭', style: TextStyle(fontSize: 15, color: GsColors.of(context).primary)),
+              child: Text('关闭', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -59,9 +59,9 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               child: Text(
                 '完成训练',
-                style: TextStyle(
+                style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                   fontSize: 14,
-                  color: _isSubmit ? GsColors.of(context).white : GsColors.of(context).gray,
+                  color: _isSubmit ? CupertinoColors.white : CupertinoColors.systemGrey4,
                 ),
               ),
               onPressed: _isSubmit ? () async {
@@ -97,7 +97,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                             '添加动作',
                             style: TextStyle(
                               fontSize: 15,
-                              color: GsColors.of(context).white,
+                              color: CupertinoColors.white,
                             ),
                           ),
                           onPressed: () => NativeWidget.motionPicker(),

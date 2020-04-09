@@ -4,7 +4,6 @@ import 'package:grass/models/habit.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/bridge/native_widget.dart';
-import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
@@ -141,19 +140,21 @@ class HabitEditScreenState extends State<HabitEditScreen> {
   Widget build(BuildContext context) {
     final habitStore = Provider.of<HabitStore>(context);
     return Scaffold(
-      backgroundColor: GsColors.of(context).background,
+      backgroundColor: CupertinoColors.systemBackground,
       appBar: GsAppBar(
         middle: Text('新建习惯'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: Text('取消', style: TextStyle(fontSize: 15, color: GsColors.of(context).primary)),
+          child: Text('取消', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: Text('保存', style: TextStyle(fontSize: 15)),
+          child: Text('保存', style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
+            color: !_isSubmit ? CupertinoColors.systemGrey4 : null
+          )),
           onPressed: _isSubmit ? () async {
             Navigator.pop(context);
             _value.name = _nameController.text;
@@ -197,11 +198,11 @@ class HabitEditScreenState extends State<HabitEditScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Text(
-                  '基本信息',
+                  '配置信息',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: GsColors.of(context).text,
+                    color: CupertinoColors.label,
                   ),
                 ),
               ),

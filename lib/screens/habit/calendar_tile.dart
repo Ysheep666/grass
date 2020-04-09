@@ -1,4 +1,5 @@
 import 'package:date_utils/date_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
@@ -75,9 +76,9 @@ class _CalendarTileState extends State<CalendarTile> {
         itemBuilder: (context, index) {
           final date = _startDate.add(Duration(days: index));
           final isSelected = Utils.isSameDay(date, widget.selectedDate);
-          final color = isSelected ? GsColors.of(context).primary : GsColors.of(context).grayB;
-          final backgroundColor = GsColors.of(context).backgroundGray;
-          final borderColor = isSelected ? GsColors.of(context).primary : GsColors.of(context).backgroundGray;
+          final color = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey2;
+          final backgroundColor = CupertinoColors.systemGrey6;
+          final borderColor = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey6;
           return InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             child: Ink(
@@ -91,8 +92,14 @@ class _CalendarTileState extends State<CalendarTile> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(DateFormat('EEE', 'zh_CH').format(date), style: TextStyle(fontSize: 12, color: color)),
-                    Text(DateFormat('dd', 'zh_CH').format(date), style: TextStyle(fontSize: 14, color: color)),
+                    Text(
+                      DateFormat('EEE', 'zh_CH').format(date), 
+                      style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 12, color: color),
+                    ),
+                    Text(
+                      DateFormat('dd', 'zh_CH').format(date),
+                      style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 14, color: color),
+                    ),
                   ],
                 ),
               ),

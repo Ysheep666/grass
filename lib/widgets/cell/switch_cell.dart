@@ -33,10 +33,9 @@ class SwitchCell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(title, style: TextStyle(
-              fontSize: 15,
+            Text(title, style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+              fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: GsColors.of(context).text,
             )),
             Spacer(),
             SizedBox(width: 15),

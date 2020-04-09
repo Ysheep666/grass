@@ -48,7 +48,7 @@ class Item extends StatelessWidget {
         _action(
           icon: FeatherIcons.archive,
           caption: '归档',
-          color: GsColors.of(context).background,
+          color: CupertinoColors.systemBackground,
           foregroundColor: GsColors.of(context).primary,
           onTap: () {
             Future.delayed(Duration.zero, () async {
@@ -63,7 +63,7 @@ class Item extends StatelessWidget {
         _action(
           icon: FeatherIcons.trash_2,
           caption: '删除',
-          color: GsColors.of(context).background,
+          color: CupertinoColors.systemBackground,
           foregroundColor: GsColors.of(context).red,
           onTap: () async {
             final result = await NativeWidget.showConfirmDialog(
@@ -86,9 +86,9 @@ class Item extends StatelessWidget {
           child: Container(
             height: 100,
             decoration: BoxDecoration(
-              color: GsColors.of(context).white,
+              color: CupertinoColors.systemBackground,
               boxShadow: [BoxShadow(
-                color: GsColors.of(context).black.withOpacity(0.1),
+                color: CupertinoColors.systemGrey.withOpacity(0.3),
                 offset: Offset(0, 1),
                 blurRadius: 8,
                 spreadRadius: 2,
@@ -104,11 +104,17 @@ class Item extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Expanded(
-                        child: Text(habit.name, style: TextStyle(fontSize: 21)),
+                        child: Text(
+                          habit.name, 
+                          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 21),
+                        ),
                       ),
                       Text(
                         '已完成次数',
-                        style: TextStyle(fontSize: 12, color: GsColors.of(context).grayB),
+                        style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                          fontSize: 12, 
+                          color: CupertinoColors.systemGrey4
+                        ),
                       )
                     ],
                   ),
@@ -121,15 +127,19 @@ class Item extends StatelessWidget {
                           habit.remarks.isEmpty ? '暂无备注' : habit.remarks,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                             fontSize: 15,
-                            color: GsColors.of(context).grayB,
+                            color: CupertinoColors.systemGrey3,
                           ),
                         ),
                       ),
                       SizedBox(
                         width: 80,
-                        child: Text('0', textAlign: TextAlign.right, style: TextStyle(fontSize: 24)),
+                        child: Text(
+                          '0',
+                          textAlign: TextAlign.right, 
+                          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 24),
+                        ),
                       ),
                     ],
                   ),

@@ -10,6 +10,7 @@ import Flutter
     GeneratedPluginRegistrant.register(with: self)
     MethodFlutterPlugin.register(with: self.registrar(forPlugin: "MethodFlutterPlugin"))
     WidgetFlutterPlugin.register(with: self.registrar(forPlugin: "WidgetFlutterPlugin"))
+    UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "取消"
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

@@ -56,7 +56,8 @@ import Toast_Swift
     private func motionPicker(_ arguments: [String: Any]) {
         if let topController = getTopViewController() {
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MotionList") as! MotionListViewController
-            let navigationController = NavigationController(rootViewController: controller)
+            let navigationController = UINavigationController(rootViewController: controller)
+            navigationController.navigationBar.shadowImage = UIImage()
             topController.present(navigationController, animated: true)
         }
     }

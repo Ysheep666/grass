@@ -42,7 +42,7 @@ class _HabitScreenState extends State<HabitScreen> {
         GestureDetector(
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: GsColors.of(context).backgroundGray,
+              color: CupertinoColors.systemGrey6,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             child: Container(
@@ -79,14 +79,18 @@ class _HabitScreenState extends State<HabitScreen> {
         Image(
           image: AssetImage('assets/images/placeholder.png'),
           width: 160,
-          color: GsColors.of(context).gray,
+          color: CupertinoColors.systemGrey4,
         ),
         SizedBox(height: 20),
         Text(
           '您的任务列表为空\n请点击‘+’创建一个新习惯吧',
           textAlign: TextAlign.center, 
-          style: TextStyle(fontSize: 14, color: GsColors.of(context).gray),
+          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+            fontSize: 14, 
+            color: CupertinoColors.systemGrey4,
+          ),
         ),
+        SizedBox(height: 120),
       ],
     );
   }
@@ -97,13 +101,13 @@ class _HabitScreenState extends State<HabitScreen> {
       builder: (BuildContext context) {
         final habitStore = Provider.of<HabitStore>(context);
         return Scaffold(
-          backgroundColor: GsColors.of(context).background,
+          backgroundColor: CupertinoColors.systemBackground,
           appBar: GsAppBar(
             shadow: false,
             middle: _appBarMiddle(habitStore.selectedDate),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.menu, color: GsColors.of(context).gray),
+              child: Icon(FeatherIcons.menu, size: 28, color: CupertinoColors.systemGrey4),
               onPressed: () {
                 Constant.emitter.emit('drawer@toggle');
                 Constant.emitter.emit('habit@close_slidable');
@@ -111,7 +115,7 @@ class _HabitScreenState extends State<HabitScreen> {
             ),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.plus, color: GsColors.of(context).gray),
+              child: Icon(FeatherIcons.plus, size: 28, color: CupertinoColors.systemGrey4),
               onPressed: () {
                 Constant.emitter.emit('habit@close_slidable');
                 NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
@@ -133,7 +137,7 @@ class _HabitScreenState extends State<HabitScreen> {
               ),
               Expanded(
                 child: Material(
-                  color: GsColors.of(context).background,
+                  color: CupertinoColors.systemBackground,
                   child: habitStore.isLoaded
                       ? habitStore.habits.isEmpty ? _placeholder() : List(items: habitStore.habits) 
                       : Center(),

@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:grass/utils/colors.dart';
 
 /// 封装输入框
 class TextFieldCell extends StatelessWidget {
@@ -51,12 +51,11 @@ class TextFieldCell extends StatelessWidget {
         crossAxisAlignment: maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            height: 46,
+            height: 48,
             alignment: Alignment.centerLeft,
-            child: Text(title, style: TextStyle(
-              fontSize: 15,
+            child: Text(title, style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+              fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: GsColors.of(context).text,
             ))
           ),
           SizedBox(width: 15),
@@ -69,12 +68,15 @@ class TextFieldCell extends StatelessWidget {
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: TextStyle(color: GsColors.of(context).primary),
+                  hintStyle: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                    fontSize: 16,
+                    color: CupertinoColors.placeholderText,
+                  ),
                   border: InputBorder.none,
                 ),
                 textInputAction: textInputAction,
                 inputFormatters: inputFormatters,
-                cursorColor: GsColors.of(context).primary,
+                cursorColor: CupertinoColors.systemBlue,
                 maxLines: maxLines,
                 autofocus: autofocus,
                 onChanged: onChanged,

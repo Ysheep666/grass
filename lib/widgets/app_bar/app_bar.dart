@@ -26,13 +26,13 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _backgroundColor = backgroundColor ?? GsColors.of(context).background;
+    final _backgroundColor = backgroundColor ?? CupertinoColors.systemBackground;
     return Container(
       decoration: BoxDecoration(
           color: _backgroundColor,
           boxShadow: shadow ? [
             BoxShadow(
-              color: GsColors.of(context).black.withOpacity(0.1),
+              color: CupertinoColors.systemGrey.withOpacity(0.3),
               offset: Offset(0, 1),
               blurRadius: 1,
               spreadRadius: 0,
@@ -43,7 +43,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: padding,
         backgroundColor: _backgroundColor,
         middle: DefaultTextStyle(
-          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle.copyWith(fontWeight: FontWeight.w500),
+          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
           child: middle,
         ),
         leading: leading,

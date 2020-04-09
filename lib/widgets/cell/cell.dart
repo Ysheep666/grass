@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grass/utils/colors.dart';
 
 class Cell extends StatelessWidget {
   const Cell({
@@ -40,10 +39,9 @@ class Cell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: maxLines == 1 ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: TextStyle(
-              fontSize: 15,
+            Text(title, style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+              fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: GsColors.of(context).text,
             )),
             Spacer(),
             SizedBox(width: 15),
@@ -54,10 +52,9 @@ class Cell extends StatelessWidget {
                 maxLines: maxLines,
                 textAlign: maxLines == 1 ? TextAlign.right : textAlign,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                   fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: GsColors.of(context).gray,
+                  color: CupertinoColors.secondaryLabel,
                 ),
               ),
             ),
@@ -66,7 +63,7 @@ class Cell extends StatelessWidget {
               opacity: onTap == null ? 0 : 1,
               child: Padding(
                 padding: EdgeInsets.only(top: maxLines == 1 ? 0 : 2),
-                child: Icon(CupertinoIcons.right_chevron, color: GsColors.of(context).gray),
+                child: Icon(CupertinoIcons.right_chevron, color: CupertinoColors.tertiaryLabel),
               ),
             )
           ],

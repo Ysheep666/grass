@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/utils/bridge/native_method.dart';
-import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
@@ -58,16 +57,6 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   }
 
   @override
-  void deactivate() {
-    super.deactivate();
-    widget.onChanged({
-      'type': _type,
-      'values': _type == HabitRepeatStatusType.custom ? 
-          [_valueController.text == '' ? 0 : int.parse(_valueController.text)] : _values[_type],
-    });
-  }
-
-  @override
   void dispose() {
     _valueFocusNode.dispose();
     super.dispose();
@@ -76,7 +65,6 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   List<Widget> _items() {
     final items = <Widget>[
       Container(
-        width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: CupertinoSlidingSegmentedControl(
           children: segmentedChildren,
@@ -151,25 +139,38 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: GsColors.of(context).background,
+      color: CupertinoColors.systemBackground,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
       clipBehavior: Clip.antiAlias,
       child: Container(
         height: getModalBottomSheetHeight(12),
         child: Scaffold(
-          backgroundColor: GsColors.of(context).background,
+          backgroundColor: CupertinoColors.systemBackground,
           appBar: GsAppBar(
-            padding: const EdgeInsetsDirectional.only(start: 5, end: 5),
+            padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
             middle: Text('重复'),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.clear, size: 36, color: GsColors.of(context).text),
+              child: Icon(CupertinoIcons.clear, size: 44, color: CupertinoColors.systemBlue),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
+            trailing: CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: Text('确定', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
+              onPressed: () {
+                widget.onChanged({
+                  'type': _type,
+                  'values': _type == HabitRepeatStatusType.custom ? 
+                      [_valueController.text == '' ? 0 : int.parse(_valueController.text)] : _values[_type],
+                });
+                Navigator.pop(context);
+              },
+            ),
           ),
-          body: Column(
+          body: ListView(
+            physics: ScrollPhysics(),
             children: _items(),
           ),
         ),

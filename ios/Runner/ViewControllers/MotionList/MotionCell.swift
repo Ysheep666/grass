@@ -13,9 +13,7 @@ class MotionCell: UITableViewCell {
         didSet {
             if let motion = motion {
                 thumbView.image = UIImage(
-                    named: FlutterDartProject.lookupKey(forAsset: "assets/resources/\(motion.thumb)"),
-                    in: Bundle.main,
-                    compatibleWith: nil
+                    contentsOfFile: (Global.motionBundle?.path(forResource: motion.thumb, ofType: nil) ?? "")
                 )
                 nameLabel.text = motion.name
                 typeLabel.text = motion.type
@@ -28,7 +26,7 @@ class MotionCell: UITableViewCell {
             if let selected = isISelected {
                 if selected {
                     accessoryType = .checkmark
-                    backgroundColor = UIColor(named: "solitude")
+                    backgroundColor = UIColor(red:0.91, green:0.96, blue:1.00, alpha:1.00)
                 } else {
                     accessoryType = .none
                     backgroundColor = nil
@@ -44,6 +42,6 @@ class MotionCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         selectedBackgroundView = UIView()
-        selectedBackgroundView?.backgroundColor = UIColor(named: "solitude")
+        selectedBackgroundView?.backgroundColor = UIColor(red:0.91, green:0.96, blue:1.00, alpha:1.00)
     }
 }

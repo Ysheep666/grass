@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
@@ -25,7 +26,7 @@ class _MenuScreenState extends State<MenuScreen> {
     bool more = false,
   }) {
     final selected = name == widget.routeName;
-    final color = selected ? Colors.white : GsColors.of(context).text.withOpacity(more ? 0.6 : 1);
+    final color = selected ? Colors.white : CupertinoColors.label.withOpacity(more ? 0.6 : 1);
     final backgroundColor = selected ? GsColors.of(context).primary : Colors.transparent;
     return InkWell(
       child: Ink(
@@ -37,7 +38,7 @@ class _MenuScreenState extends State<MenuScreen> {
           children: <Widget>[
             Icon(iconData, size: 20, color: color),
             SizedBox(width: 15),
-            Text(title, style: TextStyle(
+            Text(title, style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
               color: color,
               fontSize: 14,
               fontWeight: FontWeight.w500,

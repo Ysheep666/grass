@@ -9,7 +9,6 @@
 import UIKit
 
 class MotionListViewController: UITableViewController {
-    var allMotions: [Motion] = []
     var motions: [Motion] = []
     var sortedGroupKeys: [String] = []
     var groups: [String: [Motion]] = [:]
@@ -29,19 +28,21 @@ class MotionListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if navigationItem.leftBarButtonItem == nil {
-            navigationItem.leftBarButtonItem =  UIBarButtonItem(
+            let buttonItem = UIBarButtonItem(
                 barButtonSystemItem: UIBarButtonItem.SystemItem.stop,
                 target: self,
                 action: #selector(close)
             )
+            navigationItem.leftBarButtonItem = buttonItem
         }
+
+        refreshRightBarButton()
 
         definesPresentationContext = true
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
 
-        allMotions = loadJson(FlutterDartProject.lookupKey(forAsset: "assets/motions.json"))
-        updateData()
+        refreshData()
         tableView.reloadData()
     }
 
@@ -80,12 +81,45 @@ class MotionListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let motion = getData(at: indexPath) else { return }
         impactFeedback(.light)
-        print(motion)
+        if let index = selectedMotions.firstIndex(of: motion) {
+            selectedMotions.remove(at: index)
+        } else {
+            selectedMotions.append(motion)
+        }
+
+        refreshRightBarButton()
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         if searchController.isActive { return nil }
         return sortedGroupKeys
+    }
+
+    func refreshRightBarButton() {
+        if navigationItem.rightBarButtonItem == nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "",
+                style: .plain,
+                target: self,
+                action: #selector(save)
+            )
+        }
+
+        let saveButton = navigationItem.rightBarButtonItem!
+        var title = "确定"
+        let titleAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .semibold)]
+        let isEnabled = !selectedMotions.isEmpty
+
+        if selectedMotions.count > 1 {
+            title += "(\(selectedMotions.count))"
+        }
+        saveButton.isEnabled = isEnabled
+        saveButton.title = title
+        saveButton.setTitleTextAttributes(titleAttributes, for: .normal)
+        saveButton.setTitleTextAttributes(titleAttributes, for: .highlighted)
+        saveButton.setTitleTextAttributes(titleAttributes, for: .disabled)
+        saveButton.tintColor = UIColor.systemBlue
     }
 
     func getData(at indexPath: IndexPath) -> Motion? {
@@ -100,8 +134,8 @@ class MotionListViewController: UITableViewController {
         return nil
     }
 
-    func updateData(_ searchText: String = "") {
-        motions = searchText == "" ? allMotions : allMotions.filter({
+    func refreshData(_ searchText: String = "") {
+        motions = searchText == "" ? Global.motions : Global.motions.filter({
             $0.name.contains(searchText) || $0.initials.contains(searchText) || $0.type.contains(searchText)
         })
         if !searchController.isActive {
@@ -120,19 +154,23 @@ class MotionListViewController: UITableViewController {
     @objc func close() {
         navigationController!.dismiss(animated: true, completion: nil)
     }
+
+    @objc func save() {
+        navigationController!.dismiss(animated: true, completion: nil)
+    }
 }
 
 
 extension MotionListViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, searchController.isActive {
-            updateData(searchText)
+            refreshData(searchText)
         }
         tableView.reloadData()
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        updateData()
+        refreshData()
         tableView.reloadData()
     }
 }
