@@ -36,4 +36,19 @@ class MotionRecord extends BaseModel {
     );
     return resets.map((reset) => MotionRecord.fromJson(reset)).toList();
   }
+
+  static Future<List<MotionRecord>> batchAdd(List<MotionRecord> habitRecords) async {
+    final db = await DbHelper.instance.getDb();
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      for (var habitRecord in habitRecords) {
+        batch.insert(tableName, habitRecord.toJson());
+      }
+      final ids = await batch.commit();
+      for (var i = 0; i < ids.length; i++) {
+        habitRecords[i].id = ids[i];
+      }
+    });
+    return habitRecords;
+  }
 }

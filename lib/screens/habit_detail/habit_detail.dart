@@ -8,8 +8,8 @@ import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:provider/provider.dart';
 
+import 'motion_record_list.dart';
 import 'top.dart';
-
 class HabitDetailScreen extends StatefulWidget {
   HabitDetailScreen({
     Key key,
@@ -23,6 +23,7 @@ class HabitDetailScreen extends StatefulWidget {
 }
 
 class HabitDetailScreenState extends State<HabitDetailScreen> {
+  HabitDetailStore _habitDetailStore;
   bool _isSubmit = false;
   bool _appBarShadow = false;
 
@@ -30,9 +31,18 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-      await habitDetailStore.didLoad(widget.habit);
+      _habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+      await _habitDetailStore.didLoad(widget.habit);
     });
+  }
+
+  @override
+  void deactivate() {
+    Future.delayed(Duration.zero, () async {
+      _habitDetailStore?.clear();
+      _habitDetailStore = null;
+    });
+    super.deactivate();
   }
 
   @override
@@ -84,10 +94,15 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                     SliverToBoxAdapter(
                       child: Top(habit: habitDetailStore.habit),
                     ),
-                    // SliverAnimatedList
+                    habitDetailStore.isLoaded ? MotionRecordList() : Center(),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        padding: EdgeInsets.only(
+                          top: 10, 
+                          left: 20, 
+                          right: 20, 
+                          bottom: 10 + MediaQuery.of(context).padding.bottom,
+                        ),
                         child: CupertinoButton(
                           padding: const EdgeInsets.symmetric(vertical: 6),
                           color: GsColors.of(context).primary,
@@ -100,7 +115,10 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                               color: CupertinoColors.white,
                             ),
                           ),
-                          onPressed: () => NativeWidget.motionPicker(),
+                          onPressed: () async {
+                            final ids = await NativeWidget.motionPicker();
+                            habitDetailStore.addMotionsByIds(ids);
+                          },
                         ),
                       ),
                     ),

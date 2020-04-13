@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/screens/habit_detail/habit_detail.dart';
-import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/bridge/native_widget.dart';
@@ -12,8 +11,8 @@ import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
-class Item extends StatelessWidget {
-  const Item({
+class HabitItem extends StatelessWidget {
+  const HabitItem({
     Key key,
     this.habit,
     this.slidableController,
@@ -84,19 +83,18 @@ class Item extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: GestureDetector(
           child: Container(
-            height: 100,
             decoration: BoxDecoration(
               color: CupertinoColors.systemBackground,
               boxShadow: [BoxShadow(
-                color: CupertinoColors.systemGrey.withOpacity(0.3),
+                color: CupertinoColors.systemGrey.withOpacity(0.2),
                 offset: Offset(0, 1),
-                blurRadius: 8,
-                spreadRadius: 2,
+                blurRadius: 10,
+                spreadRadius: 1,
               )],
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -149,8 +147,6 @@ class Item extends StatelessWidget {
           ),
           onTap: () {
             NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
-            final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-            habitDetailStore.setIsload(false);
             Navigator.push(
               context,
               CupertinoPageRoute(

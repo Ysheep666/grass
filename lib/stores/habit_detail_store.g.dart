@@ -60,6 +60,23 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     }, _$recordAtom, name: '${_$recordAtom.name}_set');
   }
 
+  final _$motionsAtom = Atom(name: '_HabitDetailStore.motions');
+
+  @override
+  List<Motion> get motions {
+    _$motionsAtom.context.enforceReadPolicy(_$motionsAtom);
+    _$motionsAtom.reportObserved();
+    return super.motions;
+  }
+
+  @override
+  set motions(List<Motion> value) {
+    _$motionsAtom.context.conditionallyRunInAction(() {
+      super.motions = value;
+      _$motionsAtom.reportChanged();
+    }, _$motionsAtom, name: '${_$motionsAtom.name}_set');
+  }
+
   final _$motionRecordsAtom = Atom(name: '_HabitDetailStore.motionRecords');
 
   @override
@@ -103,23 +120,25 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     return _$didLoadAsyncAction.run(() => super.didLoad(value));
   }
 
-  final _$_HabitDetailStoreActionController =
-      ActionController(name: '_HabitDetailStore');
+  final _$clearAsyncAction = AsyncAction('clear');
 
   @override
-  dynamic setIsload(bool value) {
-    final _$actionInfo = _$_HabitDetailStoreActionController.startAction();
-    try {
-      return super.setIsload(value);
-    } finally {
-      _$_HabitDetailStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> clear() {
+    return _$clearAsyncAction.run(() => super.clear());
+  }
+
+  final _$addMotionsByIdsAsyncAction = AsyncAction('addMotionsByIds');
+
+  @override
+  Future<void> addMotionsByIds(List<int> motionIds) {
+    return _$addMotionsByIdsAsyncAction
+        .run(() => super.addMotionsByIds(motionIds));
   }
 
   @override
   String toString() {
     final string =
-        'isLoaded: ${isLoaded.toString()},habit: ${habit.toString()},record: ${record.toString()},motionRecords: ${motionRecords.toString()},motionGroupRecords: ${motionGroupRecords.toString()}';
+        'isLoaded: ${isLoaded.toString()},habit: ${habit.toString()},record: ${record.toString()},motions: ${motions.toString()},motionRecords: ${motionRecords.toString()},motionGroupRecords: ${motionGroupRecords.toString()}';
     return '{$string}';
   }
 }

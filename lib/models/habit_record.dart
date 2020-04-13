@@ -47,10 +47,6 @@ class HabitRecord extends BaseModel {
     this.updatedDate = DateTime.now();
   }
 
-  Future<HabitRecord> createByCopy() async {
-    // this.updatedDate = DateTime.now();
-  }
-
   factory HabitRecord.fromJson(Map<String, dynamic> json) => _$HabitRecordFromJson(json);
   Map<String, dynamic> toJson() => _$HabitRecordToJson(this);
 

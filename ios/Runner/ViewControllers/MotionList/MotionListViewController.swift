@@ -9,6 +9,8 @@
 import UIKit
 
 class MotionListViewController: UITableViewController {
+    var completion: ((_ motions: [Motion]) -> Void)?
+
     var motions: [Motion] = []
     var sortedGroupKeys: [String] = []
     var groups: [String: [Motion]] = [:]
@@ -135,7 +137,7 @@ class MotionListViewController: UITableViewController {
     }
 
     func refreshData(_ searchText: String = "") {
-        motions = searchText == "" ? Global.motions : Global.motions.filter({
+        motions = searchText == "" ? Helper.motions : Helper.motions.filter({
             $0.name.contains(searchText) || $0.initials.contains(searchText) || $0.type.contains(searchText)
         })
         if !searchController.isActive {
@@ -156,6 +158,7 @@ class MotionListViewController: UITableViewController {
     }
 
     @objc func save() {
+        completion?(selectedMotions)
         navigationController!.dismiss(animated: true, completion: nil)
     }
 }

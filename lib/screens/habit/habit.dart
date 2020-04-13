@@ -13,7 +13,7 @@ import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar_tile.dart';
-import 'list.dart';
+import 'habit_list.dart';
 
 class HabitScreen extends StatefulWidget {
   HabitScreen({Key key}) : super(key: key);
@@ -139,7 +139,7 @@ class _HabitScreenState extends State<HabitScreen> {
                 child: Material(
                   color: CupertinoColors.systemBackground,
                   child: habitStore.isLoaded
-                      ? habitStore.habits.isEmpty ? _placeholder() : List(items: habitStore.habits) 
+                      ? habitStore.habits.isEmpty ? _placeholder() : HabitList()
                       : Center(),
                 ),
               ),

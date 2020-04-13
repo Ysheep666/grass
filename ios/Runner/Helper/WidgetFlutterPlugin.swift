@@ -34,8 +34,9 @@ import Toast_Swift
             result(nil)
             break
         case "motionPicker":
-            motionPicker(call.arguments as! [String : Any])
-            result(nil)
+            motionPicker(call.arguments as! [String : Any], completion: { motions in
+                result(motions.map { $0.id })
+            })
             break
         default:
             result(FlutterMethodNotImplemented)
@@ -53,9 +54,10 @@ import Toast_Swift
         }
     }
 
-    private func motionPicker(_ arguments: [String: Any]) {
+    private func motionPicker(_ arguments: [String: Any], completion: ((_ motions: [Motion]) -> Void)? = nil) {
         if let topController = getTopViewController() {
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MotionList") as! MotionListViewController
+            controller.completion = completion
             let navigationController = UINavigationController(rootViewController: controller)
             navigationController.navigationBar.shadowImage = UIImage()
             topController.present(navigationController, animated: true)
@@ -72,3 +74,4 @@ import Toast_Swift
         return nil
     }
 }
+

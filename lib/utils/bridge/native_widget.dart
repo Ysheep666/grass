@@ -59,7 +59,8 @@ class NativeWidget {
     });
   }
 
-  static Future<void> motionPicker() async {
-    await _channel.invokeMethod('motionPicker', {});
+  static Future<List<int>> motionPicker() async {
+    final reset = await _channel.invokeMethod('motionPicker', {});
+    return reset is List ? reset.map((e) => e as int).toList() : [];
   }
 }

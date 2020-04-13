@@ -8,7 +8,11 @@
 
 import Foundation
 
-struct Motion: Hashable, Codable, Identifiable {
+struct Motion: Codable, Equatable {
+    static func == (lhs: Motion, rhs: Motion) -> Bool {
+        return lhs.id == rhs.id
+    }
+
     var id: Int
     var name: String
     var remarks: String
@@ -16,4 +20,9 @@ struct Motion: Hashable, Codable, Identifiable {
     var type: String
     var media: String
     var thumb: String
+    var content: [MotionContent]
+}
+
+struct MotionContent: Codable {
+    var category: String
 }

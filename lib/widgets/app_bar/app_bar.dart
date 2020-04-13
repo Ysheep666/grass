@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grass/utils/colors.dart';
 
 class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
   GsAppBar({
@@ -10,6 +9,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.trailing,
     this.padding,
     this.backgroundColor,
+    this.transitionBetweenRoutes = true,
     this.shadow = true,
   })  : preferredSize = Size.fromHeight(44),
         super(key: key);
@@ -19,6 +19,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget trailing;
   final EdgeInsetsDirectional padding;
   final Color backgroundColor;
+  final bool transitionBetweenRoutes;
   final bool shadow;
 
   @override
@@ -40,6 +41,7 @@ class GsAppBar extends StatelessWidget implements PreferredSizeWidget {
           ] : [],
       ),
       child: CupertinoNavigationBar(
+        transitionBetweenRoutes: transitionBetweenRoutes,
         padding: padding,
         backgroundColor: _backgroundColor,
         middle: DefaultTextStyle(

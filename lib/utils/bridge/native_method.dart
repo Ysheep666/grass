@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
+import 'package:grass/models/motion.dart';
 
 enum ImpactFeedbackStyle {
   light,
@@ -21,7 +24,7 @@ const _notificationFeedbackTypeEnumMap = {
 };
 
 class NativeMethod {
-  static const _nativeMethod = const MethodChannel('com.penta.Grass/native_method');
+  static const _channel = const MethodChannel('com.penta.Grass/native_method');
 
   static Future<void> impactFeedback(ImpactFeedbackStyle type) async {
     switch (type) {
@@ -43,6 +46,12 @@ class NativeMethod {
   }
 
   static Future<void> notificationFeedback(NotificationFeedbackType type) async {
-    await _nativeMethod.invokeMethod('notificationFeedback', _notificationFeedbackTypeEnumMap[type]);
+    await _channel.invokeMethod('notificationFeedback', _notificationFeedbackTypeEnumMap[type]);
+  }
+
+  static Future<List<Motion>> getMotionsByIds(List<int> ids) async {
+    final reset =  await _channel.invokeMethod('getMotionsByIds', ids);
+    final json = jsonDecode(reset);
+    return (json as List).map((e) => Motion.fromJson(e)).toList();
   }
 }

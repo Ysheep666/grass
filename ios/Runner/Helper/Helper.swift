@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Global {
+class Helper {
     static let motions: [Motion] = loadJson("motions.json")
     static let motionBundle = Bundle(url: Bundle.main.url(forResource: "motions", withExtension: "bundle")!)
 }

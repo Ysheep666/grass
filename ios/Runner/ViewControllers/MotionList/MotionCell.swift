@@ -13,7 +13,7 @@ class MotionCell: UITableViewCell {
         didSet {
             if let motion = motion {
                 thumbView.image = UIImage(
-                    contentsOfFile: (Global.motionBundle?.path(forResource: motion.thumb, ofType: nil) ?? "")
+                    contentsOfFile: (Helper.motionBundle?.path(forResource: motion.thumb, ofType: nil) ?? "")
                 )
                 nameLabel.text = motion.name
                 typeLabel.text = motion.type

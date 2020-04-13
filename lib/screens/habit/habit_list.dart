@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/habit.dart';
+import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
-import 'item.dart';
+import 'habit_item.dart';
 
-class List extends StatefulWidget {
-  const List({
-    Key key,
-    this.items,
-  }) : super(key: key);
-
-  final ObservableList<Habit> items;
+class HabitList extends StatefulWidget {
+  const HabitList({Key key}) : super(key: key);
 
   @override
-  _ListState createState() => _ListState();
+  _HabitListState createState() => _HabitListState();
 }
 
-class _ListState extends State<List> {
+class _HabitListState extends State<HabitList> {
   GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  int _initialItemCount = 0;
   SlidableController _slidableController = SlidableController();
+  ObservableList<Habit> _habits;
 
   @override
   void initState() { 
     super.initState();
-    _initialItemCount = widget.items.length;
-    widget.items.observe((listChange) {
+    final habitStore = Provider.of<HabitStore>(context, listen: false);
+    _habits = habitStore.habits;
+    _habits.observe((listChange) {
+      if (!habitStore.isLoaded) {
+        return;
+      }
+
       if (listChange.added?.isNotEmpty ?? false) {
         _listKey.currentState.insertItem(listChange.index);
       }
@@ -38,7 +40,6 @@ class _ListState extends State<List> {
         });
       }
     });
-
     Constant.emitter.on('habit@close_slidable', _closeSlidable);
   }
 
@@ -52,10 +53,10 @@ class _ListState extends State<List> {
     _slidableController.activeState?.close();
   }
 
-  _buildItem(Habit item, Animation<double> animation) {
+  _buildItem(Habit habit, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
-      child: Item(habit: item, slidableController: _slidableController),
+      child: HabitItem(habit: habit, slidableController: _slidableController),
     );
   }
 
@@ -64,12 +65,12 @@ class _ListState extends State<List> {
     return AnimatedList(
       key: _listKey,
       padding: EdgeInsets.only(top: 10, bottom: 10 + MediaQuery.of(context).padding.bottom),
-      initialItemCount: _initialItemCount,
+      initialItemCount: _habits.length,
       itemBuilder: (BuildContext context, int index, Animation<double> animation) {
-        if (widget.items.length <= index) {
+        if (_habits.length <= index) {
           return null;
         }
-        return _buildItem(widget.items[index], animation);
+        return _buildItem(_habits[index], animation);
       },
     );
   }

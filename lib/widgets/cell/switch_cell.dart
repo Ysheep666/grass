@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grass/utils/colors.dart';
 
 class SwitchCell extends StatelessWidget {
   const SwitchCell({
