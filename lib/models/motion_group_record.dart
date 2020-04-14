@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:grass/utils/db.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -49,16 +51,23 @@ class MotionGroupRecord extends BaseModel {
   factory MotionGroupRecord.fromJson(Map<String, dynamic> json) => _$MotionGroupRecordFromJson(json);
   Map<String, dynamic> toJson() => _$MotionGroupRecordToJson(this);
 
-  static List<MotionContent> _valuesFromJson(dynamic json) => (json as List)
+  static List<MotionContent> _valuesFromJson(String jsonText) {
+    final json = jsonText == null ? [] : jsonDecode(jsonText);
+    return (json as List)
       ?.map((e) => e == null
           ? null
           : MotionContent.fromJson(e as Map<String, dynamic>))
       ?.toList();
-  static List<dynamic> _valuesToJson(List<MotionContent> values) => values
+  }
+
+  static String _valuesToJson(List<MotionContent> values) {
+    final json = values
       ?.map((e) => e == null
           ? null
           : e.toJson())
       ?.toList();
+    return jsonEncode(json);
+  }
 
   static Future<List<MotionGroupRecord>> getItemsByMotionRecordIds(List<int> motionRecordIds) async {
     if (motionRecordIds.isEmpty) {
@@ -67,9 +76,23 @@ class MotionGroupRecord extends BaseModel {
     final db = await DbHelper.instance.getDb();
     List<Map> resets = await db.query(
       tableName,
-      where: '$fieldMotionRecordId IN (?)',
-      whereArgs: [motionRecordIds.join(',')],
+      where: '$fieldMotionRecordId IN (${motionRecordIds.join(', ')})',
     );
     return resets.map((reset) => MotionGroupRecord.fromJson(reset)).toList();
+  }
+
+  static Future<List<MotionGroupRecord>> batchAdd(List<MotionGroupRecord> motionGroupRecords) async {
+    final db = await DbHelper.instance.getDb();
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      for (var motionGroupRecord in motionGroupRecords) {
+        batch.insert(tableName, motionGroupRecord.toJson());
+      }
+      final ids = await batch.commit();
+      for (var i = 0; i < ids.length; i++) {
+        motionGroupRecords[i].id = ids[i];
+      }
+    });
+    return motionGroupRecords;
   }
 }

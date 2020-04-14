@@ -13,7 +13,7 @@ class Top extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -29,7 +29,7 @@ class Top extends StatelessWidget {
           Text(
             habit.remarks == '' ? '暂无备注' : habit.remarks, 
             style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-              fontSize: 14, 
+              fontSize: 16,
               color: habit.remarks.isEmpty 
                   ? CupertinoColors.systemGrey3 : CupertinoColors.label,
             ),

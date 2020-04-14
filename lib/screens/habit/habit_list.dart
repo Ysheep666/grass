@@ -64,7 +64,7 @@ class _HabitListState extends State<HabitList> {
   Widget build(BuildContext context) {
     return AnimatedList(
       key: _listKey,
-      padding: EdgeInsets.only(top: 10, bottom: 10 + MediaQuery.of(context).padding.bottom),
+      padding: EdgeInsets.only(bottom: 10 + MediaQuery.of(context).padding.bottom),
       initialItemCount: _habits.length,
       itemBuilder: (BuildContext context, int index, Animation<double> animation) {
         if (_habits.length <= index) {

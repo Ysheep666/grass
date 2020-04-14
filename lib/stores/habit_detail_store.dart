@@ -67,9 +67,18 @@ abstract class _HabitDetailStore with Store {
     final newMotionRecords = await MotionRecord.batchAdd(
       motionIds.map((id) => MotionRecord(motionId: id, habitRecordId: record.id)).toList()
     );
+    final newMotionGroupRecords = await MotionGroupRecord.batchAdd(
+      newMotionRecords.map((r) => MotionGroupRecord(
+        motionRecordId: r.id,
+        content: newMotions.firstWhere((m) => m.id == r.motionId).content
+      )).toList()
+    );
     motions.addAll(newMotions);
     for (var motionRecord in newMotionRecords) {
       motionRecords.add(motionRecord);
+    }
+    for (var motionGroupRecord in newMotionGroupRecords) {
+      motionGroupRecords.add(motionGroupRecord);
     }
   }
 

@@ -9,7 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-const calendarTileOffsetIndex = 3;
+const _calendarDaysCount = 365;
+const _calendarDaysInitIndex = 30;
 
 _getStartDate() => DateTime.now().add(Duration(days: -30));
 
@@ -29,7 +30,7 @@ class CalendarTileController {
   goToday() {
     _calendarTileState
       ._scrollController
-      .scrollTo(index: 30 - calendarTileOffsetIndex, duration: Duration(milliseconds: 200));
+      .scrollTo(index: _calendarDaysInitIndex, alignment: 0.45, duration: Duration(milliseconds: 200));
   }
 }
 
@@ -48,8 +49,8 @@ class CalendarTile extends StatefulWidget {
 }
 
 class _CalendarTileState extends State<CalendarTile> {
-  DateTime _startDate = _getStartDate();
   final ItemScrollController _scrollController = ItemScrollController();
+  DateTime _startDate = _getStartDate();
 
   @override
   void initState() {
@@ -69,7 +70,8 @@ class _CalendarTileState extends State<CalendarTile> {
     return Container(
       height: 62,
       child: ScrollablePositionedList.separated(
-        initialScrollIndex: 30 - calendarTileOffsetIndex,
+        initialScrollIndex: _calendarDaysInitIndex,
+        initialAlignment: 0.45,
         scrollDirection: Axis.horizontal,
         itemScrollController: _scrollController,
         padding: const EdgeInsets.all(10),
@@ -88,7 +90,7 @@ class _CalendarTileState extends State<CalendarTile> {
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
               ),
               child: SizedBox(
-                width: 42,
+                width: 40,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -113,7 +115,7 @@ class _CalendarTileState extends State<CalendarTile> {
           );
         }, 
         separatorBuilder: (BuildContext context, int index) => SizedBox(width: 10), 
-        itemCount: 365,
+        itemCount: _calendarDaysCount,
       ),
     );
   }

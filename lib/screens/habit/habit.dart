@@ -103,7 +103,7 @@ class _HabitScreenState extends State<HabitScreen> {
         return Scaffold(
           backgroundColor: CupertinoColors.systemBackground,
           appBar: GsAppBar(
-            shadow: false,
+            decoration: BoxDecoration(boxShadow: []),
             middle: _appBarMiddle(habitStore.selectedDate),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,

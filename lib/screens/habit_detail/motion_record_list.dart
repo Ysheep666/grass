@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'motion_record_item.dart';
 
-
 class MotionRecordList extends StatefulWidget {
   const MotionRecordList({Key key}) : super(key: key);
 

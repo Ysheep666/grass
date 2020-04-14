@@ -77,6 +77,7 @@ class TextFieldCell extends StatelessWidget {
                 textInputAction: textInputAction,
                 inputFormatters: inputFormatters,
                 cursorColor: CupertinoColors.systemBlue,
+                keyboardAppearance: CupertinoTheme.brightnessOf(context),
                 maxLines: maxLines,
                 autofocus: autofocus,
                 onChanged: onChanged,

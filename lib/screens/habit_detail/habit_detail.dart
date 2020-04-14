@@ -53,7 +53,9 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
         return Scaffold(
           backgroundColor: CupertinoColors.systemBackground,
           appBar: GsAppBar(
-            shadow: _appBarShadow,
+            decoration: BoxDecoration(
+              boxShadow: _appBarShadow ? null : [],
+            ),
             middle: Center(),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
@@ -99,8 +101,8 @@ class HabitDetailScreenState extends State<HabitDetailScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(
                           top: 10, 
-                          left: 20, 
-                          right: 20, 
+                          left: 15, 
+                          right: 15, 
                           bottom: 10 + MediaQuery.of(context).padding.bottom,
                         ),
                         child: CupertinoButton(

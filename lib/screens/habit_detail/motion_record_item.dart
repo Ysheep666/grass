@@ -8,6 +8,8 @@ import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
+import 'motion_group_record_list.dart';
+
 class MotionRecordItem extends StatefulWidget {
   MotionRecordItem({
     Key key,
@@ -21,6 +23,11 @@ class MotionRecordItem extends StatefulWidget {
 }
 
 class _MotionRecordItemState extends State<MotionRecordItem> {
+  TextStyle _defaultHeaderTextStyle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+  );
+
   _top(Motion motion) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -45,27 +52,21 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
   }
 
   _header(Motion motion) {
-    TextStyle defaultStyle = TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-    );
     List<Widget> items = [];
     items.addAll([
-      SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: defaultStyle)),
-      SizedBox(width: 100, child: Text('上一次', textAlign: TextAlign.center, style: defaultStyle)),
+      SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
+      SizedBox(width: 100, child: Text('上一次', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
     ]);
     items.addAll(motion.content.map((c) => 
       Expanded(
         flex: 1,
-        child: Text(MotionCategoryEnumMap[c.category], textAlign: TextAlign.center, style: defaultStyle),
+        child: Text(MotionCategoryEnumMap[c.category], textAlign: TextAlign.center, style: _defaultHeaderTextStyle),
       ),
     ).toList());
-    items.addAll([
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Icon(FeatherIcons.check, size: 20, color: CupertinoColors.label),
-      ),
-    ]);
+    items.add(Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Icon(FeatherIcons.check, size: 20, color: CupertinoColors.label),
+    ));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -82,7 +83,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
         final habitDetailStore = Provider.of<HabitDetailStore>(context);
         final motion = habitDetailStore.motions.firstWhere((m) => m.id == widget.motionRecord.motionId);
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
@@ -99,6 +100,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
               children: <Widget>[
                 _top(motion),
                 _header(motion),
+                MotionGroupRecordList(motionRecord: widget.motionRecord),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -115,6 +117,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                           '添加组',
                           style: TextStyle(
                             fontSize: 14,
+                            fontWeight: FontWeight.w500,
                             color: CupertinoColors.label,
                           ),
                         ),
