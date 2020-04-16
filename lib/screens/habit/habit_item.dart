@@ -9,6 +9,7 @@ import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HabitItem extends StatelessWidget {
@@ -149,7 +150,7 @@ class HabitItem extends StatelessWidget {
             NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
             Navigator.push(
               context,
-              CupertinoPageRoute(
+              MaterialWithModalsPageRoute(
                 builder: (context) => HabitDetailScreen(habit: habit)
               ),
             );

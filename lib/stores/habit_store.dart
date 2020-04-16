@@ -73,7 +73,7 @@ abstract class _HabitStore with Store {
       ..sort((a, b) => a.updatedDate.difference(b.updatedDate).inMicroseconds > 0 ? -1 : 1);
 
     final diff = ListDiff<Habit>(habits, newItems);
-    final ots = diff.getOt();
+    final ots = diff.getOT();
     int index = 0;
     for (var i = 0; i < ots.length; i++) {
       final ot = ots[i];

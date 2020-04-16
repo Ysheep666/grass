@@ -55,7 +55,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
     List<Widget> items = [];
     items.addAll([
       SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
-      SizedBox(width: 100, child: Text('上一次', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
+      SizedBox(width: 108, child: Text('上一次', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
     ]);
     items.addAll(motion.content.map((c) => 
       Expanded(

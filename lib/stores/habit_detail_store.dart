@@ -85,7 +85,7 @@ abstract class _HabitDetailStore with Store {
   _updateMotionRecords(List<MotionRecord> items) async {
     motions = await NativeMethod.getMotionsByIds(items.map((e) => e.motionId).toList());
     final diff = ListDiff<MotionRecord>(motionRecords, items);
-    final ots = diff.getOt();
+    final ots = diff.getOT();
     int index = 0;
     for (var i = 0; i < ots.length; i++) {
       final ot = ots[i];
@@ -102,7 +102,7 @@ abstract class _HabitDetailStore with Store {
 
   _updateMotionGroupRecords(List<MotionGroupRecord> items) async {
     final diff = ListDiff<MotionGroupRecord>(motionGroupRecords, items);
-    final ots = diff.getOt();
+    final ots = diff.getOT();
     int index = 0;
     for (var i = 0; i < ots.length; i++) {
       final ot = ots[i];

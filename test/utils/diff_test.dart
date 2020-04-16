@@ -23,25 +23,25 @@ List<String> _merge(List<String> a, List<ChangeNotification<String>> ots) {
 void main() {
   test('List Diff 1', () {
     var diff = ListDiff<String>(''.split(''), 'abc123'.split(''));
-    var ots = diff.getOt();
+    var ots = diff.getOT();
     expect(_merge(''.split(''), ots).join(''), 'abc123');
   });
 
  test('List Diff 2', () {
     var diff = ListDiff<String>('abc123'.split(''), ''.split(''));
-    var ots = diff.getOt();
+    var ots = diff.getOT();
     expect(_merge('abc123'.split(''), ots).join(''), '');
   });
 
  test('List Diff 3', () {
     var diff = ListDiff<String>('abc123'.split(''), '123abc'.split(''));
-    var ots = diff.getOt();
+    var ots = diff.getOT();
     expect(_merge('abc123'.split(''), ots).join(''), '123abc');
   });
 
  test('List Diff 4', () {
     var diff = ListDiff<String>('abc123'.split(''), 'efg123'.split(''));
-    var ots = diff.getOt();
+    var ots = diff.getOT();
     expect(_merge('abc123'.split(''), ots).join(''), 'efg123');
   });
 }

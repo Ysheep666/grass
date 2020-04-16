@@ -9,6 +9,7 @@ import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
+import 'package:grass/widgets/popup/popup.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -79,12 +80,11 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   void _openRepeatStatus() {
     FocusScope.of(context).unfocus();
-    showModalBottomSheet(
+    showPopup(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
+      builder: (BuildContext context, ScrollController controller) {
         return RepeatStatusPicker(
+          scrollController: controller,
           statusType: _value.repeatStatusType,
           statusValues: _value.repeatStatusValues,
           onChanged: (value) {
@@ -100,19 +100,21 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   void _openStartDate() {
     FocusScope.of(context).unfocus();
-    showModalBottomSheet(
+    showPopup(
       context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 300,
-          child: CupertinoDatePicker(
-            mode: CupertinoDatePickerMode.date,
-            initialDateTime: _value.startDate,
-            onDateTimeChanged: (value) {
-              setState(() {
-                _value.startDate = value;
-              });
-            },
+      builder: (BuildContext context, ScrollController controller) {
+        return SafeArea(
+          child: Container(
+            height: 300,
+            child: CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.date,
+              initialDateTime: _value.startDate,
+              onDateTimeChanged: (value) {
+                setState(() {
+                  _value.startDate = value;
+                });
+              },
+            ),
           ),
         );
       },
@@ -121,9 +123,9 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   void _openAlertTime() {
     FocusScope.of(context).unfocus();
-    showModalBottomSheet(
+    showPopup(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context, ScrollController controller) {
         return AlertTimePicker(
           alertTime: _value.alertTime,
           onChanged: (value) {
@@ -172,7 +174,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
             children: <Widget>[
               TextFieldCell(
                 title: '名称',
-                hintText: '请输入习惯名称',
+                placeholder: '请输入习惯名称',
                 controller: _nameController,
                 focusNode: _nameFocusNode,
                 autofocus: _value.name == '',
@@ -187,7 +189,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
               ),
               TextFieldCell(
                 title: '备注',
-                hintText: '请输入备注',
+                placeholder: '请输入备注',
                 controller: _remarksController,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,

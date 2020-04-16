@@ -35,13 +35,8 @@ bool boolFromInt(int i) => i != 0;
 /// 布尔转数字
 int boolToInt(bool b) => b ? 1 : 0;
 
+/// 获取 bottom sheet 高度，去除掉 aafearea top, 将剩下的分成 16份，value 表示去多少份
 double getModalBottomSheetHeight(int value) {
   final data = MediaQueryData.fromWindow(window);
   return (data.size.height - data.padding.top) * value / 16;
-}
-
-class AlertDialogActionModel {
-  final Widget content;
-  final VoidCallback onPressed;
-  AlertDialogActionModel({this.content, this.onPressed});
 }

@@ -81,9 +81,8 @@ class _CalendarTileState extends State<CalendarTile> {
           final color = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey2;
           final backgroundColor = CupertinoColors.systemGrey6;
           final borderColor = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey6;
-          return InkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            child: Ink(
+          return GestureDetector(
+            child: Container(
               decoration: BoxDecoration(
                 color: backgroundColor,
                 border: Border.all(color: borderColor, width: 1),

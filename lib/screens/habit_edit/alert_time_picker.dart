@@ -33,37 +33,39 @@ class _AlertTimePickerState extends State<AlertTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350,
-      child: Column(
-        children: <Widget>[
-          SwitchCell(
-            title: '提醒',
-            checked: _value != null,
-            border: Border(bottom: BorderSide.none),
-            onChanged: (value) {
-              NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
-              setState(() {
-                if (_value == null) {
-                  _alertTime = DateTime.now();
-                } else {
-                  _alertTime = null;
-                }
-              });
-            },
-          ),
-          Expanded(
-            child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.time,
-              initialDateTime: _value,
-              onDateTimeChanged: (DateTime value) {
+    return SafeArea(
+      child: Container(
+        height: 350,
+        child: Column(
+          children: <Widget>[
+            SwitchCell(
+              title: '提醒',
+              checked: _value != null,
+              border: Border(bottom: BorderSide.none),
+              onChanged: (value) {
+                NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
                 setState(() {
-                  _alertTime = value;
+                  if (_value == null) {
+                    _alertTime = DateTime.now();
+                  } else {
+                    _alertTime = null;
+                  }
                 });
               },
             ),
-          ),
-        ],
+            Expanded(
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                initialDateTime: _value,
+                onDateTimeChanged: (DateTime value) {
+                  setState(() {
+                    _alertTime = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

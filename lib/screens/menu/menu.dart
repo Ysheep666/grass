@@ -28,8 +28,8 @@ class _MenuScreenState extends State<MenuScreen> {
     final selected = name == widget.routeName;
     final color = selected ? Colors.white : CupertinoColors.label.withOpacity(more ? 0.6 : 1);
     final backgroundColor = selected ? GsColors.of(context).primary : Colors.transparent;
-    return InkWell(
-      child: Ink(
+    return GestureDetector(
+      child: Container(
         height: 44,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         color: backgroundColor,

@@ -7,8 +7,8 @@ class ListDiff<T> {
   final List<T> b;
   ListDiff(this.a, this.b);
 
-  /// get diff ot
-  List<ChangeNotification<T>> getOt() {
+  /// 获取数据的编辑路径 OT
+  List<ChangeNotification<T>> getOT() {
     List<List<int>> matrix = List(a.length + 1);
     for (var i = 0; i < a.length + 1; i++) {
       matrix[i] =  List(b.length + 1);

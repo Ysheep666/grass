@@ -10,6 +10,7 @@ import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/icons/icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar_tile.dart';
@@ -121,7 +122,7 @@ class _HabitScreenState extends State<HabitScreen> {
                 NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  MaterialWithModalsPageRoute(
                     builder: (context) => HabitEditScreen(habit: Habit())
                   ),
                 );

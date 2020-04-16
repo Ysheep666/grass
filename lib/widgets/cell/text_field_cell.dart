@@ -8,7 +8,7 @@ class TextFieldCell extends StatelessWidget {
   const TextFieldCell({
     Key key,
     @required this.title,
-    this.hintText = '',
+    this.placeholder = '',
     this.controller,
     this.height = 50,
     this.keyboardType = TextInputType.text,
@@ -23,7 +23,7 @@ class TextFieldCell extends StatelessWidget {
   }): super(key: key);
 
   final String title;
-  final String hintText;
+  final String placeholder;
   final TextEditingController controller;
   final double height;
   final TextInputType keyboardType;
@@ -51,7 +51,7 @@ class TextFieldCell extends StatelessWidget {
         crossAxisAlignment: maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            height: 48,
+            height: 44,
             alignment: Alignment.centerLeft,
             child: Text(title, style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
               fontSize: 16,
@@ -61,27 +61,33 @@ class TextFieldCell extends StatelessWidget {
           SizedBox(width: 15),
           Expanded(
             child: Semantics(
-              label: hintText.isEmpty ? '请输入$title' : hintText,
-              child: TextField(
+              label: placeholder.isEmpty ? '请输入$title' : placeholder,
+              child: CupertinoTextField(
                 focusNode: focusNode,
-                keyboardType: keyboardType,
                 controller: controller,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                    fontSize: 16,
-                    color: CupertinoColors.placeholderText,
-                  ),
-                  border: InputBorder.none,
+                placeholder: placeholder,
+                textAlign: TextAlign.left,
+                style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                  fontSize: 16,
+                  height: 20 / 16,
                 ),
+                placeholderStyle: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                  fontSize: 16,
+                  height: 20 / 16,
+                  color: CupertinoColors.placeholderText,
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  border: Border.all(width: 0, color: Colors.transparent),
+                ),
+                keyboardType: keyboardType,
                 textInputAction: textInputAction,
                 inputFormatters: inputFormatters,
-                cursorColor: CupertinoColors.systemBlue,
-                keyboardAppearance: CupertinoTheme.brightnessOf(context),
                 maxLines: maxLines,
                 autofocus: autofocus,
                 onChanged: onChanged,
-                onSubmitted: onSubmitted,
+                onSubmitted: onSubmitted, 
               ),
             ),
           ),

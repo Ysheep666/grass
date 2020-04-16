@@ -12,11 +12,13 @@ import 'package:grass/widgets/cell/text_field_cell.dart';
 class RepeatStatusPicker extends StatefulWidget {
   RepeatStatusPicker({
     Key key,
+    this.scrollController,
     this.statusType,
     this.statusValues,
     this.onChanged,
   }) : super(key: key);
 
+  final ScrollController scrollController;
   final HabitRepeatStatusType statusType;
   final List<int> statusValues;
   final ValueChanged<Map> onChanged;
@@ -122,7 +124,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
         items.add(
           TextFieldCell(
             title: '间隔天数',
-            hintText: '请输入间隔天数',
+            placeholder: '请输入间隔天数',
             focusNode: _valueFocusNode,
             controller: _valueController,
             keyboardType: TextInputType.number,
@@ -138,10 +140,9 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: CupertinoColors.systemBackground,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-      clipBehavior: Clip.antiAlias,
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
       child: Container(
         height: getModalBottomSheetHeight(12),
         child: Scaffold(
@@ -170,7 +171,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
             ),
           ),
           body: ListView(
-            physics: ScrollPhysics(),
+            controller: widget.scrollController,
             children: _items(),
           ),
         ),

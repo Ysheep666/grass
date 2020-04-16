@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Duration _defaultSideMenuDuration = Duration(milliseconds: 120);
+const Duration _defaultSideMenuDuration = Duration(milliseconds: 250);
 
 class GsSideMenu extends StatefulWidget {
   GsSideMenu({
