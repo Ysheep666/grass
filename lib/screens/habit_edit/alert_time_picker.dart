@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/utils/bridge/native_method.dart';
+import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/cell/switch_cell.dart';
 
 class AlertTimePicker extends StatefulWidget {
@@ -55,6 +56,7 @@ class _AlertTimePickerState extends State<AlertTimePicker> {
             ),
             Expanded(
               child: CupertinoDatePicker(
+                backgroundColor: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
                 mode: CupertinoDatePickerMode.time,
                 initialDateTime: _value,
                 onDateTimeChanged: (DateTime value) {

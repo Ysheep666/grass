@@ -41,7 +41,7 @@ class CheckCell extends StatelessWidget {
             SizedBox(width: 15),
             Opacity(
               opacity: checked ? 1 : 0,
-              child: Icon(FeatherIcons.check, color: CupertinoColors.systemBlue),
+              child: Icon(FeatherIcons.check, color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context)),
             )
           ],
         ),

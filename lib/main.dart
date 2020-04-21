@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,11 +19,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) => MultiProvider(
     providers: [
       Provider<PreferencesService>(
@@ -40,9 +36,11 @@ class _MyAppState extends State<MyApp> {
     ],
     child: Consumer<BaseStore>(
       builder: (_, store, __) => Observer(
-        builder: (_) => MaterialApp(
+        builder: (_) => CupertinoApp(
           title: 'Grass',
-          themeMode: store.useDarkMode,
+          theme: CupertinoThemeData(
+            brightness: store.useDarkMode == ThemeMode.light ? Brightness.light : Brightness.dark,
+          ),
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -51,13 +49,14 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: [
             Locale('zh', 'CH'),
           ],
+          navigatorObservers: [store.routeObserver],
           home: ContainerLayout(),
         ),
       ),
     ),
   );
 }
-
+ 
 void main() async {
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);

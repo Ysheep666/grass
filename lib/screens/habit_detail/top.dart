@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
+import 'package:grass/utils/colors.dart';
 
 class Top extends StatelessWidget {
   const Top({
@@ -22,16 +23,15 @@ class Top extends StatelessWidget {
             style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
               fontSize: 24, fontWeight: 
               FontWeight.w500,
-              color: CupertinoColors.label,
             ),
           ),
           SizedBox(height: 8),
           Text(
-            habit.remarks == '' ? '暂无备注' : habit.remarks, 
+            habit.remarks == '' ? '暂无备注' : habit.remarks,
             style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
               fontSize: 16,
               color: habit.remarks.isEmpty 
-                  ? CupertinoColors.systemGrey3 : CupertinoColors.label,
+                  ? CupertinoDynamicColor.resolve(GsColors.grey, context) : null,
             ),
           ),
         ],

@@ -12,6 +12,10 @@ abstract class _BaseStore with Store {
     _setup();
   }
 
+  /// 主题管理
+  @observable
+  RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
   final PreferencesService _preferencesService;
 
   /// 主题管理

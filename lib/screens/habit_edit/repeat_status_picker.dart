@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/utils/bridge/native_method.dart';
+import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
@@ -28,12 +29,6 @@ class RepeatStatusPicker extends StatefulWidget {
 }
 
 class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
-  final Map<HabitRepeatStatusType, Widget> segmentedChildren = const {
-    HabitRepeatStatusType.day: Text('每日'),
-    HabitRepeatStatusType.week: Text('每周'),
-    HabitRepeatStatusType.custom: Text('自定义'),
-  };
-
   FocusNode _valueFocusNode = FocusNode();
   TextEditingController _valueController;
 
@@ -69,7 +64,11 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
       Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: CupertinoSlidingSegmentedControl(
-          children: segmentedChildren,
+          children: {
+            HabitRepeatStatusType.day: Text('每日', style: CupertinoTheme.of(context).textTheme.textStyle),
+            HabitRepeatStatusType.week: Text('每周', style: CupertinoTheme.of(context).textTheme.textStyle),
+            HabitRepeatStatusType.custom: Text('自定义', style: CupertinoTheme.of(context).textTheme.textStyle),
+          },
           onValueChanged: (HabitRepeatStatusType newValue) {
             NativeMethod.impactFeedback(ImpactFeedbackStyle.soft);
             setState(() {
@@ -146,15 +145,19 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
       child: Container(
         height: getModalBottomSheetHeight(12),
         child: Scaffold(
-          backgroundColor: CupertinoColors.systemBackground,
+          backgroundColor: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
           appBar: GsAppBar(
             padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
             middle: Text('重复'),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.clear, size: 44, color: CupertinoColors.systemBlue),
+              child: Icon(
+                CupertinoIcons.clear,
+                size: 44,
+                color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
+              ),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.maybePop(context);
               },
             ),
             trailing: CupertinoButton(
@@ -166,7 +169,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
                   'values': _type == HabitRepeatStatusType.custom ? 
                       [_valueController.text == '' ? 0 : int.parse(_valueController.text)] : _values[_type],
                 });
-                Navigator.pop(context);
+                Navigator.maybePop(context);
               },
             ),
           ),

@@ -29,11 +29,9 @@ class _HabitListState extends State<HabitList> {
       if (!habitStore.isLoaded) {
         return;
       }
-
       if (listChange.added?.isNotEmpty ?? false) {
         _listKey.currentState.insertItem(listChange.index);
       }
-
       if (listChange.removed?.isNotEmpty ?? false) {
         _listKey.currentState.removeItem(listChange.index,  (BuildContext context, Animation<double> animation) {
           return _buildItem(listChange.removed.first, animation);

@@ -62,32 +62,31 @@ class TextFieldCell extends StatelessWidget {
           Expanded(
             child: Semantics(
               label: placeholder.isEmpty ? '请输入$title' : placeholder,
-              child: CupertinoTextField(
+              child: TextField(
                 focusNode: focusNode,
                 controller: controller,
-                placeholder: placeholder,
-                textAlign: TextAlign.left,
+                textAlign: TextAlign.start,
                 style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                   fontSize: 16,
-                  height: 20 / 16,
+                  height: 1.5,
+                  textBaseline: TextBaseline.alphabetic,
                 ),
-                placeholderStyle: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                  fontSize: 16,
-                  height: 20 / 16,
-                  color: CupertinoColors.placeholderText,
+                decoration: InputDecoration(
+                  hintText: placeholder,
+                  hintStyle: TextStyle(
+                    color: CupertinoDynamicColor.resolve(CupertinoColors.placeholderText, context),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  border: InputBorder.none,
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border.all(width: 0, color: Colors.transparent),
-                ),
+                keyboardAppearance: CupertinoTheme.brightnessOf(context),
                 keyboardType: keyboardType,
                 textInputAction: textInputAction,
                 inputFormatters: inputFormatters,
                 maxLines: maxLines,
                 autofocus: autofocus,
                 onChanged: onChanged,
-                onSubmitted: onSubmitted, 
+                onSubmitted: onSubmitted,
               ),
             ),
           ),

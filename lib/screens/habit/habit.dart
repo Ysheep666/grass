@@ -5,6 +5,7 @@ import 'package:grass/models/habit.dart';
 import 'package:grass/screens/habit_edit/habit_edit.dart';
 import 'package:grass/stores/habit_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
+import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
@@ -43,7 +44,7 @@ class _HabitScreenState extends State<HabitScreen> {
         GestureDetector(
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey6,
+              color: CupertinoDynamicColor.resolve(GsColors.grey2, context),
               borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             child: Container(
@@ -52,7 +53,7 @@ class _HabitScreenState extends State<HabitScreen> {
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 '今天',
-                style: TextStyle(fontSize: 12, color: GsColors.of(context).primary),
+                style: TextStyle(fontSize: 12, color: GsColors.primary),
               ),
             ),
           ),
@@ -80,7 +81,7 @@ class _HabitScreenState extends State<HabitScreen> {
         Image(
           image: AssetImage('assets/images/placeholder.png'),
           width: 160,
-          color: CupertinoColors.systemGrey4,
+          color: CupertinoDynamicColor.resolve(GsColors.grey, context),
         ),
         SizedBox(height: 20),
         Text(
@@ -88,7 +89,7 @@ class _HabitScreenState extends State<HabitScreen> {
           textAlign: TextAlign.center, 
           style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
             fontSize: 14, 
-            color: CupertinoColors.systemGrey4,
+            color: CupertinoDynamicColor.resolve(GsColors.grey, context),
           ),
         ),
         SizedBox(height: 120),
@@ -102,13 +103,13 @@ class _HabitScreenState extends State<HabitScreen> {
       builder: (BuildContext context) {
         final habitStore = Provider.of<HabitStore>(context);
         return Scaffold(
-          backgroundColor: CupertinoColors.systemBackground,
+          backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
           appBar: GsAppBar(
             decoration: BoxDecoration(boxShadow: []),
             middle: _appBarMiddle(habitStore.selectedDate),
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.menu, size: 28, color: CupertinoColors.systemGrey4),
+              child: Icon(FeatherIcons.menu, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
               onPressed: () {
                 Constant.emitter.emit('drawer@toggle');
                 Constant.emitter.emit('habit@close_slidable');
@@ -116,16 +117,20 @@ class _HabitScreenState extends State<HabitScreen> {
             ),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.plus, size: 28, color: CupertinoColors.systemGrey4),
-              onPressed: () {
+              child: Icon(FeatherIcons.plus, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
+              onPressed: () async {
                 Constant.emitter.emit('habit@close_slidable');
                 NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
-                Navigator.push(
-                  context,
-                  MaterialWithModalsPageRoute(
+                final habit = await Navigator.of(context).push(
+                  MaterialWithModalsPageRoute<Habit>(
                     builder: (context) => HabitEditScreen(habit: Habit())
                   ),
                 );
+                if (habit != null) {
+                  await habitStore.save(habit);
+                  NativeMethod.notificationFeedback(NotificationFeedbackType.success);
+                  NativeWidget.toast('✌️保存成功✌️');
+                }
               },
             ),
           ),
@@ -138,7 +143,7 @@ class _HabitScreenState extends State<HabitScreen> {
               ),
               Expanded(
                 child: Material(
-                  color: CupertinoColors.systemBackground,
+                  color: CupertinoDynamicColor.resolve(GsColors.background, context),
                   child: habitStore.isLoaded
                       ? habitStore.habits.isEmpty ? _placeholder() : HabitList()
                       : Center(),

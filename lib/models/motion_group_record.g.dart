@@ -9,7 +9,7 @@ part of 'motion_group_record.dart';
 MotionGroupRecord _$MotionGroupRecordFromJson(Map<String, dynamic> json) {
   return MotionGroupRecord(
     id: json['id'] as int,
-    content: MotionGroupRecord._valuesFromJson(json['content']),
+    content: MotionGroupRecord._valuesFromJson(json['content'] as String),
     motionRecordId: json['motionRecordId'] as int,
     isDone: boolFromInt(json['isDone'] as int),
   )

@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grass/models/habit.dart';
-import 'package:grass/stores/habit_store.dart';
-import 'package:grass/utils/bridge/native_method.dart';
-import 'package:grass/utils/bridge/native_widget.dart';
+import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
@@ -11,7 +9,6 @@ import 'package:grass/widgets/cell/cell.dart';
 import 'package:grass/widgets/cell/text_field_cell.dart';
 import 'package:grass/widgets/popup/popup.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import 'alert_time_picker.dart';
 import 'repeat_status_picker.dart';
@@ -29,7 +26,6 @@ class HabitEditScreen extends StatefulWidget {
 }
 
 class HabitEditScreenState extends State<HabitEditScreen> {
-  FocusNode _nameFocusNode = FocusNode();
   TextEditingController _nameController;
   TextEditingController _remarksController;
 
@@ -72,7 +68,6 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   @override
   void dispose() {
-    _nameFocusNode.dispose();
     _nameController.dispose();
     _remarksController.dispose();
     super.dispose();
@@ -107,6 +102,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
           child: Container(
             height: 300,
             child: CupertinoDatePicker(
+              backgroundColor: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
               mode: CupertinoDatePickerMode.date,
               initialDateTime: _value.startDate,
               onDateTimeChanged: (value) {
@@ -140,30 +136,26 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final habitStore = Provider.of<HabitStore>(context);
     return Scaffold(
-      backgroundColor: CupertinoColors.systemBackground,
+      backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
       appBar: GsAppBar(
         middle: Text('新建习惯'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           child: Text('取消', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.maybePop(context);
           },
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           child: Text('保存', style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
-            color: !_isSubmit ? CupertinoColors.systemGrey4 : null
+            color: !_isSubmit ? CupertinoDynamicColor.resolve(GsColors.grey, context) : null
           )),
           onPressed: _isSubmit ? () async {
-            Navigator.pop(context);
             _value.name = _nameController.text;
             _value.remarks = _remarksController.text;
-            await habitStore.save(_value);
-            NativeMethod.notificationFeedback(NotificationFeedbackType.success);
-            NativeWidget.toast('✌️保存成功✌️');
+            Navigator.maybePop(context, _value);
           } : null,
         ),
       ),
@@ -176,7 +168,6 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 title: '名称',
                 placeholder: '请输入习惯名称',
                 controller: _nameController,
-                focusNode: _nameFocusNode,
                 autofocus: _value.name == '',
                 onChanged: (String value) {
                   setState(() {
@@ -184,7 +175,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                   });
                 },
                 onSubmitted: (String value) {
-                  _nameFocusNode.nextFocus();
+                  FocusScope.of(context).nextFocus();
                 },
               ),
               TextFieldCell(
@@ -193,7 +184,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 controller: _remarksController,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
-                height: 80,
+                height: 92,
                 maxLines: 99,
               ),
               SizedBox(height: 24),
@@ -204,7 +195,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: CupertinoColors.label,
+                    color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
                   ),
                 ),
               ),

@@ -54,7 +54,7 @@ class Cell extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                   fontSize: 15,
-                  color: CupertinoColors.secondaryLabel,
+                  color: CupertinoDynamicColor.resolve(CupertinoColors.secondaryLabel, context),
                 ),
               ),
             ),
@@ -63,7 +63,10 @@ class Cell extends StatelessWidget {
               opacity: onTap == null ? 0 : 1,
               child: Padding(
                 padding: EdgeInsets.only(top: maxLines == 1 ? 0 : 2),
-                child: Icon(CupertinoIcons.right_chevron, color: CupertinoColors.tertiaryLabel),
+                child: Icon(
+                  CupertinoIcons.right_chevron, 
+                  color: CupertinoDynamicColor.resolve(CupertinoColors.tertiaryLabel, context),
+                ),
               ),
             )
           ],

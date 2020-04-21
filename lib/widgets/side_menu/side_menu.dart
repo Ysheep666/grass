@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-const Duration _defaultSideMenuDuration = Duration(milliseconds: 250);
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class GsSideMenu extends StatefulWidget {
   GsSideMenu({
@@ -8,17 +9,14 @@ class GsSideMenu extends StatefulWidget {
     @required this.menu,
     @required this.content,
     this.menuWidth = 200,
-    this.duration = _defaultSideMenuDuration,
-    this.maskColor = Colors.black,
-    this.maskOpacity = 0.2,
+    this.maskColor,
+    this.maskOpacity = 0.1,
   }) : super(key: key);
 
   final Widget menu;
   final Widget content;
 
   final double menuWidth;
-  final Duration duration;
-
   final Color maskColor;
   final double maskOpacity;
 
@@ -27,16 +25,14 @@ class GsSideMenu extends StatefulWidget {
 }
 
 class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  AnimationController _animationController;
   bool _previouslyOpened = false;
 
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(
+    _animationController = AnimationController(
       value: 0,
-      duration: widget.duration,
       vsync: this
     )
       ..addListener(_animationChanged)
@@ -45,23 +41,23 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   void open() {
-    _controller.fling(velocity: 1);
+    _animationController.fling(velocity: 1);
   }
 
   void close() {
-    _controller.fling(velocity: -1);
+    _animationController.fling(velocity: -1);
   }
 
   void toggle() {
     if (_previouslyOpened) {
-      _controller.fling(velocity: -1);
+      _animationController.fling(velocity: -1);
     } else {
-      _controller.fling(velocity: 1);
+      _animationController.fling(velocity: 1);
     }
   }
 
@@ -70,7 +66,7 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
   }
 
   void _animationStatusChanged(AnimationStatus status) {
-    final bool opened = _controller.value > 0 ? true : false;
+    final bool opened = _animationController.value > 0 ? true : false;
     switch (status) {
       case AnimationStatus.reverse:
         break;
@@ -94,7 +90,7 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
     return Stack(
       children: <Widget>[
         Transform.translate(
-          offset: Offset(widget.menuWidth *  _controller.value, 0),
+          offset: Offset(widget.menuWidth *  _animationController.value, 0),
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -102,8 +98,22 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
               IgnorePointer(
                 ignoring: !_previouslyOpened,
                 child: GestureDetector(
-                  child: Container(
-                    color: widget.maskColor.withOpacity(widget.maskOpacity * _controller.value),
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                      child: Opacity(
+                        opacity: widget.maskOpacity * _animationController.value,
+                        child: Container(
+                          color: widget.maskColor ?? CupertinoDynamicColor.resolve(
+                            CupertinoDynamicColor.withBrightness(
+                              color: Colors.black,
+                              darkColor: Colors.white,
+                            ),
+                            context,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   onTap: () => close()
                 ),
@@ -112,7 +122,7 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
           ),
         ),
         Transform.translate(
-          offset: Offset(widget.menuWidth * (_controller.value - 1), 0),
+          offset: Offset(widget.menuWidth * (_animationController.value - 1), 0),
           child: Container(
             width: widget.menuWidth,
             child: widget.menu

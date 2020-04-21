@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:grass/utils/colors.dart';
 
 
 
@@ -299,7 +300,7 @@ class GsAppBar extends StatefulWidget implements ObstructingPreferredSizeWidget 
   /// True if the navigation bar's background color has no transparency.
   @override
   bool shouldFullyObstruct(BuildContext context) {
-    final Color backgroundColor = this.decoration?.color ?? CupertinoColors.systemBackground;
+    final Color backgroundColor = this.decoration?.color ??  CupertinoDynamicColor.resolve(GsColors.background, context);
     return backgroundColor.alpha == 0xFF;
   }
 
@@ -368,10 +369,10 @@ class _GsAppBarState extends State<GsAppBar> {
         builder: (BuildContext context) {
           return DecoratedBox(
             decoration: BoxDecoration().copyWith(
-              color: widget.decoration?.color ?? CupertinoColors.systemBackground,
+              color: widget.decoration?.color ?? CupertinoDynamicColor.resolve(GsColors.background, context),
               boxShadow: widget.decoration?.boxShadow ?? [
                 BoxShadow(
-                  color: CupertinoColors.systemGrey.withOpacity(0.2),
+                  color: CupertinoDynamicColor.resolve(GsColors.shadowColor, context),
                   offset: Offset(0, 1),
                   blurRadius: 1,
                   spreadRadius: 1,

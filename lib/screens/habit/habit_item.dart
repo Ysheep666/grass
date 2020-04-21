@@ -48,8 +48,8 @@ class HabitItem extends StatelessWidget {
         _action(
           icon: FeatherIcons.archive,
           caption: '归档',
-          color: CupertinoColors.systemBackground,
-          foregroundColor: GsColors.of(context).primary,
+          color: CupertinoDynamicColor.resolve(GsColors.background, context),
+          foregroundColor: GsColors.primary,
           onTap: () {
             Future.delayed(Duration.zero, () async {
               final habitStore = Provider.of<HabitStore>(context, listen: false);
@@ -63,8 +63,8 @@ class HabitItem extends StatelessWidget {
         _action(
           icon: FeatherIcons.trash_2,
           caption: '删除',
-          color: CupertinoColors.systemBackground,
-          foregroundColor: GsColors.of(context).red,
+          color: CupertinoDynamicColor.resolve(GsColors.background, context),
+          foregroundColor: GsColors.red,
           onTap: () async {
             final result = await NativeWidget.showConfirmDialog(
               title: '您确定要删除吗？',
@@ -85,13 +85,15 @@ class HabitItem extends StatelessWidget {
         child: GestureDetector(
           child: Container(
             decoration: BoxDecoration(
-              color: CupertinoColors.systemBackground,
-              boxShadow: [BoxShadow(
-                color: CupertinoColors.systemGrey.withOpacity(0.2),
-                offset: Offset(0, 1),
-                blurRadius: 10,
-                spreadRadius: 1,
-              )],
+              color: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
+              boxShadow: [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(GsColors.shadowColor, context),
+                  offset: Offset(0, 1),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ],
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             child: Padding(
@@ -111,8 +113,8 @@ class HabitItem extends StatelessWidget {
                       Text(
                         '已完成次数',
                         style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                          fontSize: 12, 
-                          color: CupertinoColors.systemGrey4
+                          fontSize: 12,
+                          color: CupertinoDynamicColor.resolve(GsColors.grey, context)
                         ),
                       )
                     ],
@@ -128,7 +130,7 @@ class HabitItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                             fontSize: 15,
-                            color: CupertinoColors.systemGrey3,
+                            color: CupertinoDynamicColor.resolve(GsColors.grey, context),
                           ),
                         ),
                       ),
@@ -147,14 +149,14 @@ class HabitItem extends StatelessWidget {
             ),
           ),
           onTap: () {
+            Constant.emitter.emit('habit@close_slidable');
             NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
-            Navigator.push(
-              context,
+            Navigator.of(context).push(
               MaterialWithModalsPageRoute(
+                fullscreenDialog: true,
                 builder: (context) => HabitDetailScreen(habit: habit)
               ),
             );
-            Constant.emitter.emit('habit@close_slidable');
           },
         ),
       ),

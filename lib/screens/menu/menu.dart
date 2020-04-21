@@ -26,8 +26,11 @@ class _MenuScreenState extends State<MenuScreen> {
     bool more = false,
   }) {
     final selected = name == widget.routeName;
-    final color = selected ? Colors.white : CupertinoColors.label.withOpacity(more ? 0.6 : 1);
-    final backgroundColor = selected ? GsColors.of(context).primary : Colors.transparent;
+    final color = selected ? Colors.white : CupertinoDynamicColor.resolve(
+      CupertinoColors.label,
+      context,
+    ).withOpacity(more ? 0.6 : 1);
+    final backgroundColor = selected ? GsColors.primary : Colors.transparent;
     return GestureDetector(
       child: Container(
         height: 44,
@@ -57,7 +60,7 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -78,9 +78,9 @@ class _CalendarTileState extends State<CalendarTile> {
         itemBuilder: (context, index) {
           final date = _startDate.add(Duration(days: index));
           final isSelected = Utils.isSameDay(date, widget.selectedDate);
-          final color = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey2;
-          final backgroundColor = CupertinoColors.systemGrey6;
-          final borderColor = isSelected ? GsColors.of(context).primary : CupertinoColors.systemGrey6;
+          final color = CupertinoDynamicColor.resolve(isSelected ? GsColors.primary : GsColors.grey, context);
+          final backgroundColor = CupertinoDynamicColor.resolve(GsColors.grey2, context);
+          final borderColor = CupertinoDynamicColor.resolve(isSelected ? GsColors.primary : GsColors.grey2, context);
           return GestureDetector(
             child: Container(
               decoration: BoxDecoration(

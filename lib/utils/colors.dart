@@ -1,15 +1,43 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class GsColors {
-  static GsColors of(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-    return GsColors(isLight);
-  }
+  static const CupertinoDynamicColor primary = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF409EFF), 
+    darkColor: Color(0xFF409EFF),
+  );
 
-  GsColors(this.isLight);
-  bool isLight;
+  static const CupertinoDynamicColor red = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFEC352D), 
+    darkColor: Color(0xFFEC352D),
+  );
 
-  Color get primary => isLight ? Color(0xFF409EFF) : Color(0xFF409EFF);
-  Color get red => isLight ? Color(0xFFEC352D) : Color(0xFFEC352D);
-  Color get green => isLight ? Color(0xFF00CF67) : Color(0xFFEC352D);
+  static const CupertinoDynamicColor green = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF00CF67), 
+    darkColor: Color(0xFF00CF67),
+  );
+
+  static const CupertinoDynamicColor background = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF), 
+    darkColor: Color(0xFF000000),
+  );
+
+  static const CupertinoDynamicColor boxBackground = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF), 
+    darkColor: Color(0xFF353535),
+  );
+
+  static const CupertinoDynamicColor shadowColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFDFDFDF), 
+    darkColor: Color(0xFF303030),
+  );
+
+  static const CupertinoDynamicColor grey = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFAAAAAA), 
+    darkColor: Color(0xFF9B9B9B),
+  );
+
+  static const CupertinoDynamicColor grey2 = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFF2F2F7), 
+    darkColor: Color(0xFF1C1C1E),
+  );
 }

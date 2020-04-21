@@ -5,6 +5,7 @@ import 'package:grass/models/motion.dart';
 import 'package:grass/models/motion_content.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +24,6 @@ class MotionRecordItem extends StatefulWidget {
 }
 
 class _MotionRecordItemState extends State<MotionRecordItem> {
-  TextStyle _defaultHeaderTextStyle = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w600,
-  );
-
   _top(Motion motion) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -52,20 +48,25 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
   }
 
   _header(Motion motion) {
+    TextStyle headerTextStyle = CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+    );
+
     List<Widget> items = [];
     items.addAll([
-      SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
-      SizedBox(width: 108, child: Text('上一次', textAlign: TextAlign.center, style: _defaultHeaderTextStyle)),
+      SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: headerTextStyle)),
+      SizedBox(width: 108, child: Text('上一次', textAlign: TextAlign.center, style: headerTextStyle)),
     ]);
     items.addAll(motion.content.map((c) => 
       Expanded(
         flex: 1,
-        child: Text(MotionCategoryEnumMap[c.category], textAlign: TextAlign.center, style: _defaultHeaderTextStyle),
+        child: Text(MotionCategoryEnumMap[c.category], textAlign: TextAlign.center, style: headerTextStyle),
       ),
     ).toList());
     items.add(Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Icon(FeatherIcons.check, size: 20, color: CupertinoColors.label),
+      child: Icon(FeatherIcons.check, size: 20, color: CupertinoDynamicColor.resolve(CupertinoColors.label, context)),
     ));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -87,13 +88,15 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: CupertinoColors.systemBackground,
-              boxShadow: [BoxShadow(
-                color: CupertinoColors.systemGrey.withOpacity(0.2),
-                offset: Offset(0, 1),
-                blurRadius: 10,
-                spreadRadius: 1,
-              )],
+              color: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
+              boxShadow: [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(GsColors.shadowColor, context),
+                  offset: Offset(0, 1),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ],
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             child: Column(
@@ -106,19 +109,22 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                   padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                   child: CupertinoButton(
                     padding: const EdgeInsets.symmetric(vertical: 3),
-                    color: CupertinoColors.systemGrey5,
+                    color: CupertinoDynamicColor.resolve(GsColors.grey2, context),
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
                     minSize: 0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(FeatherIcons.plus, size: 16, color: CupertinoColors.label),
+                        Icon(
+                          FeatherIcons.plus,
+                          size: 16,
+                          color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+                        ),
                         Text(
                           '添加组',
-                          style: TextStyle(
+                          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: CupertinoColors.label,
                           ),
                         ),
                       ],
