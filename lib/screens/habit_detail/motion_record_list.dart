@@ -14,7 +14,7 @@ class MotionRecordList extends StatefulWidget {
 }
 
 class _MotionRecordListState extends State<MotionRecordList> {
-  GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>();
+  final _listKey = GlobalKey<SliverAnimatedListState>();
   ObservableList<MotionRecord> _motionRecords;
 
   @override

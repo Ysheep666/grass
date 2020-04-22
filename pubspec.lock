@@ -210,9 +210,11 @@ packages:
   flutter_native_dialog:
     dependency: "direct main"
     description:
-      name: flutter_native_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: ea9ed6199cde52157121a47f74a39bac45e32761
+      url: "git@github.com:sadne/flutter_native_dialog.git"
+    source: git
     version: "0.1.0"
   flutter_slidable:
     dependency: "direct main"

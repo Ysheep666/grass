@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/models/motion.dart';
-import 'package:grass/models/motion_content.dart';
 import 'package:grass/models/motion_record.dart';
+import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/widgets/icons/icons.dart';
@@ -48,6 +48,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
   }
 
   _header(Motion motion) {
+    final baseStore = Provider.of<BaseStore>(context, listen: false);
     TextStyle headerTextStyle = CupertinoTheme.of(context).textTheme.textStyle.copyWith(
       fontSize: 15,
       fontWeight: FontWeight.w600,
@@ -61,7 +62,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
     items.addAll(motion.content.map((c) => 
       Expanded(
         flex: 1,
-        child: Text(MotionCategoryEnumMap[c.category], textAlign: TextAlign.center, style: headerTextStyle),
+        child: Text(baseStore.getMotionCategoryLabel(c.category), textAlign: TextAlign.center, style: headerTextStyle),
       ),
     ).toList());
     items.add(Padding(

@@ -11,6 +11,11 @@ class GsColors {
     darkColor: Color(0xFFEC352D),
   );
 
+  static const CupertinoDynamicColor pink = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFABDBD), 
+    darkColor: Color(0xFFFABDBD),
+  );
+
   static const CupertinoDynamicColor green = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF00CF67), 
     darkColor: Color(0xFF00CF67),

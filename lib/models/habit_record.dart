@@ -12,12 +12,15 @@ class HabitRecord extends BaseModel {
   static final fieldId = 'id';
   static final fieldHabitId = 'habitId';
   static final fieldIsDone = 'isDone';
+  static final fieldIsArchived = 'isArchived';
   static final fieldCreatedDate = 'createdDate';
   static final fieldUpdatedDate = 'updatedDate';
 
   int habitId;
   @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
   bool isDone;
+  @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
+  bool isArchived;
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
   DateTime createdDate;
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
@@ -30,6 +33,7 @@ class HabitRecord extends BaseModel {
     int id,
     this.habitId,
     this.isDone = false,
+    this.isArchived = false,
     this.createdDate,
     this.updatedDate,
   }) : super(id) {

@@ -16,10 +16,12 @@ class GsCustomKeyboard extends StatefulWidget {
 
   GsCustomKeyboard({
     Key key,
+    @required this.focusNode,
     @required this.textEditingController,
     this.onHide,
   }) : super(key: key);
 
+  final FocusNode focusNode;
   final TextEditingController textEditingController;
   final VoidCallback onHide;
 
@@ -29,7 +31,12 @@ class GsCustomKeyboard extends StatefulWidget {
 
 class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerProviderStateMixin {
   AnimationController _animationController;
+  FocusNode _focusNode;
   TextEditingController _textEditingController;
+
+  set focusNode(FocusNode value) {
+    _focusNode = value;
+  }
 
   set textEditingController(TextEditingController value) {
     _textEditingController = value;
@@ -38,6 +45,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
   @override
   void initState() {
     super.initState();
+    _focusNode = widget.focusNode;
     _textEditingController = widget.textEditingController;
     _animationController = AnimationController(value: 0, vsync: this)
         ..addListener(() {
@@ -71,7 +79,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
   }
 
   _delete() {
-    if (_textEditingController != null) {
+    if (_textEditingController != null && _textEditingController.text.isNotEmpty) {
       final selection = _textEditingController.selection;
       final splitText = _textEditingController.text.split('').toList();
       final start = selection.start == selection.end ? selection.start - 1 : selection.start;
@@ -175,7 +183,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
       highlightedColor: Colors.white,
       highlightedBackgroundColor: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
       onPressed: () {
-        FocusScope.of(context).nextFocus();
+        _focusNode.nextFocus();
       },
     );
   }

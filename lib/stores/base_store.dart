@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grass/models/motion_content.dart';
 import 'package:grass/utils/preferences_service.dart';
 import 'package:mobx/mobx.dart';
 
@@ -12,7 +13,7 @@ abstract class _BaseStore with Store {
     _setup();
   }
 
-  /// 主题管理
+  /// 路由管理
   @observable
   RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -32,5 +33,20 @@ abstract class _BaseStore with Store {
   Future<void> _setup() async {
     await _preferencesService.loaded;
     useDarkMode = _preferencesService.useDarkMode;
+  }
+
+  String getMotionCategoryLabel(MotionCategory category) {
+    switch (category) {
+      case MotionCategory.weight:
+        return WeightUnitEnumMap[_preferencesService.weightUnit];
+      case MotionCategory.distance:
+        return DistanceUnitEnumMap[_preferencesService.distanceUnit];
+      case MotionCategory.number:
+        return '次';
+      case MotionCategory.duration:
+        return '时间';
+      default:
+        return '';
+    }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grass/models/motion_content.dart';
 import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
+import 'package:grass/widgets/form_input/form_input.dart';
 import 'package:grass/widgets/icons/icons.dart';
 
 class MotionGroupRecordItem extends StatefulWidget {
@@ -20,6 +22,18 @@ class MotionGroupRecordItem extends StatefulWidget {
 }
 
 class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle headerTextStyle = CupertinoTheme.of(context).textTheme.textStyle.copyWith(
@@ -54,28 +68,55 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> {
     ));
 
     items.addAll(
-      widget.motionGroupRecord.content.map(
-        (c) => _Input()
-      )
+      widget.motionGroupRecord.content.map((value) {
+        return _Input(
+          content: value,
+        );
+      })
     );
 
     items.add(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Icon(FeatherIcons.check, size: 20, color: CupertinoColors.label),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: GestureDetector(
+        child: Container(
+          width: 30,
+          height: 24,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: CupertinoDynamicColor.resolve(GsColors.grey2, context),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Icon(FeatherIcons.check, size: 20, color: CupertinoColors.label),
+        ),
+        onTap: () {
+          if (_formKey.currentState.validate()) {
+            _formKey.currentState.save();
+            print(widget.motionGroupRecord.content[0].toJson());
+          }
+        },
+      ),
     ));
 
     return Container(
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        children: items,
+      child: Form(
+        key: _formKey,
+        child: Row(
+          children: items,
+        ),
       ),
     );
   }
 }
 
 class _Input extends StatefulWidget {
-  const _Input({Key key}) : super(key: key);
+  const _Input({
+    Key key,
+    @required this.content,
+  }) : super(key: key);
+
+  final MotionContent content;
 
   @override
   _InputState createState() => _InputState();
@@ -92,7 +133,10 @@ class _InputState extends State<_Input> {
     _controller = TextEditingController();
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        Constant.emitter.emit('habit_detail@show_keyboard', _controller);
+        Constant.emitter.emit('habit_detail@show_keyboard', {
+         'focusNode': _focusNode,
+         'textEditingController': _controller,
+        });
       }
     });
   }
@@ -106,13 +150,35 @@ class _InputState extends State<_Input> {
 
   @override
   Widget build(BuildContext context) {
+    final decoration = InputDecoration(
+      hintText: '',
+      hintStyle: TextStyle(
+        color: CupertinoDynamicColor.resolve(CupertinoColors.placeholderText, context),
+      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+      filled: true,
+      fillColor: CupertinoDynamicColor.resolve(GsColors.grey2, context),
+      enabledBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderSide: BorderSide(
+          style: BorderStyle.none,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 2,
+          color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+      ),
+    );
     return Expanded(
       flex: 1,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 6),
         alignment: Alignment.center,
         height: 24,
-        child: TextField(
+        child: FormInput(
           readOnly: true,
           showCursor: true,
           enableInteractiveSelection: true,
@@ -122,30 +188,21 @@ class _InputState extends State<_Input> {
             height: 20 / 15,
             textBaseline: TextBaseline.alphabetic,
           ),
-          decoration: InputDecoration(
-            hintText: '',
-            hintStyle: TextStyle(
-              color: CupertinoDynamicColor.resolve(CupertinoColors.placeholderText, context),
-            ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-            filled: true,
-            fillColor: CupertinoDynamicColor.resolve(GsColors.grey2, context),
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              borderSide: BorderSide(
-                style: BorderStyle.none,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-              ),
-              borderRadius: const  BorderRadius.all(Radius.circular(5)),
-            ),
+          decoration: decoration,
+          errorDecoration: decoration.copyWith(
+            fillColor: CupertinoDynamicColor.resolve(GsColors.pink, context),
           ),
           focusNode: _focusNode,
           controller: _controller,
+          validator: (value) {
+            if (value.isEmpty) {
+              return '';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            widget.content.value = double.parse(value);
+          },
         ),
       ),
     );

@@ -142,6 +142,7 @@ class DbHelper {
           '${HabitRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
           '${HabitRecord.fieldHabitId} INTEGER,'
           '${HabitRecord.fieldIsDone} INTEGER,'
+          '${HabitRecord.fieldIsArchived} INTEGER,'
           '${HabitRecord.fieldCreatedDate} INTEGER,'
           '${HabitRecord.fieldUpdatedDate} INTEGER,'
           'FOREIGN KEY(${HabitRecord.fieldHabitId}) REFERENCES ${Habit.tableName}(${Habit.fieldId}) ON DELETE CASCADE);'

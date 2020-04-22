@@ -9,13 +9,6 @@ enum MotionCategory {
   duration,
 }
 
-const MotionCategoryEnumMap = {
-  MotionCategory.weight: 'kg',
-  MotionCategory.distance: 'km',
-  MotionCategory.number: '次',
-  MotionCategory.duration: '时间',
-};
-
 @JsonSerializable()
 class MotionContent {
   MotionCategory category;

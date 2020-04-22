@@ -16,8 +16,8 @@ class HabitList extends StatefulWidget {
 }
 
 class _HabitListState extends State<HabitList> {
-  GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  SlidableController _slidableController = SlidableController();
+  final _listKey = GlobalKey<AnimatedListState>();
+  final _slidableController = SlidableController();
   ObservableList<Habit> _habits;
 
   @override

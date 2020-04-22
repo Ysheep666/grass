@@ -67,10 +67,13 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
   }
 
   _showKeyboard(data) {
+    final focusNode = data['focusNode'] as FocusNode;
+    final textEditingController = data['textEditingController'] as TextEditingController;
     if (_overlayEntry == null) {
-      _insertOverlay(data as TextEditingController);
+      _insertOverlay(focusNode, textEditingController);
     } else {
-      _keyboardKey.currentState?.textEditingController = data as TextEditingController;
+      _keyboardKey.currentState?.focusNode = focusNode;
+      _keyboardKey.currentState?.textEditingController = textEditingController;
       if (!_isShowKeyboard) {
         _keyboardKey.currentState?.open();
       }
@@ -90,7 +93,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
     }
   }
 
-  void _insertOverlay(TextEditingController textEditingController) {
+  void _insertOverlay(FocusNode focusNode, TextEditingController textEditingController) {
     _overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
@@ -99,6 +102,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
           bottom: 0,
           child: GsCustomKeyboard(
             key: _keyboardKey,
+            focusNode: focusNode,
             textEditingController: textEditingController,
             onHide: () {
               _hideKeyboard(null);

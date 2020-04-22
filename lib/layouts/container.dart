@@ -13,7 +13,7 @@ class ContainerLayout extends StatefulWidget {
 }
 
 class _ContainerLayoutState extends State<ContainerLayout> {
-  final GlobalKey<GsSideMenuState> _sideMenuKey = GlobalKey<GsSideMenuState>();
+  final _sideMenuKey = GlobalKey<GsSideMenuState>();
   final routes = {
     '/': (context) => HabitScreen(),
     '/calendar': (context) => HabitScreen(),
