@@ -60,10 +60,10 @@ class HabitEditScreenState extends State<HabitEditScreen> {
 
   @override
   void initState() {
-    super.initState();
     _value = widget.habit;
     _nameController = TextEditingController(text: _value.name);
     _remarksController = TextEditingController(text: _value.remarks);
+    super.initState();
   }
 
   @override
@@ -184,7 +184,7 @@ class HabitEditScreenState extends State<HabitEditScreen> {
                 controller: _remarksController,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
-                height: 92,
+                height: 84,
                 maxLines: 99,
               ),
               SizedBox(height: 24),

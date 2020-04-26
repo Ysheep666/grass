@@ -13,7 +13,7 @@ abstract class BaseModel<T> {
   BaseModel(this.id);
 
   @override
-  bool operator ==(Object other) =>
+  bool operator == (Object other) =>
     identical(this, other) ||
     other is BaseModel &&
     runtimeType == other.runtimeType &&

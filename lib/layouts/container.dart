@@ -27,9 +27,9 @@ class _ContainerLayoutState extends State<ContainerLayout> {
 
   @override
   void initState() {
-    super.initState();
     Constant.emitter.on('drawer@toggle', _toggleSideMenu);
     Constant.emitter.on('drawer@selected', _selected);
+    super.initState();
   }
 
   @override

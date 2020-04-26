@@ -22,7 +22,6 @@ class _HabitListState extends State<HabitList> {
 
   @override
   void initState() { 
-    super.initState();
     final habitStore = Provider.of<HabitStore>(context, listen: false);
     _habits = habitStore.habits;
     _habits.observe((listChange) {
@@ -39,6 +38,7 @@ class _HabitListState extends State<HabitList> {
       }
     });
     Constant.emitter.on('habit@close_slidable', _closeSlidable);
+    super.initState();
   }
 
   @override

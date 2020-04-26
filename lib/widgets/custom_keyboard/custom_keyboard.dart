@@ -7,6 +7,18 @@ import 'package:grass/widgets/icons/icons.dart';
 const double _keyButtonSpacing = 6;
 const double _keyButtonHeight = 48;
 
+abstract class GsCustomKeyboardController extends TextEditingController {
+  GsCustomKeyboardController({
+    String text,
+  }) : super(text: text);
+
+  bool get isDecimal => true;
+
+  input(String value) {}
+  delete() {}
+  deleteAll() {}
+}
+
 class GsCustomKeyboard extends StatefulWidget {
   static double get preferredHeight {
     MediaQueryData _mediaQueryData  = MediaQueryData.fromWindow(window);
@@ -22,7 +34,7 @@ class GsCustomKeyboard extends StatefulWidget {
   }) : super(key: key);
 
   final FocusNode focusNode;
-  final TextEditingController textEditingController;
+  final GsCustomKeyboardController textEditingController;
   final VoidCallback onHide;
 
   @override
@@ -32,19 +44,18 @@ class GsCustomKeyboard extends StatefulWidget {
 class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   FocusNode _focusNode;
-  TextEditingController _textEditingController;
+  GsCustomKeyboardController _textEditingController;
 
   set focusNode(FocusNode value) {
     _focusNode = value;
   }
 
-  set textEditingController(TextEditingController value) {
+  set textEditingController(GsCustomKeyboardController value) {
     _textEditingController = value;
   }
 
   @override
   void initState() {
-    super.initState();
     _focusNode = widget.focusNode;
     _textEditingController = widget.textEditingController;
     _animationController = AnimationController(value: 0, vsync: this)
@@ -52,6 +63,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
           setState(() {});
         })
         ..fling(velocity: 1);
+    super.initState();
   }
 
   open() {
@@ -60,35 +72,6 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
 
   dismiss() {
     _animationController.fling(velocity: -1);
-  }
-
-  _input(String value) {
-    if (_textEditingController != null) {
-      final selection = _textEditingController.selection;
-      final splitText = _textEditingController.text.split('').toList();
-      if (selection.start == selection.end) {
-        splitText.insert(selection.start, value);
-      } else {
-        splitText.replaceRange(selection.start, selection.end, [value]);
-      }
-      _textEditingController.value = TextEditingValue(
-        text: splitText.join(''),
-        selection: TextSelection.collapsed(offset: selection.start + value.length)
-      );
-    }
-  }
-
-  _delete() {
-    if (_textEditingController != null && _textEditingController.text.isNotEmpty) {
-      final selection = _textEditingController.selection;
-      final splitText = _textEditingController.text.split('').toList();
-      final start = selection.start == selection.end ? selection.start - 1 : selection.start;
-      splitText.replaceRange(start, selection.end, []);
-      _textEditingController.value = TextEditingValue(
-        text: splitText.join(''),
-        selection: TextSelection.collapsed(offset: start)
-      );
-    }
   }
 
   List<Widget> _spacingColumnItems(List<Widget> items, {double spacing = _keyButtonSpacing}) {
@@ -118,7 +101,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
   Widget _inputButton(String value) {
     return GsCustomKeyboardButton(
       child: Text(value),
-      onPressed: () => _input(value),
+      onPressed: () => _textEditingController.input(value),
     );
   }
 
@@ -170,7 +153,8 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
         color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
       ),
       reverseBackgroundColor: true,
-      onPressed: () => _delete(),
+      onPressed: () => _textEditingController.delete(),
+      onLongPressed: () => _textEditingController.deleteAll(),
     );
   }
 
@@ -234,7 +218,7 @@ class GsCustomKeyboardState extends State<GsCustomKeyboard> with SingleTickerPro
               ),
               Row(
                 children: _spacingRowItems([
-                  _inputButton('.'),
+                  _textEditingController.isDecimal ? _inputButton('.') : SizedBox(),
                   _inputButton('0'),
                   _deleteButton(),
                   _doneButton(),
@@ -253,6 +237,7 @@ class GsCustomKeyboardButton extends StatefulWidget {
     Key key,
     @required this.child,
     @required this.onPressed,
+    this.onLongPressed,
     this.reverseBackgroundColor = false,
     this.defaultColor,
     this.highlightedColor,
@@ -262,6 +247,7 @@ class GsCustomKeyboardButton extends StatefulWidget {
 
   final Widget child;
   final VoidCallback onPressed;
+  final VoidCallback onLongPressed;
   final bool reverseBackgroundColor;
   final Color defaultColor;
   final Color highlightedColor;
@@ -319,6 +305,7 @@ class _GsCustomKeyboardButtonState extends State<GsCustomKeyboardButton> {
       onTapUp: _handleTapUp,
       onTapCancel: _handleTapCancel,
       onTap: widget.onPressed,
+      onLongPress: widget.onLongPressed,
       child: Semantics(
         button: true,
         child: Container(

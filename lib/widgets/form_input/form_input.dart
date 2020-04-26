@@ -222,12 +222,12 @@ class _FormInputState extends FormFieldState<String> {
 
   @override
   void initState() {
-    super.initState();
     if (widget.controller == null) {
       _controller = TextEditingController(text: widget.initialValue);
     } else {
       widget.controller.addListener(_handleControllerChanged);
     }
+    super.initState();
   }
 
   @override

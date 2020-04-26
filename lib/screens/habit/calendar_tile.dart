@@ -54,9 +54,9 @@ class _CalendarTileState extends State<CalendarTile> {
 
   @override
   void initState() {
-    super.initState();
     _startDate = _getStartDate();
     widget.controller?._attach(this);
+    super.initState();
   }
 
   @override

@@ -9,7 +9,6 @@ import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HabitItem extends StatelessWidget {
@@ -30,8 +29,8 @@ class HabitItem extends StatelessWidget {
         children: <Widget>[
           Icon(icon, size: 20, color: foregroundColor),
           SizedBox(height: 6),
-          Text(caption, style: TextStyle(fontSize: 13, color: foregroundColor))
-        ]
+          Text(caption, style: TextStyle(fontSize: 13, color: foregroundColor)),
+        ],
       ),
       color: color,
       onTap: onTap,
@@ -152,7 +151,7 @@ class HabitItem extends StatelessWidget {
             Constant.emitter.emit('habit@close_slidable');
             NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
             Navigator.of(context).push(
-              MaterialWithModalsPageRoute(
+              CupertinoPageRoute(
                 fullscreenDialog: true,
                 builder: (context) => HabitDetailScreen(habit: habit)
               ),

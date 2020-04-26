@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grass/utils/colors.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'bottom_sheet.dart';
 
 class _PopupModal extends StatelessWidget {
   const _PopupModal({
@@ -29,7 +30,11 @@ class _PopupModal extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-      child: child,
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: child
+      ),
     );
 
     if (onWillPop == null) {

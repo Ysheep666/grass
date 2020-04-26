@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/models/motion.dart';
+import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
@@ -57,7 +58,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
     List<Widget> items = [];
     items.addAll([
       SizedBox(width: 30, child: Text('组', textAlign: TextAlign.center, style: headerTextStyle)),
-      SizedBox(width: 108, child: Text('上一次', textAlign: TextAlign.center, style: headerTextStyle)),
+      SizedBox(width: 100, child: Text('上一次', textAlign: TextAlign.center, style: headerTextStyle)),
     ]);
     items.addAll(motion.content.map((c) => 
       Expanded(
@@ -66,8 +67,13 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
       ),
     ).toList());
     items.add(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Icon(FeatherIcons.check, size: 20, color: CupertinoDynamicColor.resolve(CupertinoColors.label, context)),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        width: 30,
+        height: 24,
+        alignment: Alignment.center,
+        child: Icon(FeatherIcons.check, size: 20, color: CupertinoDynamicColor.resolve(CupertinoColors.label, context)),
+      ),
     ));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -131,6 +137,11 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                       ],
                     ),
                     onPressed: () async {
+                      final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+                      habitDetailStore.addMotionGroupRecord(MotionGroupRecord(
+                        motionRecordId: widget.motionRecord.id,
+                        content: motion.content,
+                      ));
                     },
                   ),
                 ),

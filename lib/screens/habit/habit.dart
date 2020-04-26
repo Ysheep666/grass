@@ -11,7 +11,6 @@ import 'package:grass/utils/constant.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:grass/widgets/app_bar/app_bar.dart';
 import 'package:grass/widgets/icons/icons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar_tile.dart';
@@ -29,11 +28,11 @@ class _HabitScreenState extends State<HabitScreen> {
 
   @override
   void initState() {
-    super.initState();
     Future.delayed(Duration.zero, () async {
       final habitStore = Provider.of<HabitStore>(context, listen: false);
       await habitStore.didLoad();
     });
+    super.initState();
   }
 
   Widget _appBarMiddle(DateTime selectedDate) {
@@ -122,7 +121,7 @@ class _HabitScreenState extends State<HabitScreen> {
                 Constant.emitter.emit('habit@close_slidable');
                 NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
                 final habit = await Navigator.of(context).push(
-                  MaterialWithModalsPageRoute<Habit>(
+                  CupertinoPageRoute<Habit>(
                     builder: (context) => HabitEditScreen(habit: Habit())
                   ),
                 );

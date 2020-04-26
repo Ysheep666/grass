@@ -323,8 +323,8 @@ class _GsAppBarState extends State<GsAppBar> {
 
   @override
   void initState() {
-    super.initState();
     keys = _NavigationBarStaticComponentsKeys();
+    super.initState();
   }
 
   @override

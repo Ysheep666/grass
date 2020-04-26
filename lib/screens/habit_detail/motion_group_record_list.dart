@@ -24,14 +24,15 @@ class _MotionGroupRecordListState extends State<MotionGroupRecordList> {
 
   @override
   void initState() {
-    super.initState();
     final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
     _motionGroupRecords = habitDetailStore.motionGroupRecords;
     _motionGroupRecords.observe((listChange) {
       if (!habitDetailStore.isLoaded) {
         return;
       }
+      setState(() {});
     });
+    super.initState();
   }
 
   @override

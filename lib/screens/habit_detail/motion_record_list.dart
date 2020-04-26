@@ -19,7 +19,6 @@ class _MotionRecordListState extends State<MotionRecordList> {
 
   @override
   void initState() {
-    super.initState();
     final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
     _motionRecords = habitDetailStore.motionRecords;
     _motionRecords.observe((listChange) {
@@ -37,6 +36,7 @@ class _MotionRecordListState extends State<MotionRecordList> {
         });
       }
     });
+    super.initState();
   }
 
   _buildItem(MotionRecord record, Animation<double> animation) {

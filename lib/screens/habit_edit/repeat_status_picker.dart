@@ -41,7 +41,6 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
 
   @override
   void initState() {
-    super.initState();
     _type = widget.statusType;
     _values[widget.statusType] = widget.statusValues;
     _valueController = TextEditingController(text: '${_values[HabitRepeatStatusType.custom][0]}');
@@ -51,6 +50,7 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
         _valueController.selection = TextSelection(baseOffset: 0, extentOffset: _valueController.text.length);
       }
     });
+    super.initState();
   }
 
   @override
@@ -139,44 +139,40 @@ class _RepeatStatusPickerState extends State<RepeatStatusPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: Container(
-        height: getModalBottomSheetHeight(12),
-        child: Scaffold(
-          backgroundColor: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
-          appBar: GsAppBar(
-            padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
-            middle: Text('重复'),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(
-                CupertinoIcons.clear,
-                size: 44,
-                color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
-              ),
-              onPressed: () {
-                Navigator.maybePop(context);
-              },
+    return Container(
+      height: getModalBottomSheetHeight(12),
+      child: Scaffold(
+        backgroundColor: CupertinoDynamicColor.resolve(GsColors.boxBackground, context),
+        appBar: GsAppBar(
+          padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
+          middle: Text('重复'),
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Icon(
+              CupertinoIcons.clear,
+              size: 44,
+              color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
             ),
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Text('确定', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
-              onPressed: () {
-                widget.onChanged({
-                  'type': _type,
-                  'values': _type == HabitRepeatStatusType.custom ? 
-                      [_valueController.text == '' ? 0 : int.parse(_valueController.text)] : _values[_type],
-                });
-                Navigator.maybePop(context);
-              },
-            ),
+            onPressed: () {
+              Navigator.maybePop(context);
+            },
           ),
-          body: ListView(
-            controller: widget.scrollController,
-            children: _items(),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Text('确定', style: CupertinoTheme.of(context).textTheme.actionTextStyle),
+            onPressed: () {
+              widget.onChanged({
+                'type': _type,
+                'values': _type == HabitRepeatStatusType.custom ? 
+                    [_valueController.text == '' ? 0 : int.parse(_valueController.text)] : _values[_type],
+              });
+              Navigator.maybePop(context);
+            },
           ),
+        ),
+        body: ListView(
+          controller: widget.scrollController,
+          children: _items(),
         ),
       ),
     );

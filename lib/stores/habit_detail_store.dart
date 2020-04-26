@@ -53,12 +53,23 @@ abstract class _HabitDetailStore with Store {
 
   @action
   Future<void> clear() async {
+    await MotionRecord.batchUpdate(motionRecords);
+    await MotionGroupRecord.batchUpdate(motionGroupRecords);
     isLoaded = false;
     habit = null;
     record = null;
     motions = [];
     motionRecords = ObservableList<MotionRecord>();
     motionGroupRecords = ObservableList<MotionGroupRecord>();
+  }
+
+  @action
+  Future<void> updateMotionGroupRecordByTemp(MotionGroupRecord motionGroupRecord) async {
+    final newmMotionGroupRecord = motionGroupRecord.copy();
+    final index = motionGroupRecords.indexWhere((r) => r.id == newmMotionGroupRecord.id);
+    if (index != -1) {
+      motionGroupRecords[index] = newmMotionGroupRecord;
+    }
   }
 
   @action
@@ -80,6 +91,12 @@ abstract class _HabitDetailStore with Store {
     for (var motionGroupRecord in newMotionGroupRecords) {
       motionGroupRecords.add(motionGroupRecord);
     }
+  }
+
+  @action
+  Future<void> addMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
+    motionGroupRecord.id = await motionGroupRecord.save();
+    motionGroupRecords.add(motionGroupRecord);
   }
 
   _updateMotionRecords(List<MotionRecord> items) async {

@@ -30,13 +30,13 @@ class GsSideMenuState extends State<GsSideMenu> with SingleTickerProviderStateMi
 
   @override
   void initState() {
-    super.initState();
     _animationController = AnimationController(
       value: 0,
       vsync: this
     )
       ..addListener(_animationChanged)
       ..addStatusListener(_animationStatusChanged);
+    super.initState();
   }
 
   @override

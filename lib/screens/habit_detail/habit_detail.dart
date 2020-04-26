@@ -35,13 +35,13 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
 
   @override
   void initState() {
-    super.initState();
     Constant.emitter.on('habit_detail@show_keyboard', _showKeyboard);
     Constant.emitter.on('habit_detail@hide_keyboard', _hideKeyboard);
     Future.delayed(Duration.zero, () async {
       _habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
       await _habitDetailStore.didLoad(widget.habit);
     });
+    super.initState();
   }
 
   @override
@@ -68,7 +68,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
 
   _showKeyboard(data) {
     final focusNode = data['focusNode'] as FocusNode;
-    final textEditingController = data['textEditingController'] as TextEditingController;
+    final textEditingController = data['textEditingController'] as GsCustomKeyboardController;
     if (_overlayEntry == null) {
       _insertOverlay(focusNode, textEditingController);
     } else {
@@ -93,7 +93,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
     }
   }
 
-  void _insertOverlay(FocusNode focusNode, TextEditingController textEditingController) {
+  void _insertOverlay(FocusNode focusNode, GsCustomKeyboardController textEditingController) {
     _overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(

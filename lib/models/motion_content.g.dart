@@ -11,7 +11,7 @@ MotionContent _$MotionContentFromJson(Map<String, dynamic> json) {
     category: _$enumDecodeNullable(_$MotionCategoryEnumMap, json['category']),
     value: (json['value'] as num)?.toDouble(),
     defaultValue: (json['defaultValue'] as num)?.toDouble(),
-  );
+  )..inputValue = json['inputValue'] as String;
 }
 
 Map<String, dynamic> _$MotionContentToJson(MotionContent instance) =>
@@ -19,6 +19,7 @@ Map<String, dynamic> _$MotionContentToJson(MotionContent instance) =>
       'category': _$MotionCategoryEnumMap[instance.category],
       'value': instance.value,
       'defaultValue': instance.defaultValue,
+      'inputValue': instance.inputValue,
     };
 
 T _$enumDecode<T>(

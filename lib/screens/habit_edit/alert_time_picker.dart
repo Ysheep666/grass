@@ -28,8 +28,8 @@ class _AlertTimePickerState extends State<AlertTimePicker> {
 
   @override
   void initState() {
-    super.initState();
     _value = widget.alertTime;
+    super.initState();
   }
 
   @override

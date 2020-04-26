@@ -68,7 +68,7 @@ class TextFieldCell extends StatelessWidget {
                 textAlign: TextAlign.start,
                 style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                   fontSize: 16,
-                  height: 1.5,
+                  height: 20 / 16,
                   textBaseline: TextBaseline.alphabetic,
                 ),
                 decoration: InputDecoration(
@@ -76,7 +76,7 @@ class TextFieldCell extends StatelessWidget {
                   hintStyle: TextStyle(
                     color: CupertinoDynamicColor.resolve(CupertinoColors.placeholderText, context),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   border: InputBorder.none,
                 ),
                 keyboardAppearance: CupertinoTheme.brightnessOf(context),
@@ -85,6 +85,7 @@ class TextFieldCell extends StatelessWidget {
                 inputFormatters: inputFormatters,
                 maxLines: maxLines,
                 autofocus: autofocus,
+                cursorWidth: 2,
                 onChanged: onChanged,
                 onSubmitted: onSubmitted,
               ),
