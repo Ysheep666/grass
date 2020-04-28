@@ -11,6 +11,7 @@ MotionRecord _$MotionRecordFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     motionId: json['motionId'] as int,
     habitRecordId: json['habitRecordId'] as int,
+    sortIndex: json['sortIndex'] as int,
   );
 }
 
@@ -19,4 +20,5 @@ Map<String, dynamic> _$MotionRecordToJson(MotionRecord instance) =>
       'id': instance.id,
       'motionId': instance.motionId,
       'habitRecordId': instance.habitRecordId,
+      'sortIndex': instance.sortIndex,
     };

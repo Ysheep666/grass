@@ -3,6 +3,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 environment:
   sdk: ">=2.2.2 <3.0.0"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -26,10 +27,7 @@ dependencies:
   flutter_slidable: ^0.5.4
 
   # prerelease
-  flutter_native_dialog: 
-    git:
-      url: git@github.com:sadne/flutter_native_dialog.git
-      ref: master
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

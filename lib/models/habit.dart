@@ -77,7 +77,7 @@ class Habit extends BaseModel {
 
   static Future<List<Habit>> getItems() async {
     final db = await DbHelper.instance.getDb();
-    List<Map> resets = await db.query(tableName);
-    return resets.map((reset) => Habit.fromJson(reset)).toList();
+    List<Map> results = await db.query(tableName);
+    return results.map((result) => Habit.fromJson(result)).toList();
   }
 }

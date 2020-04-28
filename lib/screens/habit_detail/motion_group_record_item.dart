@@ -36,7 +36,7 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
 
   _update(MotionGroupRecord motionGroupRecord) {
     final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-    habitDetailStore.updateMotionGroupRecordByTemp(motionGroupRecord);
+    habitDetailStore.updateMotionGroupRecord(motionGroupRecord);
   }
 
   _delete(MotionGroupRecord motionGroupRecord) {

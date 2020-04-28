@@ -9,14 +9,17 @@ class MotionRecord extends BaseModel {
   static final fieldId = 'id';
   static final fieldMotionId = 'motionId';
   static final fieldHabitRecordId = 'habitRecordId';
+  static final fieldSortIndex = 'sortIndex';
 
   int motionId;
   int habitRecordId;
+  int sortIndex;
 
   MotionRecord({
     int id,
     this.motionId,
     this.habitRecordId,
+    this.sortIndex = 0,
   }) : super(id);
 
   @override
@@ -29,12 +32,12 @@ class MotionRecord extends BaseModel {
 
   static Future<List<MotionRecord>> getItemsByHabitRecordId(int habitRecordId) async {
     final db = await DbHelper.instance.getDb();
-    List<Map> resets = await db.query(
+    List<Map> results = await db.query(
       tableName,
       where: '$fieldHabitRecordId = ?',
       whereArgs: [habitRecordId],
     );
-    return resets.map((reset) => MotionRecord.fromJson(reset)).toList();
+    return results.map((result) => MotionRecord.fromJson(result)).toList();
   }
 
   static Future<List<MotionRecord>> batchAdd(List<MotionRecord> motionRecords) async {

@@ -30,13 +30,14 @@ import Toast_Swift
         let method = call.method as String
         switch method {
         case "toast":
-            makeToast(call.arguments as! [String : Any])
+            toast(call.arguments as! [String : Any])
             result(nil)
             break
+        case "alert":
+            alert(call.arguments as! [String : Any], result: result)
+            break
         case "motionPicker":
-            motionPicker(call.arguments as! [String : Any], completion: { motions in
-                result(motions.map { $0.id })
-            })
+            motionPicker(call.arguments as! [String : Any], result: result)
             break
         default:
             result(FlutterMethodNotImplemented)
@@ -44,7 +45,7 @@ import Toast_Swift
         }
     }
 
-    private func makeToast(_ arguments: [String: Any]) {
+    private func toast(_ arguments: [String: Any]) {
         if let topController = getTopViewController() {
             topController.view.makeToast(
                 arguments["message"] as? String,
@@ -54,10 +55,33 @@ import Toast_Swift
         }
     }
 
-    private func motionPicker(_ arguments: [String: Any], completion: ((_ motions: [Motion]) -> Void)? = nil) {
+    private func alert(_ arguments: [String: Any], result: @escaping FlutterResult) {
+        if let topController = getTopViewController() {
+            let controller = UIAlertController(
+                title: arguments["title"] as? String,
+                message: arguments["message"] as? String,
+                preferredStyle: UIAlertController.Style(rawValue: arguments["preferredStyle"] as! Int) ?? .alert
+            )
+            let actions = arguments["actions"] as? [ [String : Any]] ?? []
+            for action in actions {
+                controller.addAction(UIAlertAction(
+                    title: action["title"] as? String,
+                    style: UIAlertAction.Style(rawValue: action["style"] as! Int) ?? .default,
+                    handler: { _ in
+                        result(action["value"])
+                    }
+                ))
+            }
+            topController.present(controller, animated: true)
+        }
+    }
+
+    private func motionPicker(_ arguments: [String: Any], result: @escaping FlutterResult) {
         if let topController = getTopViewController() {
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MotionList") as! MotionListViewController
-            controller.completion = completion
+            controller.completion = { motions in
+                result(motions.map { $0.id })
+            }
             let navigationController = UINavigationController(rootViewController: controller)
             navigationController.navigationBar.shadowImage = UIImage()
             topController.present(navigationController, animated: true)

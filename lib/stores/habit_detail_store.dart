@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:grass/models/habit.dart';
 import 'package:grass/models/habit_record.dart';
 import 'package:grass/models/motion.dart';
@@ -13,6 +15,9 @@ class HabitDetailStore = _HabitDetailStore with _$HabitDetailStore;
 
 /// habit 详细数据，主要用于 habit_detail 页面
 abstract class _HabitDetailStore with Store {
+  Timer _timer;
+  bool _lock = false;
+
   @observable
   bool isLoaded = false;
 
@@ -53,23 +58,12 @@ abstract class _HabitDetailStore with Store {
 
   @action
   Future<void> clear() async {
-    await MotionRecord.batchUpdate(motionRecords);
-    await MotionGroupRecord.batchUpdate(motionGroupRecords);
     isLoaded = false;
     habit = null;
     record = null;
     motions = [];
     motionRecords = ObservableList<MotionRecord>();
     motionGroupRecords = ObservableList<MotionGroupRecord>();
-  }
-
-  @action
-  Future<void> updateMotionGroupRecordByTemp(MotionGroupRecord motionGroupRecord) async {
-    final newmMotionGroupRecord = motionGroupRecord.copy();
-    final index = motionGroupRecords.indexWhere((r) => r.id == newmMotionGroupRecord.id);
-    if (index != -1) {
-      motionGroupRecords[index] = newmMotionGroupRecord;
-    }
   }
 
   @action
@@ -101,10 +95,34 @@ abstract class _HabitDetailStore with Store {
 
   @action
   Future<void> removeMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
-    final reset = await motionGroupRecord.delete();
-    if (reset != -1) {
+    final result = await motionGroupRecord.delete();
+    if (result != -1) {
       motionGroupRecords.remove(motionGroupRecord);
     }
+  }
+
+  @action
+  Future<void> updateMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
+    final newmMotionGroupRecord = motionGroupRecord.copy();
+    final index = motionGroupRecords.indexWhere((r) => r.id == newmMotionGroupRecord.id);
+    if (index != -1) {
+      motionGroupRecords[index] = newmMotionGroupRecord;
+    }
+    _updateTo();
+  }
+
+  _updateTo() {
+    _timer?.cancel();
+    _timer = Timer(Duration(seconds: 1), () async {
+      if (_lock) {
+        Future.delayed(Duration(seconds: 1), () => _updateTo());
+      } else {
+        _lock = true;
+        await MotionRecord.batchUpdate(motionRecords);
+        await MotionGroupRecord.batchUpdate(motionGroupRecords);
+        _lock = false;
+      }
+    });
   }
 
   _updateMotionRecords(List<MotionRecord> items) async {

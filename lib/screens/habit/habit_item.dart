@@ -65,11 +65,15 @@ class HabitItem extends StatelessWidget {
           color: CupertinoDynamicColor.resolve(GsColors.background, context),
           foregroundColor: GsColors.red,
           onTap: () async {
-            final result = await NativeWidget.showConfirmDialog(
+            final result = await NativeWidget.alert(
               title: '您确定要删除吗？',
               message: '将删除此习惯的所有数据，不可恢复。',
+              actions: [
+                AlertAction(value: 'ok', title: '确定', style: AlertActionStyle.destructive),
+                AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
+              ]
             );
-            if (result) {
+            if (result == 'ok') {
               Future.delayed(Duration.zero, () async {
                 final habitStore = Provider.of<HabitStore>(context, listen: false);
                 habitStore.remove(habit);

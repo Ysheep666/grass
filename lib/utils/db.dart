@@ -156,6 +156,7 @@ class DbHelper {
           '${MotionRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
           '${MotionRecord.fieldMotionId} INTEGER,'
           '${MotionRecord.fieldHabitRecordId} INTEGER,'
+          '${MotionRecord.fieldSortIndex} INTEGER,'
           'FOREIGN KEY(${MotionRecord.fieldHabitRecordId}) REFERENCES ${HabitRecord.tableName}(${HabitRecord.fieldId}) ON DELETE CASCADE);'
       );
     });

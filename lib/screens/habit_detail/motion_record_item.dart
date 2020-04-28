@@ -7,6 +7,7 @@ import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
@@ -29,6 +30,8 @@ class MotionRecordItem extends StatefulWidget {
 }
 
 class _MotionRecordItemState extends State<MotionRecordItem> {
+  final _moerButtonKey = GlobalKey<State>();
+
   _top(Motion motion) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -42,9 +45,20 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
             },
           ),
           CupertinoButton(
+            key: _moerButtonKey,
             padding: EdgeInsets.zero,
             child: Icon(FeatherIcons.more_horizontal, size: 24),
-            onPressed: () {
+            onPressed: () async {
+              final result = await NativeWidget.alert(
+                preferredStyle: AlertPreferredStyle.actionSheet,
+                actions: [
+                  AlertAction(value: 'up', title: '上移'),
+                  AlertAction(value: 'down', title: '下移'),
+                  AlertAction(value: 'delete', title: '删除运动'),
+                  AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
+                ]
+              );
+              print(result);
             },
           ),
         ],

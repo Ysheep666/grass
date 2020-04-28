@@ -95,11 +95,11 @@ class MotionGroupRecord extends BaseModel {
       return [];
     }
     final db = await DbHelper.instance.getDb();
-    List<Map> resets = await db.query(
+    List<Map> results = await db.query(
       tableName,
       where: '$fieldMotionRecordId IN (${motionRecordIds.join(', ')})',
     );
-    return resets.map((reset) => MotionGroupRecord.fromJson(reset)).toList();
+    return results.map((result) => MotionGroupRecord.fromJson(result)).toList();
   }
 
   static Future<List<MotionGroupRecord>> batchAdd(List<MotionGroupRecord> motionGroupRecords) async {

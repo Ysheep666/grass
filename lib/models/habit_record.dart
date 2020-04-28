@@ -56,15 +56,15 @@ class HabitRecord extends BaseModel {
 
   static Future<HabitRecord> getLastByHabitId(int habitId) async {
     final db = await DbHelper.instance.getDb();
-    List<Map> resets = await db.query(
+    List<Map> results = await db.query(
       tableName,
       where: '$fieldHabitId = ?',
       whereArgs: [habitId],
       orderBy: '$fieldId DESC',
       limit: 1,
     );
-    if (resets.length > 0) {
-      return HabitRecord.fromJson(resets.first);
+    if (results.length > 0) {
+      return HabitRecord.fromJson(results.first);
     }
     return null;
   }

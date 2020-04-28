@@ -127,14 +127,13 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     return _$clearAsyncAction.run(() => super.clear());
   }
 
-  final _$updateMotionGroupRecordByTempAsyncAction =
-      AsyncAction('updateMotionGroupRecordByTemp');
+  final _$updateMotionGroupRecordAsyncAction =
+      AsyncAction('updateMotionGroupRecord');
 
   @override
-  Future<void> updateMotionGroupRecordByTemp(
-      MotionGroupRecord motionGroupRecord) {
-    return _$updateMotionGroupRecordByTempAsyncAction
-        .run(() => super.updateMotionGroupRecordByTemp(motionGroupRecord));
+  Future<void> updateMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
+    return _$updateMotionGroupRecordAsyncAction
+        .run(() => super.updateMotionGroupRecord(motionGroupRecord));
   }
 
   final _$addMotionsByIdsAsyncAction = AsyncAction('addMotionsByIds');
