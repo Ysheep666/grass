@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,14 @@ class MotionRecordList extends StatefulWidget {
 
 class _MotionRecordListState extends State<MotionRecordList> {
   final _listKey = GlobalKey<SliverAnimatedListState>();
+  SlidableController _slidableController = SlidableController(
+    onSlideAnimationChanged: (value) {},
+    onSlideIsOpenChanged: (value) {
+      if (value) {
+        Constant.emitter.emit('habit_detail@hide_keyboard');
+      }
+    },
+  );
   ObservableList<MotionRecord> _motionRecords;
 
   @override
@@ -36,13 +46,28 @@ class _MotionRecordListState extends State<MotionRecordList> {
         });
       }
     });
+    Constant.emitter.on('habit_detail@close_slidable', _closeSlidable);
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    Constant.emitter.off('habit_detail@close_slidable', _closeSlidable);
+    super.dispose();
+  }
+
+  _closeSlidable(data) {
+    _slidableController.activeState?.close();
   }
 
   _buildItem(MotionRecord record, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
-      child: MotionRecordItem(motionRecord: record),
+      child: MotionRecordItem(
+        motionRecord: record,
+        slidableController: _slidableController,
+      ),
     );
   }
 

@@ -35,6 +35,7 @@ class ItemInputState extends State<ItemInput> {
     _controller = _KeyboardController(content: widget.content, text: widget.content.inputValue);
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
+        Constant.emitter.emit('habit_detail@close_slidable');
         Constant.emitter.emit('habit_detail@show_keyboard', {
          'focusNode': _focusNode,
          'textEditingController': _controller,
@@ -53,6 +54,16 @@ class ItemInputState extends State<ItemInput> {
     _focusNode.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(ItemInput oldWidget) {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if (oldWidget.content.inputValue != widget.content.inputValue) {
+        _controller.text = widget.content.inputValue;
+      }
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

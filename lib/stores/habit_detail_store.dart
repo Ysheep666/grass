@@ -99,6 +99,14 @@ abstract class _HabitDetailStore with Store {
     motionGroupRecords.add(motionGroupRecord);
   }
 
+  @action
+  Future<void> removeMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
+    final reset = await motionGroupRecord.delete();
+    if (reset != -1) {
+      motionGroupRecords.remove(motionGroupRecord);
+    }
+  }
+
   _updateMotionRecords(List<MotionRecord> items) async {
     motions = await NativeMethod.getMotionsByIds(items.map((e) => e.motionId).toList());
     final diff = ListDiff<MotionRecord>(motionRecords, items);

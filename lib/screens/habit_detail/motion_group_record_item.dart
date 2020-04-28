@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/colors.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/animation/scale_box.dart';
 import 'package:grass/widgets/animation/shake_box.dart';
 import 'package:grass/widgets/icons/icons.dart';
@@ -16,10 +18,12 @@ class MotionGroupRecordItem extends StatefulWidget {
     Key key,
     this.index,
     this.motionGroupRecord,
+    this.slidableController,
   }) : super(key: key);
 
   final int index;
   final MotionGroupRecord motionGroupRecord;
+  final SlidableController slidableController;
 
   @override
   _MotionGroupRecordItemState createState() => _MotionGroupRecordItemState();
@@ -33,6 +37,11 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
   _update(MotionGroupRecord motionGroupRecord) {
     final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
     habitDetailStore.updateMotionGroupRecordByTemp(motionGroupRecord);
+  }
+
+  _delete(MotionGroupRecord motionGroupRecord) {
+    final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+    habitDetailStore.removeMotionGroupRecord(motionGroupRecord);
   }
 
   @override
@@ -124,6 +133,7 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
             ),
           ),
           onPressed: () {
+            Constant.emitter.emit('habit_detail@close_slidable');
             if (_formKey.currentState.validate()) {
               widget.motionGroupRecord.isDone = !isDone;
               _update(widget.motionGroupRecord);
@@ -141,16 +151,34 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
     ));
 
     return ClipRect(
-      child: ScaleBox(
-        key: _itemScaleBoxKey,
-        child: Container(
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          color: isDone ? CupertinoDynamicColor.resolve(GsColors.green, context).withOpacity(0.15) : null,
-          child: Form(
-            key: _formKey,
-            child: Row(
-              children: items,
+      child: Slidable(
+        controller: widget.slidableController,
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        secondaryActions: <Widget>[
+          SlideAction(
+            child: Text('删除', style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            )),
+            color: GsColors.red,
+            onTap: () => _delete(widget.motionGroupRecord),
+          ),
+        ],
+        child: ClipRect(
+          child: ScaleBox(
+            key: _itemScaleBoxKey,
+            child: Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              color: isDone ? CupertinoDynamicColor.resolve(GsColors.green, context).withOpacity(0.15) : null,
+              child: Form(
+                key: _formKey,
+                child: Row(
+                  children: items,
+                ),
+              ),
             ),
           ),
         ),

@@ -193,6 +193,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
                                   ),
                                 ),
                                 onPressed: () async {
+                                  Constant.emitter.emit('habit_detail@close_slidable');
                                   _hideKeyboard(null);
                                   final ids = await NativeWidget.motionPicker();
                                   habitDetailStore.addMotionsByIds(ids);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/habit_detail_store.dart';
@@ -11,9 +12,11 @@ class MotionGroupRecordList extends StatefulWidget {
   MotionGroupRecordList({
     Key key,
     this.motionRecord,
+    this.slidableController,
   }) : super(key: key);
 
   final MotionRecord motionRecord;
+  final SlidableController slidableController;
 
   @override
   _MotionGroupRecordListState createState() => _MotionGroupRecordListState();
@@ -43,6 +46,7 @@ class _MotionGroupRecordListState extends State<MotionGroupRecordList> {
         .map((entry) => MotionGroupRecordItem(
           index: entry.key,
           motionGroupRecord: entry.value,
+          slidableController: widget.slidableController,
         ))
         .toList();
     return Container(

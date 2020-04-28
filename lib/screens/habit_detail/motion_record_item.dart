@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion.dart';
 import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/utils/colors.dart';
+import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +18,11 @@ class MotionRecordItem extends StatefulWidget {
   MotionRecordItem({
     Key key,
     this.motionRecord,
+    this.slidableController,
   }) : super(key: key);
 
   final MotionRecord motionRecord;
+  final SlidableController slidableController;
 
   @override
   _MotionRecordItemState createState() => _MotionRecordItemState();
@@ -76,7 +80,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
       ),
     ));
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: items,
@@ -110,7 +114,10 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
               children: <Widget>[
                 _top(motion),
                 _header(motion),
-                MotionGroupRecordList(motionRecord: widget.motionRecord),
+                MotionGroupRecordList(
+                  motionRecord: widget.motionRecord,
+                  slidableController: widget.slidableController,
+                ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -137,6 +144,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                       ],
                     ),
                     onPressed: () async {
+                      Constant.emitter.emit('habit_detail@close_slidable');
                       final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
                       habitDetailStore.addMotionGroupRecord(MotionGroupRecord(
                         motionRecordId: widget.motionRecord.id,

@@ -153,6 +153,15 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
         .run(() => super.addMotionGroupRecord(motionGroupRecord));
   }
 
+  final _$removeMotionGroupRecordAsyncAction =
+      AsyncAction('removeMotionGroupRecord');
+
+  @override
+  Future<void> removeMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
+    return _$removeMotionGroupRecordAsyncAction
+        .run(() => super.removeMotionGroupRecord(motionGroupRecord));
+  }
+
   @override
   String toString() {
     final string =
