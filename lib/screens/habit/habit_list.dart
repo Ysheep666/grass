@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 
 import 'habit_item.dart';
 
+const _kDuration = Duration(milliseconds: 200);
+
 class HabitList extends StatefulWidget {
   const HabitList({Key key}) : super(key: key);
 
@@ -29,12 +31,12 @@ class _HabitListState extends State<HabitList> {
         return;
       }
       if (listChange.added?.isNotEmpty ?? false) {
-        _listKey.currentState.insertItem(listChange.index);
+        _listKey.currentState.insertItem(listChange.index, duration: _kDuration);
       }
       if (listChange.removed?.isNotEmpty ?? false) {
         _listKey.currentState.removeItem(listChange.index,  (BuildContext context, Animation<double> animation) {
           return _buildItem(listChange.removed.first, animation);
-        });
+        }, duration: _kDuration);
       }
     });
     Constant.emitter.on('habit@close_slidable', _closeSlidable);
@@ -54,7 +56,12 @@ class _HabitListState extends State<HabitList> {
   _buildItem(Habit habit, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
-      child: HabitItem(habit: habit, slidableController: _slidableController),
+      child: SizeTransition(
+        axis: Axis.vertical,
+        sizeFactor: animation,
+        axisAlignment: -1,
+        child: HabitItem(habit: habit, slidableController: _slidableController),
+      ),
     );
   }
 

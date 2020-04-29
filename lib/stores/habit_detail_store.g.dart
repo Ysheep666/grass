@@ -127,21 +127,13 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     return _$clearAsyncAction.run(() => super.clear());
   }
 
-  final _$updateMotionGroupRecordAsyncAction =
-      AsyncAction('updateMotionGroupRecord');
+  final _$addMotionRecordsByMotionIdsAsyncAction =
+      AsyncAction('addMotionRecordsByMotionIds');
 
   @override
-  Future<void> updateMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
-    return _$updateMotionGroupRecordAsyncAction
-        .run(() => super.updateMotionGroupRecord(motionGroupRecord));
-  }
-
-  final _$addMotionsByIdsAsyncAction = AsyncAction('addMotionsByIds');
-
-  @override
-  Future<void> addMotionsByIds(List<int> motionIds) {
-    return _$addMotionsByIdsAsyncAction
-        .run(() => super.addMotionsByIds(motionIds));
+  Future<void> addMotionRecordsByMotionIds(List<int> motionIds) {
+    return _$addMotionRecordsByMotionIdsAsyncAction
+        .run(() => super.addMotionRecordsByMotionIds(motionIds));
   }
 
   final _$addMotionGroupRecordAsyncAction = AsyncAction('addMotionGroupRecord');
@@ -159,6 +151,15 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
   Future<void> removeMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
     return _$removeMotionGroupRecordAsyncAction
         .run(() => super.removeMotionGroupRecord(motionGroupRecord));
+  }
+
+  final _$updateMotionGroupRecordAsyncAction =
+      AsyncAction('updateMotionGroupRecord');
+
+  @override
+  Future<void> updateMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
+    return _$updateMotionGroupRecordAsyncAction
+        .run(() => super.updateMotionGroupRecord(motionGroupRecord));
   }
 
   @override

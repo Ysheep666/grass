@@ -82,7 +82,7 @@ class _HabitScreenState extends State<HabitScreen> {
           width: 160,
           color: CupertinoDynamicColor.resolve(GsColors.grey, context),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 50),
         Text(
           '您的任务列表为空\n请点击‘+’创建一个新习惯吧',
           textAlign: TextAlign.center, 

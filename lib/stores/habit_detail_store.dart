@@ -67,7 +67,7 @@ abstract class _HabitDetailStore with Store {
   }
 
   @action
-  Future<void> addMotionsByIds(List<int> motionIds) async {
+  Future<void> addMotionRecordsByMotionIds(List<int> motionIds) async {
     final newMotions = await NativeMethod.getMotionsByIds(motionIds);
     final newMotionRecords = await MotionRecord.batchAdd(
       motionIds.map((id) => MotionRecord(motionId: id, habitRecordId: record.id)).toList()
@@ -84,6 +84,14 @@ abstract class _HabitDetailStore with Store {
     }
     for (var motionGroupRecord in newMotionGroupRecords) {
       motionGroupRecords.add(motionGroupRecord);
+    }
+  }
+
+  @action
+  Future<void> removeMotionRecord(MotionRecord motionRecord) async {
+    final result = await motionRecord.delete();
+    if (result != -1) {
+      motionRecords.remove(motionRecord);
     }
   }
 

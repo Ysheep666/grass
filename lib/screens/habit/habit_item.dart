@@ -77,7 +77,7 @@ class HabitItem extends StatelessWidget {
               Future.delayed(Duration.zero, () async {
                 final habitStore = Provider.of<HabitStore>(context, listen: false);
                 habitStore.remove(habit);
-                NativeWidget.toast('✌️删除成功✌️');
+                NativeMethod.notificationFeedback(NotificationFeedbackType.success);
               });
             }
           },

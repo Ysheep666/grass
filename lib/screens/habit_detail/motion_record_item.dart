@@ -7,6 +7,7 @@ import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
@@ -32,6 +33,24 @@ class MotionRecordItem extends StatefulWidget {
 class _MotionRecordItemState extends State<MotionRecordItem> {
   final _moerButtonKey = GlobalKey<State>();
 
+  _delete() async {
+    final result = await NativeWidget.alert(
+      title: '您确定要删除运动吗？',
+      message: '将删除此运动的所有组，不可恢复。',
+      actions: [
+        AlertAction(value: 'ok', title: '确定', style: AlertActionStyle.destructive),
+        AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
+      ]
+    );
+    if (result == 'ok') {
+      Future.delayed(Duration.zero, () async {
+        final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+        habitDetailStore.removeMotionRecord(widget.motionRecord);
+        NativeMethod.notificationFeedback(NotificationFeedbackType.success);
+      });
+    }
+  }
+
   _top(Motion motion) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -49,6 +68,8 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
             padding: EdgeInsets.zero,
             child: Icon(FeatherIcons.more_horizontal, size: 24),
             onPressed: () async {
+              Constant.emitter.emit('habit_detail@hide_keyboard');
+              Constant.emitter.emit('habit_detail@close_slidable');
               final result = await NativeWidget.alert(
                 preferredStyle: AlertPreferredStyle.actionSheet,
                 actions: [
@@ -58,7 +79,11 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                   AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
                 ]
               );
-              print(result);
+              if (result == 'up') {
+
+              } else if (result == 'delete') {
+                await _delete();
+              }
             },
           ),
         ],

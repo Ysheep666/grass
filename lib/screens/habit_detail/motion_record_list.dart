@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 
 import 'motion_record_item.dart';
 
+const _kDuration = Duration(milliseconds: 200);
+
 class MotionRecordList extends StatefulWidget {
   const MotionRecordList({Key key}) : super(key: key);
 
@@ -37,19 +39,18 @@ class _MotionRecordListState extends State<MotionRecordList> {
       }
 
       if (listChange.added?.isNotEmpty ?? false) {
-        _listKey.currentState?.insertItem(listChange.index);
+        _listKey.currentState?.insertItem(listChange.index, duration: _kDuration);
       }
 
       if (listChange.removed?.isNotEmpty ?? false) {
         _listKey.currentState?.removeItem(listChange.index,  (BuildContext context, Animation<double> animation) {
           return _buildItem(listChange.removed.first, animation);
-        });
+        }, duration: _kDuration);
       }
     });
     Constant.emitter.on('habit_detail@close_slidable', _closeSlidable);
     super.initState();
   }
-
 
   @override
   void dispose() {
@@ -64,9 +65,14 @@ class _MotionRecordListState extends State<MotionRecordList> {
   _buildItem(MotionRecord record, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
-      child: MotionRecordItem(
-        motionRecord: record,
-        slidableController: _slidableController,
+      child: SizeTransition(
+        axis: Axis.vertical,
+        sizeFactor: animation,
+        axisAlignment: -1,
+        child: MotionRecordItem(
+          motionRecord: record,
+          slidableController: _slidableController,
+        ),
       ),
     );
   }
