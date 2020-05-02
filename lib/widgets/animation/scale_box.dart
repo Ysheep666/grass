@@ -18,7 +18,13 @@ class ScaleBoxState extends State<ScaleBox> with SingleTickerProviderStateMixin 
 
   @override
   void initState() {
-    _animationController = AnimationController(duration: const Duration(milliseconds: 120), vsync: this);
+    _animationController = 
+      AnimationController(duration: const Duration(milliseconds: 120), vsync: this)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _animationController.reverse();
+        }
+      });
     super.initState();
   }
 
@@ -34,14 +40,9 @@ class ScaleBoxState extends State<ScaleBox> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation =
+    final animation =
       Tween(begin: 0.0, end: 5.0)
-      .animate(_animationController)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _animationController.reverse();
-        }
-      });
+      .animate(_animationController);
 
     return AnimatedBuilder(
       animation: animation,

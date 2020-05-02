@@ -26,13 +26,9 @@ class HabitScreen extends StatefulWidget {
 class _HabitScreenState extends State<HabitScreen> {
   CalendarTileController _controller = CalendarTileController();
 
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () async {
-      final habitStore = Provider.of<HabitStore>(context, listen: false);
-      await habitStore.didLoad();
-    });
-    super.initState();
+  _didLoad() async {
+    final habitStore = Provider.of<HabitStore>(context, listen: false);
+    await habitStore.didLoad();
   }
 
   Widget _appBarMiddle(DateTime selectedDate) {
@@ -98,58 +94,63 @@ class _HabitScreenState extends State<HabitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (BuildContext context) {
-        final habitStore = Provider.of<HabitStore>(context);
-        return Scaffold(
-          backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
-          appBar: GsAppBar(
-            decoration: BoxDecoration(boxShadow: []),
-            middle: _appBarMiddle(habitStore.selectedDate),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.menu, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
-              onPressed: () {
-                Constant.emitter.emit('drawer@toggle');
-                Constant.emitter.emit('habit@close_slidable');
-              },
-            ),
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(FeatherIcons.plus, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
-              onPressed: () async {
-                Constant.emitter.emit('habit@close_slidable');
-                NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
-                final habit = await Navigator.of(context).push(
-                  CupertinoPageRoute<Habit>(
-                    builder: (context) => HabitEditScreen(habit: Habit())
-                  ),
-                );
-                if (habit != null) {
-                  await habitStore.save(habit);
-                  NativeMethod.notificationFeedback(NotificationFeedbackType.success);
-                  NativeWidget.toast('✌️保存成功✌️');
-                }
-              },
-            ),
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              CalendarTile(
-                selectedDate: habitStore.selectedDate,
-                controller: _controller,
-              ),
-              Expanded(
-                child: Material(
-                  color: CupertinoDynamicColor.resolve(GsColors.background, context),
-                  child: habitStore.isLoaded
-                      ? habitStore.habits.isEmpty ? _placeholder() : HabitList()
-                      : Center(),
+    return FutureBuilder(
+      future: _didLoad(),
+      builder: (context, snapshot) {
+        return Observer(
+          builder: (BuildContext context) {
+            final habitStore = Provider.of<HabitStore>(context);
+            return Scaffold(
+              backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
+              appBar: GsAppBar(
+                decoration: BoxDecoration(boxShadow: []),
+                middle: _appBarMiddle(habitStore.selectedDate),
+                leading: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(FeatherIcons.menu, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
+                  onPressed: () {
+                    Constant.emitter.emit('drawer@toggle');
+                    Constant.emitter.emit('habit@close_slidable');
+                  },
+                ),
+                trailing: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(FeatherIcons.plus, size: 24, color: CupertinoDynamicColor.resolve(GsColors.grey, context)),
+                  onPressed: () async {
+                    Constant.emitter.emit('habit@close_slidable');
+                    NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
+                    final habit = await Navigator.of(context).push(
+                      CupertinoPageRoute<Habit>(
+                        builder: (context) => HabitEditScreen(habit: Habit())
+                      ),
+                    );
+                    if (habit != null) {
+                      await habitStore.save(habit);
+                      NativeMethod.notificationFeedback(NotificationFeedbackType.success);
+                      NativeWidget.toast('✌️保存成功✌️');
+                    }
+                  },
                 ),
               ),
-            ],
-          ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  CalendarTile(
+                    selectedDate: habitStore.selectedDate,
+                    controller: _controller,
+                  ),
+                  Expanded(
+                    child: Material(
+                      color: CupertinoDynamicColor.resolve(GsColors.background, context),
+                      child: habitStore.isLoaded
+                          ? habitStore.habits.isEmpty ? _placeholder() : HabitList()
+                          : Center(),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         );
       }
     );

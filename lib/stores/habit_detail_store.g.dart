@@ -136,6 +136,22 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
         .run(() => super.addMotionRecordsByMotionIds(motionIds));
   }
 
+  final _$removeMotionRecordAsyncAction = AsyncAction('removeMotionRecord');
+
+  @override
+  Future<void> removeMotionRecord(MotionRecord motionRecord) {
+    return _$removeMotionRecordAsyncAction
+        .run(() => super.removeMotionRecord(motionRecord));
+  }
+
+  final _$moveMotionRecordAsyncAction = AsyncAction('moveMotionRecord');
+
+  @override
+  Future<void> moveMotionRecord(int from, int to) {
+    return _$moveMotionRecordAsyncAction
+        .run(() => super.moveMotionRecord(from, to));
+  }
+
   final _$addMotionGroupRecordAsyncAction = AsyncAction('addMotionGroupRecord');
 
   @override

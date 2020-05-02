@@ -49,6 +49,7 @@ abstract class _HabitDetailStore with Store {
     } else {
       record = habiRecord;
       final newMotionRecords = await MotionRecord.getItemsByHabitRecordId(record.id);
+      newMotionRecords.sort((a, b) => a.sortIndex.compareTo(b.sortIndex));
       await _updateMotionRecords(newMotionRecords);
       final _motionGroupRecords = await MotionGroupRecord.getItemsByMotionRecordIds(newMotionRecords.map((e) => e.id).toList());
       await _updateMotionGroupRecords(_motionGroupRecords);
@@ -70,7 +71,14 @@ abstract class _HabitDetailStore with Store {
   Future<void> addMotionRecordsByMotionIds(List<int> motionIds) async {
     final newMotions = await NativeMethod.getMotionsByIds(motionIds);
     final newMotionRecords = await MotionRecord.batchAdd(
-      motionIds.map((id) => MotionRecord(motionId: id, habitRecordId: record.id)).toList()
+      motionIds
+        .asMap().entries
+        .map((entry) => MotionRecord(
+          motionId: entry.value,
+          habitRecordId: record.id,
+          sortIndex: motionRecords.length + entry.key,
+        ))
+        .toList()
     );
     final newMotionGroupRecords = await MotionGroupRecord.batchAdd(
       newMotionRecords.map((r) => MotionGroupRecord(
@@ -93,6 +101,14 @@ abstract class _HabitDetailStore with Store {
     if (result != -1) {
       motionRecords.remove(motionRecord);
     }
+  }
+
+  @action
+  Future<void> moveMotionRecord(int from, int to) async {
+    final motionRecord = motionRecords[from];
+    motionRecords.removeAt(from);
+    motionRecords.insert(to, motionRecord);
+    _updateTo();
   }
 
   @action
@@ -121,11 +137,14 @@ abstract class _HabitDetailStore with Store {
 
   _updateTo() {
     _timer?.cancel();
-    _timer = Timer(Duration(seconds: 1), () async {
+    _timer = Timer(Duration(microseconds: 500), () async {
       if (_lock) {
-        Future.delayed(Duration(seconds: 1), () => _updateTo());
+        Future.delayed(Duration(microseconds: 500), () => _updateTo());
       } else {
         _lock = true;
+        for (var i = 0; i < motionRecords.length; i++) {
+          motionRecords[i].sortIndex = i;
+        }
         await MotionRecord.batchUpdate(motionRecords);
         await MotionGroupRecord.batchUpdate(motionGroupRecords);
         _lock = false;

@@ -18,7 +18,13 @@ class ShakeBoxState extends State<ShakeBox> with SingleTickerProviderStateMixin 
 
   @override
   void initState() {
-    _animationController = AnimationController(duration: const Duration(milliseconds: 120), vsync: this);
+    _animationController = 
+      AnimationController(duration: const Duration(milliseconds: 120), vsync: this)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _animationController.reverse();
+        }
+      });
     super.initState();
   }
 
@@ -34,7 +40,7 @@ class ShakeBoxState extends State<ShakeBox> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation =
+    final animation =
       TweenSequence([
         TweenSequenceItem<double>(tween: Tween(begin: 0, end: 5), weight: 1),
         TweenSequenceItem<double>(tween: Tween(begin: 5, end: 0), weight: 2),
@@ -42,12 +48,7 @@ class ShakeBoxState extends State<ShakeBox> with SingleTickerProviderStateMixin 
         TweenSequenceItem<double>(tween: Tween(begin: -5, end: 0), weight: 4),
         TweenSequenceItem<double>(tween: Tween(begin: 0, end: 5), weight: 5),
       ])
-      .animate(_animationController)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _animationController.reverse();
-        }
-      });
+      .animate(_animationController);
 
     return AnimatedBuilder(
       animation: animation,

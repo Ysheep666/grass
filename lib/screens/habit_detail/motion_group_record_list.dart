@@ -30,7 +30,7 @@ class _MotionGroupRecordListState extends State<MotionGroupRecordList> {
     final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
     _motionGroupRecords = habitDetailStore.motionGroupRecords;
     _motionGroupRecords.observe((listChange) {
-      if (!habitDetailStore.isLoaded) {
+      if (!habitDetailStore.isLoaded || !mounted) {
         return;
       }
       setState(() {});
@@ -44,6 +44,7 @@ class _MotionGroupRecordListState extends State<MotionGroupRecordList> {
         .where((r) => r.motionRecordId == widget.motionRecord.id)
         .toList().asMap().entries
         .map((entry) => MotionGroupRecordItem(
+          key: ValueKey(entry.value.id),
           index: entry.key,
           motionGroupRecord: entry.value,
           slidableController: widget.slidableController,

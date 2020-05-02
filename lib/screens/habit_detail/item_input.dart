@@ -57,16 +57,6 @@ class ItemInputState extends State<ItemInput> {
   }
 
   @override
-  void didUpdateWidget(ItemInput oldWidget) {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      if (oldWidget.content.inputValue != widget.content.inputValue) {
-        _controller.text = widget.content.inputValue;
-      }
-    });
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final decoration = widget.decoration;
     return Expanded(

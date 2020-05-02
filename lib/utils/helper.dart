@@ -1,7 +1,9 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 int calculateDifference(DateTime a, DateTime b) {
@@ -73,4 +75,18 @@ int valueToDuration(String value) {
 double getModalBottomSheetHeight(int value) {
   final data = MediaQueryData.fromWindow(window);
   return (data.size.height - data.padding.top) * value / 16;
+}
+
+/// 截图
+Future<Uint8List> capturePng(GlobalKey<State> key) async {
+  try {
+    RenderRepaintBoundary boundary = key.currentContext.findRenderObject();
+    var image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    return pngBytes;
+  } catch (e) {
+    print(e);
+  }
+  return null;
 }

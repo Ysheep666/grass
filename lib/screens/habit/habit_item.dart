@@ -74,11 +74,9 @@ class HabitItem extends StatelessWidget {
               ]
             );
             if (result == 'ok') {
-              Future.delayed(Duration.zero, () async {
-                final habitStore = Provider.of<HabitStore>(context, listen: false);
-                habitStore.remove(habit);
-                NativeMethod.notificationFeedback(NotificationFeedbackType.success);
-              });
+              final habitStore = Provider.of<HabitStore>(context, listen: false);
+              habitStore.remove(habit);
+              NativeMethod.notificationFeedback(NotificationFeedbackType.success);
             }
           },
         ),

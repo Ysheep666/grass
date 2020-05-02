@@ -14,6 +14,7 @@ import 'package:grass/utils/constant.dart';
 import 'package:grass/widgets/icons/icons.dart';
 import 'package:provider/provider.dart';
 
+import 'habit_detail.dart';
 import 'motion_group_record_list.dart';
 
 class MotionRecordItem extends StatefulWidget {
@@ -21,10 +22,12 @@ class MotionRecordItem extends StatefulWidget {
     Key key,
     this.motionRecord,
     this.slidableController,
+    this.onSwitch,
   }) : super(key: key);
 
   final MotionRecord motionRecord;
   final SlidableController slidableController;
+  final ValueChanged<HabitDetailItemSwitchData> onSwitch;
 
   @override
   _MotionRecordItemState createState() => _MotionRecordItemState();
@@ -32,6 +35,20 @@ class MotionRecordItem extends StatefulWidget {
 
 class _MotionRecordItemState extends State<MotionRecordItem> {
   final _moerButtonKey = GlobalKey<State>();
+
+  _up() async {
+    widget.onSwitch(HabitDetailItemSwitchData(
+      type: HabitDetailItemSwitchType.up,
+      motionRecord: widget.motionRecord,
+    ));
+  }
+
+  _down() async {
+    widget.onSwitch(HabitDetailItemSwitchData(
+      type: HabitDetailItemSwitchType.down,
+      motionRecord: widget.motionRecord,
+    ));
+  }
 
   _delete() async {
     final result = await NativeWidget.alert(
@@ -43,11 +60,9 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
       ]
     );
     if (result == 'ok') {
-      Future.delayed(Duration.zero, () async {
-        final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-        habitDetailStore.removeMotionRecord(widget.motionRecord);
-        NativeMethod.notificationFeedback(NotificationFeedbackType.success);
-      });
+      final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+      habitDetailStore.removeMotionRecord(widget.motionRecord);
+      NativeMethod.notificationFeedback(NotificationFeedbackType.success);
     }
   }
 
@@ -77,10 +92,12 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                   AlertAction(value: 'down', title: '下移'),
                   AlertAction(value: 'delete', title: '删除运动'),
                   AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
-                ]
+                ],
               );
               if (result == 'up') {
-
+                await _up();
+              } else if (result == 'down') {
+                await _down();
               } else if (result == 'delete') {
                 await _delete();
               }
