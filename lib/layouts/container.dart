@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grass/screens/calendar/calendar.dart';
 import 'package:grass/screens/habit/habit.dart';
 import 'package:grass/screens/menu/menu.dart';
 import 'package:grass/utils/bridge/native_method.dart';
@@ -16,7 +17,7 @@ class _ContainerLayoutState extends State<ContainerLayout> {
   final _sideMenuKey = GlobalKey<GsSideMenuState>();
   final routes = {
     '/': (context) => HabitScreen(),
-    '/calendar': (context) => HabitScreen(),
+    '/calendar': (context) => CalendarScreen(),
     '/count': (context) => HabitScreen(),
     '/trash': (context) => HabitScreen(),
     '/guide': (context) => HabitScreen(),

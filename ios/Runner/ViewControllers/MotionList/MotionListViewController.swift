@@ -75,6 +75,7 @@ class MotionListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let motion = getData(at: indexPath) else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: "MotionCell", for: indexPath) as! MotionCell
+        cell.currentController = self
         cell.motion = motion
         cell.isISelected = selectedMotions.contains(motion)
         return cell

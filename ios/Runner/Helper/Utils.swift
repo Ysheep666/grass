@@ -18,6 +18,15 @@ func notificationFeedback(_ feedbackStyle: UINotificationFeedbackGenerator.Feedb
     haptics.notificationOccurred(feedbackStyle)
 }
 
+func decodeModel<T: Decodable>(_ data: Data) -> T {
+    do {
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
+    } catch {
+        fatalError("Couldn't parse \(data) as \(T.self):\n\(error)")
+    }
+}
+
 func loadJson<T: Decodable>(_ filename: String) -> T {
     let data: Data
     guard let file = Bundle.main.url(forResource: filename, withExtension: nil) else {
@@ -35,3 +44,13 @@ func loadJson<T: Decodable>(_ filename: String) -> T {
         fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
     }
 }
+
+func loadImage(_ path: URL) -> CGImage {
+    guard let imageSource = CGImageSourceCreateWithURL(path as NSURL, nil),
+        let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil)
+        else {
+            fatalError("Couldn't load image \(path.lastPathComponent).jpg from main bundle.")
+        }
+    return image
+}
+

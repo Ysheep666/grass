@@ -127,7 +127,7 @@ abstract class _HabitDetailStore with Store {
 
   @action
   Future<void> updateMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
-    final newmMotionGroupRecord = motionGroupRecord.copy();
+    final newmMotionGroupRecord = motionGroupRecord.copyAndCreated();
     final index = motionGroupRecords.indexWhere((r) => r.id == newmMotionGroupRecord.id);
     if (index != -1) {
       motionGroupRecords[index] = newmMotionGroupRecord;

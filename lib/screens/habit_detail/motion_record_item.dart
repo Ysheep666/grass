@@ -75,7 +75,8 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
           CupertinoButton(
             padding: EdgeInsets.zero,
             child: Text(motion.name, style: TextStyle(fontSize: 16)),
-            onPressed: () {
+            onPressed: () async {
+              NativeWidget.motionDetail(motion);
             },
           ),
           CupertinoButton(

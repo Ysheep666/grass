@@ -12,6 +12,8 @@
 		3B80C3941E831B6300D905FE /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B80C3931E831B6300D905FE /* App.framework */; };
 		3B80C3951E831B6300D905FE /* App.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B80C3931E831B6300D905FE /* App.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54153F74242AF80D00A5A20F /* MethodFlutterPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */; };
+		5429B96B245F9DA7001628CE /* MotionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429B96A245F9DA7001628CE /* MotionDetailView.swift */; };
+		5429B96D245F9DD1001628CE /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429B96C245F9DD1001628CE /* PlayerView.swift */; };
 		545642C1243C7EB300EC5F1B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C0243C7EB200EC5F1B /* Utils.swift */; };
 		545642C3243CD27C00EC5F1B /* WidgetFlutterPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */; };
 		545642C7243EF0C000EC5F1B /* MotionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545642C6243EF0C000EC5F1B /* MotionListViewController.swift */; };
@@ -50,6 +52,8 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3B80C3931E831B6300D905FE /* App.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = App.framework; path = Flutter/App.framework; sourceTree = "<group>"; };
 		54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodFlutterPlugin.swift; sourceTree = "<group>"; };
+		5429B96A245F9DA7001628CE /* MotionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionDetailView.swift; sourceTree = "<group>"; };
+		5429B96C245F9DD1001628CE /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		545642C0243C7EB200EC5F1B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetFlutterPlugin.swift; sourceTree = "<group>"; };
 		545642C6243EF0C000EC5F1B /* MotionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionListViewController.swift; sourceTree = "<group>"; };
@@ -110,12 +114,37 @@
 		54153F70242AF7B900A5A20F /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				5429B96C245F9DD1001628CE /* PlayerView.swift */,
 				545642D5243F693500EC5F1B /* Helper.swift */,
 				545642C0243C7EB200EC5F1B /* Utils.swift */,
 				54153F73242AF80D00A5A20F /* MethodFlutterPlugin.swift */,
 				545642C2243CD27C00EC5F1B /* WidgetFlutterPlugin.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		5429B968245F9D77001628CE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5429B969245F9D94001628CE /* MotionDetail */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5429B969245F9D94001628CE /* MotionDetail */ = {
+			isa = PBXGroup;
+			children = (
+				5429B96A245F9DA7001628CE /* MotionDetailView.swift */,
+			);
+			path = MotionDetail;
+			sourceTree = "<group>";
+		};
+		5429B96E245F9E31001628CE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				545642CC243F028800EC5F1B /* Motion.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		545642C4243EF06B00EC5F1B /* ViewControllers */ = {
@@ -129,7 +158,6 @@
 		545642C5243EF0B000EC5F1B /* MotionList */ = {
 			isa = PBXGroup;
 			children = (
-				545642CC243F028800EC5F1B /* Motion.swift */,
 				545642CA243F027F00EC5F1B /* MotionCell.swift */,
 				545642C6243EF0C000EC5F1B /* MotionListViewController.swift */,
 			);
@@ -182,6 +210,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				5429B96E245F9E31001628CE /* Models */,
+				5429B968245F9D77001628CE /* Views */,
 				545642C4243EF06B00EC5F1B /* ViewControllers */,
 				54153F70242AF7B900A5A20F /* Helper */,
 				545642D2243F673E00EC5F1B /* Resources */,
@@ -352,7 +382,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				545642C3243CD27C00EC5F1B /* WidgetFlutterPlugin.swift in Sources */,
+				5429B96B245F9DA7001628CE /* MotionDetailView.swift in Sources */,
 				545642CB243F028000EC5F1B /* MotionCell.swift in Sources */,
+				5429B96D245F9DD1001628CE /* PlayerView.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				545642C7243EF0C000EC5F1B /* MotionListViewController.swift in Sources */,
 				545642CD243F028800EC5F1B /* Motion.swift in Sources */,
@@ -442,7 +474,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = QXK3VU5R45;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -578,7 +610,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = QXK3VU5R45;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -607,7 +639,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = QXK3VU5R45;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

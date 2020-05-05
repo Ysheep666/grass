@@ -74,13 +74,14 @@ class DbHelper {
     return _instance;
   }
 
+  bool _lock = false;
   bool _didInit = false;
   Database _database;
 
   DbHelper._internal();
 
   Future<Database> getDb() async {
-    if (!_didInit) await _init();
+    await _init();
     return _database;
   }
 
@@ -92,6 +93,16 @@ class DbHelper {
   }
 
   Future _init() async {
+    if (_didInit) {
+      return;
+    }
+
+    if (_lock) {
+      await Future.delayed(Duration(milliseconds: 100), () async => await _init());
+      return;
+    }
+
+    _lock = true;
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'grass.db');
     print('数据库地址：$path');
@@ -116,6 +127,7 @@ class DbHelper {
         await _createMotionGroupRecordTable(db);
       },
     );
+    _lock = false;
     _didInit = true;
   }
 

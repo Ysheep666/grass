@@ -58,7 +58,7 @@ class MotionGroupRecord extends BaseModel {
     this.updatedDate = DateTime.now();
   }
 
-  MotionGroupRecord copy({bool isCreated = false, bool isUpdated = true}) {
+  MotionGroupRecord copyAndCreated({bool isCreated = false, bool isUpdated = true}) {
     final record = MotionGroupRecord.fromJson(toJson());
     if (isCreated) {
       record.createdDate = DateTime.now();

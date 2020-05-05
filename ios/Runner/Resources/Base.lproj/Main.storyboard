@@ -41,7 +41,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MYh-6d-Vod">
-                                            <rect key="frame" x="72" y="21" width="38" height="18"/>
+                                            <rect key="frame" x="72" y="21" width="294" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -59,20 +59,38 @@
                                                 <constraint firstAttribute="height" constant="42" id="orD-lU-sMX"/>
                                             </constraints>
                                         </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDn-fV-zii">
+                                            <rect key="frame" x="366" y="25" width="28" height="28"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="28" id="H5u-uh-LF6"/>
+                                                <constraint firstAttribute="height" constant="28" id="anr-m1-q82"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                            <state key="normal" title="?">
+                                                <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onTapAccessoryButton:" destination="TQG-Cs-jx6" eventType="touchUpInside" id="Tsu-yi-JTR"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="QN0-4D-1p3" secondAttribute="bottom" constant="10" id="8xT-vw-lcn"/>
                                         <constraint firstItem="QN0-4D-1p3" firstAttribute="top" secondItem="MYh-6d-Vod" secondAttribute="bottomMargin" constant="10" id="D2d-ku-r6A"/>
                                         <constraint firstItem="MYh-6d-Vod" firstAttribute="top" secondItem="mZe-0m-eJA" secondAttribute="topMargin" constant="10" id="Hv5-4u-87N"/>
                                         <constraint firstItem="MYh-6d-Vod" firstAttribute="leading" secondItem="Ycb-zB-atb" secondAttribute="trailing" constant="15" id="M2P-bN-bwo"/>
+                                        <constraint firstItem="MDn-fV-zii" firstAttribute="leading" secondItem="MYh-6d-Vod" secondAttribute="trailing" id="NP0-5b-8zS"/>
                                         <constraint firstItem="Ycb-zB-atb" firstAttribute="leading" secondItem="mZe-0m-eJA" secondAttribute="leading" constant="15" id="XGp-0u-ZrS"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MYh-6d-Vod" secondAttribute="trailing" constant="20" symbolic="YES" id="aSD-qX-DOb"/>
+                                        <constraint firstItem="MDn-fV-zii" firstAttribute="centerY" secondItem="mZe-0m-eJA" secondAttribute="centerYWithinMargins" id="bRL-6a-hOb"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="MDn-fV-zii" secondAttribute="trailing" id="dF9-rj-TvX"/>
                                         <constraint firstItem="QN0-4D-1p3" firstAttribute="leading" secondItem="MYh-6d-Vod" secondAttribute="leading" id="sAQ-j8-wmm"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QN0-4D-1p3" secondAttribute="trailing" constant="20" symbolic="YES" id="uzN-JC-Oc5"/>
                                         <constraint firstItem="Ycb-zB-atb" firstAttribute="centerY" secondItem="mZe-0m-eJA" secondAttribute="centerYWithinMargins" id="ygw-rk-Kvp"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="accessoryButton" destination="MDn-fV-zii" id="9sw-wu-GRd"/>
                                     <outlet property="nameLabel" destination="MYh-6d-Vod" id="ptX-9n-kZO"/>
                                     <outlet property="thumbView" destination="Ycb-zB-atb" id="zqe-bL-OQe"/>
                                     <outlet property="typeLabel" destination="QN0-4D-1p3" id="DLX-9t-i0E"/>
@@ -88,7 +106,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HNA-sa-uX3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="988" y="31"/>
+            <point key="canvasLocation" x="986.95652173913049" y="30.803571428571427"/>
         </scene>
     </scenes>
 </document>

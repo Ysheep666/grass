@@ -1,5 +1,6 @@
 
 import 'package:flutter/services.dart';
+import 'package:grass/models/motion.dart';
 
 enum ToastPosition {
   top,
@@ -83,5 +84,9 @@ class NativeWidget {
   static Future<List<int>> motionPicker() async {
     final result = await _channel.invokeMethod('motionPicker', {});
     return result is List ? result.map((e) => e as int).toList() : [];
+  }
+
+  static Future motionDetail(Motion motion) async {
+    await _channel.invokeMethod('motionDetail', motion.toJson());
   }
 }

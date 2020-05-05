@@ -148,7 +148,7 @@ class _KeyboardController extends GsCustomKeyboardController {
     splitText.replaceRange(start, selection.end, []);
     final newValue = TextEditingValue(
       text: splitText.join(''),
-      selection: TextSelection.collapsed(offset: start)
+      selection: TextSelection.collapsed(offset: start),
     );
 
     if (content.category == MotionCategory.duration) {

@@ -15,11 +15,7 @@ Motion _$MotionFromJson(Map<String, dynamic> json) {
     type: json['type'] as String,
     media: json['media'] as String,
     thumb: json['thumb'] as String,
-    content: (json['content'] as List)
-        ?.map((e) => e == null
-            ? null
-            : MotionContent.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    content: Motion._contentsFromValues(json['content'] as List),
   );
 }
 
@@ -31,5 +27,5 @@ Map<String, dynamic> _$MotionToJson(Motion instance) => <String, dynamic>{
       'type': instance.type,
       'media': instance.media,
       'thumb': instance.thumb,
-      'content': instance.content,
+      'content': Motion._contentsToValues(instance.content),
     };

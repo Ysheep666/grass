@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Toast_Swift
 
 // 原生 UI 调用
@@ -38,6 +39,9 @@ import Toast_Swift
             break
         case "motionPicker":
             motionPicker(call.arguments as! [String : Any], result: result)
+            break
+        case "motionDetail":
+            motionDetail(call.arguments as! [String : Any], result: result)
             break
         default:
             result(FlutterMethodNotImplemented)
@@ -85,6 +89,28 @@ import Toast_Swift
             let navigationController = UINavigationController(rootViewController: controller)
             navigationController.navigationBar.shadowImage = UIImage()
             topController.present(navigationController, animated: true)
+        }
+    }
+
+    private func motionDetail(_ arguments: [String: Any], result: @escaping FlutterResult) {
+        if let topController = getTopViewController() {
+            let controller = UIHostingController(rootView: MotionDetailView(motion: Motion(
+                id: arguments["id"] as! Int,
+                name: arguments["name"] as! String,
+                remarks: arguments["remarks"] as! String,
+                initials: arguments["initials"] as! String,
+                type: arguments["type"] as! String,
+                media: arguments["media"] as! String,
+                thumb: arguments["thumb"] as! String,
+                content: []
+            )))
+            DispatchQueue.global().async {
+                controller.rootView.dismiss  = {
+                    controller.dismiss(animated: true)
+                    result(nil)
+                }
+            }
+            topController.present(controller, animated: true)
         }
     }
 

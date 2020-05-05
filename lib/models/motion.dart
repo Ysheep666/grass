@@ -13,6 +13,8 @@ class Motion extends BaseModel {
   String type;
   String media;
   String thumb;
+
+  @JsonKey(fromJson: _contentsFromValues, toJson: _contentsToValues)
   List<MotionContent> content;
 
   Motion({
@@ -30,4 +32,7 @@ class Motion extends BaseModel {
 
   factory Motion.fromJson(Map<String, dynamic> json) => _$MotionFromJson(json);
   Map<String, dynamic> toJson() => _$MotionToJson(this);
+
+  static List<MotionContent> _contentsFromValues(List<dynamic> values) => values.map((f) => MotionContent.fromJson(f)).toList();
+  static List<dynamic> _contentsToValues(List<MotionContent> contents) => contents.map((e) => e.toJson()).toList();
 }
