@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:grass/utils/db.dart';
 import 'package:grass/utils/helper.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -13,13 +11,16 @@ class MotionGroupRecord extends BaseModel {
   static final tableName = 'motion_group_records';
   static final fieldId = 'id';
   static final fieldMotionRecordId = 'motionRecordId';
+  static final fieldLastContent = 'lastContent';
   static final fieldContent = 'content';
   static final fieldIsDone = 'isDone';
   static final fieldCreatedDate = 'createdDate';
   static final fieldUpdatedDate = 'updatedDate';
 
   int motionRecordId;
-  @JsonKey(fromJson: _valuesFromJson, toJson: _valuesToJson)
+  @JsonKey(fromJson: valuesFromJson, toJson: valuesToJson)
+  List<MotionContent> lastContent;
+  @JsonKey(fromJson: valuesFromJson, toJson: valuesToJson)
   List<MotionContent> content;
   @JsonKey(fromJson: boolFromInt, toJson: boolToInt)
   bool isDone;
@@ -29,10 +30,12 @@ class MotionGroupRecord extends BaseModel {
 
   MotionGroupRecord({
     int id,
+    this.lastContent,
     this.content,
     this.motionRecordId,
     this.isDone = false,
   }) : super(id) {
+    this.lastContent ??= [];
     this.content ??= [];
     this.createdDate ??= DateTime.now();
     this.updatedDate ??= DateTime.now();
@@ -47,6 +50,8 @@ class MotionGroupRecord extends BaseModel {
 
   @override
   int get hashCode => id.hashCode;
+
+  bool get isEffective => content.indexWhere((c) => c.value == null || c.value == 0.0) == -1;
 
   @override
   getTableName() {
@@ -71,24 +76,6 @@ class MotionGroupRecord extends BaseModel {
 
   factory MotionGroupRecord.fromJson(Map<String, dynamic> json) => _$MotionGroupRecordFromJson(json);
   Map<String, dynamic> toJson() => _$MotionGroupRecordToJson(this);
-
-  static List<MotionContent> _valuesFromJson(String jsonText) {
-    final json = jsonText == null ? [] : jsonDecode(jsonText);
-    return (json as List)
-      ?.map((e) => e == null
-          ? null
-          : MotionContent.fromJson(e as Map<String, dynamic>))
-      ?.toList();
-  }
-
-  static String _valuesToJson(List<MotionContent> values) {
-    final json = values
-      ?.map((e) => e == null
-          ? null
-          : e.toJson())
-      ?.toList();
-    return jsonEncode(json);
-  }
 
   static Future<List<MotionGroupRecord>> getItemsByMotionRecordIds(List<int> motionRecordIds) async {
     if (motionRecordIds.isEmpty) {
@@ -128,5 +115,11 @@ class MotionGroupRecord extends BaseModel {
       await batch.commit();
     });
     return motionGroupRecords;
+  }
+
+  static Future<int> batchDelete(List<MotionGroupRecord> motionGroupRecords) async {
+    final motionGroupRecordIds = motionGroupRecords.map((f) => f.id).toList();
+    final db = await DbHelper.instance.getDb();
+    return await db.delete(tableName, where: '$fieldId IN (${motionGroupRecordIds.join(', ')})');
   }
 }

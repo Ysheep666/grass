@@ -29,14 +29,16 @@ abstract class BaseModel<T> {
   toJson();
   Future<void> preSave() async {}
 
-  Future<int> save() async {
+  Future<int> save({bool isPreSave = true}) async {
     final tableName = getTableName();
     if (tableName == '') {
       return -1;
     }
     
     final db = await DbHelper.instance.getDb();
-    await preSave();
+    if (isPreSave) {
+      await preSave();
+    }
     final json = toJson();
     if (json['id'] == null) {
       return await db.insert(tableName, json);
@@ -179,6 +181,7 @@ class DbHelper {
       txn.execute('CREATE TABLE ${MotionGroupRecord.tableName} ('
           '${MotionGroupRecord.fieldId} INTEGER PRIMARY KEY AUTOINCREMENT,'
           '${MotionGroupRecord.fieldMotionRecordId} INTEGER,'
+          '${MotionGroupRecord.fieldLastContent} TEXT,'
           '${MotionGroupRecord.fieldContent} TEXT,'
           '${MotionGroupRecord.fieldIsDone} INTEGER,'
           '${MotionGroupRecord.fieldCreatedDate} INTEGER,'

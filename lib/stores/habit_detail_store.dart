@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:grass/models/habit.dart';
 import 'package:grass/models/habit_record.dart';
 import 'package:grass/models/motion.dart';
+import 'package:grass/models/motion_content.dart';
 import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/utils/bridge/native_method.dart';
@@ -17,9 +18,14 @@ class HabitDetailStore = _HabitDetailStore with _$HabitDetailStore;
 abstract class _HabitDetailStore with Store {
   Timer _timer;
   bool _lock = false;
+  List<MotionRecord> _lastMotionRecords = [];
+  List<MotionGroupRecord> _lastMotionGroupRecords = [];
 
   @observable
   bool isLoaded = false;
+
+  @observable
+  bool isContinue = false;
 
   @observable
   Habit habit;
@@ -39,32 +45,52 @@ abstract class _HabitDetailStore with Store {
   @action
   Future<void> didLoad(Habit value) async {
     habit = value;
-    HabitRecord habiRecord = await HabitRecord.getLastByHabitId(habit.id);
-    if (habiRecord == null) {
-      habiRecord = HabitRecord(habitId: habit.id);
-      habiRecord.id = await habiRecord.save();
-      record = habiRecord;
-    } else if (habiRecord.isDone) {
-
+    final habitRecords = await HabitRecord.getLastByHabitId(habit.id);
+    if (habitRecords.isEmpty) {
+      await _createHabitRecord();
     } else {
-      record = habiRecord;
-      final newMotionRecords = await MotionRecord.getItemsByHabitRecordId(record.id);
-      newMotionRecords.sort((a, b) => a.sortIndex.compareTo(b.sortIndex));
-      await _updateMotionRecords(newMotionRecords);
-      final _motionGroupRecords = await MotionGroupRecord.getItemsByMotionRecordIds(newMotionRecords.map((e) => e.id).toList());
-      await _updateMotionGroupRecords(_motionGroupRecords);
+      final savedMotionRecords = await MotionRecord.getItemsByHabitRecordId(
+        habitRecords.first.isDone ? [habitRecords.first.id] : habitRecords.map((e) => e.id).toList()
+      );
+      final savedMotionGroupRecords = await MotionGroupRecord.getItemsByMotionRecordIds(savedMotionRecords.map((e) => e.id).toList());
+      if (habitRecords.first.isDone) {
+        _lastMotionRecords = savedMotionRecords;
+        _lastMotionGroupRecords = savedMotionGroupRecords;
+        await _createHabitRecord();
+      } else {
+        isContinue = true;
+        record = habitRecords.first;
+
+        _lastMotionRecords = savedMotionRecords.where((c) => c.habitRecordId != record.id).toList();
+        _lastMotionGroupRecords = savedMotionGroupRecords.where((c) => _lastMotionRecords.indexWhere((m) => m.id == c.motionRecordId) != -1).toList();
+
+        await _updateMotionRecords(savedMotionRecords.where((c) => c.habitRecordId == record.id).toList());
+        await _updateMotionGroupRecords(savedMotionGroupRecords.where((c) => motionRecords.indexWhere((m) => m.id == c.motionRecordId) != -1).toList());
+      }
     }
     isLoaded = true;
   }
 
   @action
   Future<void> clear() async {
+    _timer = null;
+    _lock = false;
+    _lastMotionRecords = [];
+    _lastMotionGroupRecords = [];
     isLoaded = false;
+    isContinue = false;
     habit = null;
     record = null;
     motions = [];
     motionRecords = ObservableList<MotionRecord>();
     motionGroupRecords = ObservableList<MotionGroupRecord>();
+  }
+
+  @action
+  Future<void> reset() async {
+    record.isArchived = true;
+    await record.save();
+    await _createHabitRecord();
   }
 
   @action
@@ -112,7 +138,20 @@ abstract class _HabitDetailStore with Store {
   }
 
   @action
-  Future<void> addMotionGroupRecord(MotionGroupRecord motionGroupRecord) async {
+  Future<void> addMotionGroupRecord(Motion motion, int motionRecordId) async {
+    List<MotionContent> content = motion.content;
+    final lastIndex = motionGroupRecords.lastIndexWhere((g) => g.motionRecordId == motionRecordId);
+    if (lastIndex != -1) {
+      content = motionGroupRecords[lastIndex].content.map((c) => MotionContent(
+        category: c.category,
+        defaultValue: c.value ?? c.defaultValue,
+      )).toList();
+    }
+
+    final motionGroupRecord = MotionGroupRecord(
+      motionRecordId: motionRecordId,
+      content: content,
+    );
     motionGroupRecord.id = await motionGroupRecord.save();
     motionGroupRecords.add(motionGroupRecord);
   }
@@ -135,6 +174,50 @@ abstract class _HabitDetailStore with Store {
     _updateTo();
   }
 
+  @action
+  Future<void> submit() async {
+    List<MotionRecord> discardMotionRecords = [];
+    List<MotionGroupRecord> discardMotionGroupRecords = [];
+    List<MotionGroupRecord> saveMotionGroupRecords = [];
+    for (var motionGroupRecord in motionGroupRecords) {
+      if (motionGroupRecord.isDone || motionGroupRecord.isEffective) {
+        motionGroupRecord.isDone = true;
+        saveMotionGroupRecords.add(motionGroupRecord);
+      } else {
+        discardMotionGroupRecords.add(motionGroupRecord);
+      }
+    }
+
+    discardMotionRecords = motionRecords.where((r) => saveMotionGroupRecords.indexWhere((g) => g.motionRecordId == r.id) == -1).toList();
+
+    await MotionGroupRecord.batchDelete(discardMotionGroupRecords);
+    await MotionGroupRecord.batchUpdate(saveMotionGroupRecords);
+    await MotionRecord.batchDelete(discardMotionRecords);
+
+    record.isDone = true;
+    await record.save();
+  }
+
+  _createHabitRecord() async {
+    final habiRecord = HabitRecord(habitId: habit.id);
+    habiRecord.id = await habiRecord.save();
+    record = habiRecord;
+
+    final newMotionRecords = await MotionRecord.batchAdd(_lastMotionRecords.map((m) => MotionRecord(
+      motionId: m.motionId,
+      habitRecordId: record.id,
+      sortIndex: m.sortIndex,
+    )).toList());
+    final newMotionGroupRecords = await MotionGroupRecord.batchAdd(_lastMotionGroupRecords.map((m) => MotionGroupRecord(
+      motionRecordId: newMotionRecords[_lastMotionRecords.indexWhere((c) => c.id == m.motionRecordId)].id,
+      lastContent: m.content,
+      content: m.content.map((c) => MotionContent(category: c.category)).toList(),
+    )).toList());
+
+    await _updateMotionRecords(newMotionRecords);
+    await _updateMotionGroupRecords(newMotionGroupRecords);
+  }
+
   _updateTo() {
     _timer?.cancel();
     _timer = Timer(Duration(microseconds: 500), () async {
@@ -153,7 +236,12 @@ abstract class _HabitDetailStore with Store {
   }
 
   _updateMotionRecords(List<MotionRecord> items) async {
-    motions = await NativeMethod.getMotionsByIds(items.map((e) => e.motionId).toList());
+    final newMotions = await NativeMethod.getMotionsByIds(items.map((e) => e.motionId).toList());
+    for (var motion in newMotions) {
+      if (motions.indexWhere((m) => m.id == motion.id) == -1) {
+        motions.add(motion);
+      }
+    }
     final diff = ListDiff<MotionRecord>(motionRecords, items);
     final ots = diff.getOT();
     int index = 0;

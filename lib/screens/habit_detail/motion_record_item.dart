@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion.dart';
-import 'package:grass/models/motion_group_record.dart';
 import 'package:grass/models/motion_record.dart';
 import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
@@ -55,7 +54,7 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
       title: '您确定要删除运动吗？',
       message: '将删除此运动的所有组，不可恢复。',
       actions: [
-        AlertAction(value: 'ok', title: '确定', style: AlertActionStyle.destructive),
+        AlertAction(value: 'ok', title: '确定'),
         AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
       ]
     );
@@ -202,11 +201,9 @@ class _MotionRecordItemState extends State<MotionRecordItem> {
                     ),
                     onPressed: () async {
                       Constant.emitter.emit('habit_detail@close_slidable');
+                      NativeMethod.impactFeedback(ImpactFeedbackStyle.light);
                       final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-                      habitDetailStore.addMotionGroupRecord(MotionGroupRecord(
-                        motionRecordId: widget.motionRecord.id,
-                        content: motion.content,
-                      ));
+                      habitDetailStore.addMotionGroupRecord(motion, widget.motionRecord.id);
                     },
                   ),
                 ),

@@ -26,6 +26,23 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
     }, _$isLoadedAtom, name: '${_$isLoadedAtom.name}_set');
   }
 
+  final _$isContinueAtom = Atom(name: '_HabitDetailStore.isContinue');
+
+  @override
+  bool get isContinue {
+    _$isContinueAtom.context.enforceReadPolicy(_$isContinueAtom);
+    _$isContinueAtom.reportObserved();
+    return super.isContinue;
+  }
+
+  @override
+  set isContinue(bool value) {
+    _$isContinueAtom.context.conditionallyRunInAction(() {
+      super.isContinue = value;
+      _$isContinueAtom.reportChanged();
+    }, _$isContinueAtom, name: '${_$isContinueAtom.name}_set');
+  }
+
   final _$habitAtom = Atom(name: '_HabitDetailStore.habit');
 
   @override
@@ -155,9 +172,9 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
   final _$addMotionGroupRecordAsyncAction = AsyncAction('addMotionGroupRecord');
 
   @override
-  Future<void> addMotionGroupRecord(MotionGroupRecord motionGroupRecord) {
+  Future<void> addMotionGroupRecord(Motion motion, int motionRecordId) {
     return _$addMotionGroupRecordAsyncAction
-        .run(() => super.addMotionGroupRecord(motionGroupRecord));
+        .run(() => super.addMotionGroupRecord(motion, motionRecordId));
   }
 
   final _$removeMotionGroupRecordAsyncAction =
@@ -178,10 +195,17 @@ mixin _$HabitDetailStore on _HabitDetailStore, Store {
         .run(() => super.updateMotionGroupRecord(motionGroupRecord));
   }
 
+  final _$submitAsyncAction = AsyncAction('submit');
+
+  @override
+  Future<void> submit() {
+    return _$submitAsyncAction.run(() => super.submit());
+  }
+
   @override
   String toString() {
     final string =
-        'isLoaded: ${isLoaded.toString()},habit: ${habit.toString()},record: ${record.toString()},motions: ${motions.toString()},motionRecords: ${motionRecords.toString()},motionGroupRecords: ${motionGroupRecords.toString()}';
+        'isLoaded: ${isLoaded.toString()},isContinue: ${isContinue.toString()},habit: ${habit.toString()},record: ${record.toString()},motions: ${motions.toString()},motionRecords: ${motionRecords.toString()},motionGroupRecords: ${motionGroupRecords.toString()}';
     return '{$string}';
   }
 }

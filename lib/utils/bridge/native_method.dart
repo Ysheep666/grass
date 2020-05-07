@@ -52,6 +52,9 @@ class NativeMethod {
   static Future<List<Motion>> getMotionsByIds(List<int> ids) async {
     final result =  await _channel.invokeMethod('getMotionsByIds', ids);
     final json = jsonDecode(result);
-    return (json as List).map((e) => Motion.fromJson(e)).toList();
+    return (json as List).map((e) {
+      e['content'] = jsonEncode(e['content']);
+      return Motion.fromJson(e);
+    }).toList();
   }
 }

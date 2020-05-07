@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:grass/models/motion_content.dart';
 import 'package:intl/intl.dart';
 
 int calculateDifference(DateTime a, DateTime b) {
@@ -22,6 +24,24 @@ String dateTimeFromNow(DateTime dateTime, [String pattern])  {
     return '明天';
   }
   return DateFormat(pattern ?? 'yyyy年MMMMdd日', 'zh_CH').format(dateTime);
+}
+
+List<MotionContent> valuesFromJson(String jsonText) {
+  final json = jsonText == null ? [] : jsonDecode(jsonText);
+  return (json as List)
+    ?.map((e) => e == null
+        ? null
+        : MotionContent.fromJson(e as Map<String, dynamic>))
+    ?.toList();
+}
+
+String valuesToJson(List<MotionContent> values) {
+  final json = values
+    ?.map((e) => e == null
+        ? null
+        : e.toJson())
+    ?.toList();
+  return jsonEncode(json);
 }
 
 /// 时间戳转日期

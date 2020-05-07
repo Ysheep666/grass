@@ -31,10 +31,10 @@ class _HabitListState extends State<HabitList> {
         return;
       }
       if (listChange.added?.isNotEmpty ?? false) {
-        _listKey.currentState.insertItem(listChange.index, duration: _kDuration);
+        _listKey.currentState?.insertItem(listChange.index, duration: _kDuration);
       }
       if (listChange.removed?.isNotEmpty ?? false) {
-        _listKey.currentState.removeItem(listChange.index,  (BuildContext context, Animation<double> animation) {
+        _listKey.currentState?.removeItem(listChange.index,  (BuildContext context, Animation<double> animation) {
           return _buildItem(listChange.removed.first, animation);
         }, duration: _kDuration);
       }

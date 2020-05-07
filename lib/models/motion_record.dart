@@ -30,14 +30,15 @@ class MotionRecord extends BaseModel {
   factory MotionRecord.fromJson(Map<String, dynamic> json) => _$MotionRecordFromJson(json);
   Map<String, dynamic> toJson() => _$MotionRecordToJson(this);
 
-  static Future<List<MotionRecord>> getItemsByHabitRecordId(int habitRecordId) async {
+  static Future<List<MotionRecord>> getItemsByHabitRecordId(List<int>  habitRecordIds) async {
     final db = await DbHelper.instance.getDb();
     List<Map> results = await db.query(
       tableName,
-      where: '$fieldHabitRecordId = ?',
-      whereArgs: [habitRecordId],
+      where: '$fieldHabitRecordId IN (${habitRecordIds.join(', ')})',
     );
-    return results.map((result) => MotionRecord.fromJson(result)).toList();
+    final motionRecords = results.map((result) => MotionRecord.fromJson(result)).toList();
+    motionRecords.sort((a, b) => a.sortIndex.compareTo(b.sortIndex));
+    return motionRecords;
   }
 
   static Future<List<MotionRecord>> batchAdd(List<MotionRecord> motionRecords) async {
@@ -66,5 +67,11 @@ class MotionRecord extends BaseModel {
       await batch.commit();
     });
     return motionRecords;
+  }
+
+  static Future<int> batchDelete(List<MotionRecord> motionRecords) async {
+    final motionRecordIds = motionRecords.map((f) => f.id).toList();
+    final db = await DbHelper.instance.getDb();
+    return await db.delete(tableName, where: '$fieldId IN (${motionRecordIds.join(', ')})');
   }
 }

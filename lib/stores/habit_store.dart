@@ -63,7 +63,7 @@ abstract class _HabitStore with Store {
       return value.repeatStatusValues.indexOf(selectedDate.weekday - 1) != -1;
     }
     final diffDay = calculateDifference(selectedDate, value.createdDate).abs();
-    return value.repeatStatusValues[0] == diffDay;
+    return diffDay % (value.repeatStatusValues[0] + 1) == 0;
   }
 
   _updateHabits() {

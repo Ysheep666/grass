@@ -6,7 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grass/models/habit.dart';
 import 'package:grass/models/motion_record.dart';
+import 'package:grass/screens/result/habit_good_result.dart';
 import 'package:grass/stores/habit_detail_store.dart';
+import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/bridge/native_widget.dart';
 import 'package:grass/utils/colors.dart';
 import 'package:grass/utils/constant.dart';
@@ -49,7 +51,6 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
 
   HabitDetailStore _habitDetailStore;
 
-  bool _isSubmit = false;
   bool _isShowKeyboard = false;
   bool _appBarShadow = false;
   OverlayEntry _overlayEntry;
@@ -85,7 +86,24 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
 
   _didLoad() async {
     _habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
-    await _habitDetailStore.didLoad(widget.habit);
+    if (!_habitDetailStore.isLoaded) {
+      await _habitDetailStore.didLoad(widget.habit);
+      Future.delayed(Duration(milliseconds: 100), () async {
+        if (_habitDetailStore.isContinue && _habitDetailStore.motionGroupRecords.indexWhere((c) => !c.isDone) != -1) {
+          final result = await NativeWidget.alert(
+            title: '继续锻炼？',
+            message: '您有未完成的锻炼，确定继续锻炼。',
+            actions: [
+              AlertAction(value: 'reset', title: '重新开始'),
+              AlertAction(value: 'ok', title: '确定'),
+            ]
+          );
+          if (result == 'reset') {
+            await _habitDetailStore.reset();
+          }
+        }
+      });
+    }
   }
 
   _showKeyboard(data) async {
@@ -134,7 +152,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
     }
   }
 
-  void _insertOverlay(FocusNode focusNode, GsCustomKeyboardController textEditingController) {
+  _insertOverlay(FocusNode focusNode, GsCustomKeyboardController textEditingController) {
     _overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
@@ -155,10 +173,40 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
     Overlay.of(context).insert(_overlayEntry);
   }
 
-  void _removeOverlay() async {
+  _removeOverlay() async {
     await Future.delayed(Duration(milliseconds: 500));
     _overlayEntry?.remove();
     _overlayEntry = null;
+  }
+
+  _submit() async {
+    Constant.emitter.emit('habit_detail@hide_keyboard');
+    Constant.emitter.emit('habit_detail@close_slidable');
+    bool continueSubmit = false;
+    final habitDetailStore = Provider.of<HabitDetailStore>(context, listen: false);
+    if (habitDetailStore.motionGroupRecords.indexWhere((c) => !c.isDone) != -1) {
+      final result = await NativeWidget.alert(
+        title: '确认完成锻炼？',
+        message: '如果确定，所有无效或无内容的组将被删除，有效的组都将被标记为已完成。',
+        actions: [
+          AlertAction(value: 'ok', title: '确定'),
+          AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
+        ]
+      );
+      continueSubmit = result == 'ok';
+    } else {
+      continueSubmit = true;
+    }
+    if (continueSubmit) {
+      await habitDetailStore.submit();
+      NativeMethod.notificationFeedback(NotificationFeedbackType.success);
+      Navigator.of(context).pushReplacement(
+        CupertinoPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => HabitGoodResultScreen(),
+        ),
+      );
+    }
   }
 
   @override
@@ -169,6 +217,7 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
         return Observer(
           builder: (BuildContext context) {
             final habitDetailStore = Provider.of<HabitDetailStore>(context);
+            final isSubmit = habitDetailStore.motionGroupRecords.indexWhere((c) => c.isDone) != -1;
             return Scaffold(
               backgroundColor: CupertinoDynamicColor.resolve(GsColors.background, context),
               appBar: GsAppBar(
@@ -192,11 +241,10 @@ class HabitDetailScreenState extends State<HabitDetailScreen> with RouteAware, R
                     '完成训练',
                     style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
                       fontSize: 14,
-                      color: _isSubmit ? CupertinoColors.white : CupertinoDynamicColor.resolve(GsColors.grey, context),
+                      color: isSubmit ? CupertinoColors.white : CupertinoDynamicColor.resolve(GsColors.grey, context),
                     ),
                   ),
-                  onPressed: _isSubmit ? () async {
-                  } : null,
+                  onPressed: isSubmit ? _submit : null,
                 ),
               ),
               body: habitDetailStore.isLoaded 

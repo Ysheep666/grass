@@ -69,7 +69,7 @@ class HabitItem extends StatelessWidget {
               title: '您确定要删除吗？',
               message: '将删除此习惯的所有数据，不可恢复。',
               actions: [
-                AlertAction(value: 'ok', title: '确定', style: AlertActionStyle.destructive),
+                AlertAction(value: 'ok', title: '确定'),
                 AlertAction(value: 'cancel', title: '取消', style: AlertActionStyle.cancel),
               ]
             );
@@ -155,7 +155,7 @@ class HabitItem extends StatelessWidget {
             Navigator.of(context).push(
               CupertinoPageRoute(
                 fullscreenDialog: true,
-                builder: (context) => HabitDetailScreen(habit: habit)
+                builder: (context) => HabitDetailScreen(habit: habit),
               ),
             );
           },

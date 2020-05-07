@@ -1,4 +1,5 @@
 import 'package:grass/utils/db.dart';
+import 'package:grass/utils/helper.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'motion_content.dart';
@@ -14,7 +15,7 @@ class Motion extends BaseModel {
   String media;
   String thumb;
 
-  @JsonKey(fromJson: _contentsFromValues, toJson: _contentsToValues)
+  @JsonKey(fromJson: valuesFromJson, toJson: valuesToJson)
   List<MotionContent> content;
 
   Motion({
@@ -32,7 +33,4 @@ class Motion extends BaseModel {
 
   factory Motion.fromJson(Map<String, dynamic> json) => _$MotionFromJson(json);
   Map<String, dynamic> toJson() => _$MotionToJson(this);
-
-  static List<MotionContent> _contentsFromValues(List<dynamic> values) => values.map((f) => MotionContent.fromJson(f)).toList();
-  static List<dynamic> _contentsToValues(List<MotionContent> contents) => contents.map((e) => e.toJson()).toList();
 }

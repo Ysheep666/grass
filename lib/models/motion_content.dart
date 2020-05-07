@@ -22,15 +22,15 @@ class MotionContent {
     this.defaultValue,
   });
 
-  factory MotionContent.fromJson(Map<String, dynamic> json) => _$MotionContentFromJson(json);
-  Map<String, dynamic> toJson() => _$MotionContentToJson(this);
-
   String get inputValue => valueFromNumber(value, category);
   String get defaultInputValue => valueFromNumber(defaultValue, category);
 
   set inputValue(String inputValue) {
     value = valueToNumber(inputValue, category);
   }
+
+  factory MotionContent.fromJson(Map<String, dynamic> json) => _$MotionContentFromJson(json);
+  Map<String, dynamic> toJson() => _$MotionContentToJson(this);
 
   static String valueFromNumber(double value, MotionCategory category) {
     if (value == null || value == 0.0) {

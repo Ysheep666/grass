@@ -54,18 +54,15 @@ class HabitRecord extends BaseModel {
   factory HabitRecord.fromJson(Map<String, dynamic> json) => _$HabitRecordFromJson(json);
   Map<String, dynamic> toJson() => _$HabitRecordToJson(this);
 
-  static Future<HabitRecord> getLastByHabitId(int habitId) async {
+  static Future<List<HabitRecord>> getLastByHabitId(int habitId) async {
     final db = await DbHelper.instance.getDb();
     List<Map> results = await db.query(
       tableName,
-      where: '$fieldHabitId = ?',
+      where: '$fieldHabitId = ? AND isArchived = 0',
       whereArgs: [habitId],
       orderBy: '$fieldId DESC',
-      limit: 1,
+      limit: 2,
     );
-    if (results.length > 0) {
-      return HabitRecord.fromJson(results.first);
-    }
-    return null;
+    return results.map((r) => HabitRecord.fromJson(r)).toList();
   }
 }

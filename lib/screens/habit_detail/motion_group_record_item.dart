@@ -1,7 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:grass/models/motion_group_record.dart';
+import 'package:grass/stores/base_store.dart';
 import 'package:grass/stores/habit_detail_store.dart';
 import 'package:grass/utils/bridge/native_method.dart';
 import 'package:grass/utils/colors.dart';
@@ -32,6 +34,7 @@ class MotionGroupRecordItem extends StatefulWidget {
 class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _itemScaleBoxKey = GlobalKey<ScaleBoxState>();
+  final _lastShakeBoxKey = GlobalKey<ShakeBoxState>();
   final _checkShakeBoxKey = GlobalKey<ShakeBoxState>();
 
   _update(MotionGroupRecord motionGroupRecord) {
@@ -46,7 +49,10 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
 
   @override
   Widget build(BuildContext context) {
+    final baseStore = Provider.of<BaseStore>(context, listen: false);
     final isDone = widget.motionGroupRecord.isDone;
+    final lastContent = widget.motionGroupRecord.lastContent;
+    final isLastEffective = lastContent.isNotEmpty && lastContent.indexWhere((c) => c.value == null || c.value == 0.0) == -1;
     TextStyle headerTextStyle = CupertinoTheme.of(context).textTheme.textStyle.copyWith(
       fontSize: 15,
       fontWeight: FontWeight.w600,
@@ -64,26 +70,55 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
       child: Text('${widget.index + 1}', style: headerTextStyle),
     ));
 
-    items.add(Container(
-      width: 100,
-      height: 24,
-      alignment: Alignment.center,
-      child: Container(
-        width: 18,
-        height: 3,
-        decoration: BoxDecoration(
-          color: CupertinoDynamicColor.resolve(GsColors.grey, context),
-          borderRadius: const BorderRadius.all(Radius.circular(1.5)),
+    items.add(CupertinoButton(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      minSize: 0,
+      child: ShakeBox(
+        key: _lastShakeBoxKey,
+        child: Container(
+          width: 90,
+          height: 24,
+          alignment: Alignment.center,
+          child: isLastEffective ? AutoSizeText(
+            lastContent.map((c) => '${c.inputValue}${baseStore.getMotionCategoryLabel(c.category)}').join(' x '),
+            style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+            minFontSize: 1,
+            maxLines: 1,
+          ) : Container(
+            width: 18,
+            height: 3,
+            decoration: BoxDecoration(
+              color: CupertinoDynamicColor.resolve(GsColors.grey, context),
+              borderRadius: const BorderRadius.all(Radius.circular(1.5)),
+            ),
+          )
         ),
-      )
+      ),
+      onPressed: () {
+        Constant.emitter.emit('habit_detail@close_slidable');
+        if (isLastEffective) {
+          widget.motionGroupRecord.content = lastContent;
+          _update(widget.motionGroupRecord);
+        } else {
+          NativeMethod.notificationFeedback(NotificationFeedbackType.error);
+          _lastShakeBoxKey.currentState.start();
+        }
+      },
     ));
 
     items.addAll(
-      widget.motionGroupRecord.content.map((content) {
+      widget.motionGroupRecord.content.asMap().entries.map((entry) {
+        String placeholder = entry.value.defaultInputValue;
+        if (placeholder == '' && entry.key < lastContent.length) {
+          placeholder = lastContent[entry.key].inputValue;
+        }
         return ItemInput(
-          content: content,
+          content: entry.value,
           decoration: InputDecoration(
-            hintText: content.defaultInputValue,
+            hintText: placeholder,
             hintStyle: TextStyle(
               color: CupertinoDynamicColor.resolve(CupertinoColors.placeholderText, context),
             ),
@@ -105,8 +140,8 @@ class _MotionGroupRecordItemState extends State<MotionGroupRecordItem> with Sing
             ),
           ),
           onChanged: (value) {
-            content.inputValue = value;
-            if (content.value == null || content.value == 0.0) {
+            entry.value.inputValue = value;
+            if (entry.value.value == null || entry.value.value == 0.0) {
               widget.motionGroupRecord.isDone = false;
             }
             _update(widget.motionGroupRecord);
