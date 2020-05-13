@@ -64,6 +64,23 @@ class Habit extends BaseModel {
     return tableName;
   }
 
+  /// 获取一个月以内的提示时间
+  List<DateTime> get inMonthAlertTimes {
+    if (alertTime == null) {
+      return [];
+    }
+    List<DateTime> times = [];
+    final now = DateTime.now();
+    for (var i = 0; i < 30; i++) {
+      final dayByDate = now.add(Duration(days: i));
+      final date = DateTime(dayByDate.year, dayByDate.month, dayByDate.day, alertTime.hour, alertTime.minute);
+      if (date.difference(now).inSeconds > 0 && isDay(date)) {
+        times.add(date);
+      }
+    }
+    return times;
+  }
+
   @override
   Future<void> preSave() async {
     this.updatedDate = DateTime.now();
@@ -79,5 +96,16 @@ class Habit extends BaseModel {
     final db = await DbHelper.instance.getDb();
     List<Map> results = await db.query(tableName);
     return results.map((result) => Habit.fromJson(result)).toList();
+  }
+
+  bool isDay(DateTime selectedDate) {
+    if (selectedDate.difference(startDate).inDays < 0) {
+      return false;
+    }
+    if (repeatStatusType != HabitRepeatStatusType.custom) {
+      return repeatStatusValues.indexOf(selectedDate.weekday - 1) != -1;
+    }
+    final diffDay = calculateDifference(selectedDate, createdDate).abs();
+    return diffDay % (repeatStatusValues[0] + 1) == 0;
   }
 }

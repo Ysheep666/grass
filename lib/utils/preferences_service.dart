@@ -28,18 +28,18 @@ class PreferencesService {
   }
 
   Future<void> loaded;
+  SharedPreferences sharedPreferences;
 
   static const String _useDarkModeKey = 'useDarkMode';
   static const String _weightUnitKey = 'weightUnit';
   static const String _distanceUnitKey = 'distanceUnit';
-  SharedPreferences _sharedPreferences;
 
   set useDarkMode(ThemeMode mode) {
-    _sharedPreferences.setString(_useDarkModeKey, mode.toString());
+    sharedPreferences.setString(_useDarkModeKey, mode.toString());
   }
 
   ThemeMode get useDarkMode {
-    final mode = _sharedPreferences.getString(_useDarkModeKey);
+    final mode = sharedPreferences.getString(_useDarkModeKey);
     if (mode == null) {
       return ThemeMode.light;
     }
@@ -47,11 +47,11 @@ class PreferencesService {
   }
 
   set weightUnit(WeightUnit unit) {
-    _sharedPreferences.setString(_weightUnitKey, unit.toString());
+    sharedPreferences.setString(_weightUnitKey, unit.toString());
   }
 
   WeightUnit get weightUnit {
-    final unit = _sharedPreferences.getString(_weightUnitKey);
+    final unit = sharedPreferences.getString(_weightUnitKey);
     if (unit == null) {
       return WeightUnit.kg;
     }
@@ -59,11 +59,11 @@ class PreferencesService {
   }
 
   set distanceUnit(DistanceUnit unit) {
-    _sharedPreferences.setString(_distanceUnitKey, unit.toString());
+    sharedPreferences.setString(_distanceUnitKey, unit.toString());
   }
 
   DistanceUnit get distanceUnit {
-    final unit = _sharedPreferences.getString(_distanceUnitKey);
+    final unit = sharedPreferences.getString(_distanceUnitKey);
     if (unit == null) {
       return DistanceUnit.km;
     }
@@ -71,6 +71,6 @@ class PreferencesService {
   }
 
   Future<void> _loadPreferences() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
   }
 }

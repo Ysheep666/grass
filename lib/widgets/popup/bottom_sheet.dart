@@ -421,9 +421,10 @@ class _CustomModalBottomSheetState<T> extends State<_CustomModalBottomSheet<T>> 
       case TargetPlatform.fuchsia:
         if (Localizations.of(context, MaterialLocalizations) != null) {
           return MaterialLocalizations.of(context).dialogLabel;
-        } else {
-          return DefaultMaterialLocalizations().dialogLabel;
         }
+        return DefaultMaterialLocalizations().dialogLabel;
+      default:
+        break;
     }
     return null;
   }

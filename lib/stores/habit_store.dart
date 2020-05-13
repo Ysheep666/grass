@@ -1,6 +1,5 @@
 import 'package:grass/models/habit.dart';
 import 'package:grass/utils/diff.dart';
-import 'package:grass/utils/helper.dart';
 import 'package:mobx/mobx.dart';
 
 part 'habit_store.g.dart';
@@ -59,11 +58,7 @@ abstract class _HabitStore with Store {
     if (value.isArchived) {
       return false;
     }
-    if (value.repeatStatusType != HabitRepeatStatusType.custom) {
-      return value.repeatStatusValues.indexOf(selectedDate.weekday - 1) != -1;
-    }
-    final diffDay = calculateDifference(selectedDate, value.createdDate).abs();
-    return diffDay % (value.repeatStatusValues[0] + 1) == 0;
+    return value.isDay(selectedDate);
   }
 
   _updateHabits() {
